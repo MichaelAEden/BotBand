@@ -3,10 +3,15 @@ import { Rule } from '../models/Rule';
 import { BotFitness } from '../models/BotFitness';
 import { Melody } from '../models/Melody';
 import { Note } from '../models/Note';
+import  { LeapRule }  from '../models/RulesImpl';
 
 export class GaWorker {
     
     rules: Rule[];
+
+    constructor() {
+        this.rules.push(new LeapRule());
+    }
 
     generateStartingMelody(): Melody[] {
         let melodies = new Array<Melody>();

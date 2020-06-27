@@ -1,5 +1,6 @@
 import { Melody } from './Melody';
+import { Note } from './Note';
 
 export abstract class Rule {
-    abstract apply(index: Number, changeSet: Array<String>, melody: Melody): Array<String>;
+    abstract apply(index: Number, changeSet: Array<Note>, melody: Melody): Array<Note>;
 }
