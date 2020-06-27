@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBRow, MDBCol } from 'mdbreact';
+import { MDBRow, MDBCol, MDBIcon } from 'mdbreact';
 import { fetchJson } from '../Utils/request'
 
 import './styles/TopPanel.css'
@@ -9,6 +9,9 @@ class TopPanel extends Component {
         super();
         this.state = {}
         this.handleRobotClick = this.handleRobotClick.bind(this);
+        this.handleHover = this.handleHover.bind(this);
+        this.handleThumbsUp = this.handleThumbsUp.bind(this);
+        this.handleThumbsDown = this.handleThumbsDown.bind(this);
     }
 
     async componentDidMount() {
@@ -39,12 +42,31 @@ class TopPanel extends Component {
       console.log(i);
     }
 
+    handleThumbsUp(e) {
+      console.log("thumbs up");
+    }
+
+    handleThumbsDown(e) {
+      console.log("thumbs down");
+    }
+
+    handleHover(e) {
+      console.log("hovering");
+    }
+
     render() {
       if (!this.state.bots) return null;
       
       const bots = this.state.bots.map((bot, i) => (
         <MDBCol key={i} size="3">
-          <img src="Robot1.png" className="robot" onClick={() => this.handleRobotClick(i)}></img>
+          <div>
+            <div className="robot-toolbar">
+              <MDBIcon far icon="play-circle" className="toolbar-btn" onMouseEnter={this.handleHover}/>
+              <MDBIcon far icon="thumbs-up" className="toolbar-btn" onClick={this.handleThumbsUp}/>
+              <MDBIcon far icon="thumbs-down" className="toolbar-btn" onClick={this.handleThumbsDown}/>
+            </div>
+            <img src="Robot1.png" className="robot" onClick={() => this.handleRobotClick(i)}></img>
+          </div>
         </MDBCol>
       ));
 
