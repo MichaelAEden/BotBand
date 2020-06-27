@@ -2,5 +2,5 @@
 
 node_modules/*
 build/*
-
+server/node_modules/*
 .env
