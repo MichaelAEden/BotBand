@@ -2,12 +2,19 @@ import React, { Component } from 'react';
 import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 import './styles/TopPanel.css'
 import Tone from 'tone';
+import { fetchJson } from '../Utils/request'
 
 class TopPanel extends Component {
   constructor() {
     super();
     this.state = {}
     this.handleRobotClick = this.handleRobotClick.bind(this);
+  }
+
+  async componentDidMount() {
+    const response = await fetchJson('/createbots/rating', {method: 'POST'});
+    console.log(response);
+    if (response.data) this.setState({ bots: response.bots })
   }
 
   playMelody(m) {
