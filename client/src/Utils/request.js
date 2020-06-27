@@ -15,6 +15,6 @@ export const fetchJson = async (url, options = {}) => {
     const json = await res.json();
     return response(json, null);
   } catch (e) {
-    return response(null, 'Invalid JSON response from server.');
+    return response(null, 'Invalid JSON response from server.');
   }
 };
