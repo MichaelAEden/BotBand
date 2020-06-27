@@ -8,16 +8,16 @@ var GaWorker = /** @class */ (function () {
     }
     GaWorker.prototype.generateStartingMelody = function () {
         var melodies = new Array();
-        melodies.push(new Melody_1.Melody(this.createNoteArray('C4,G4,D4,A4,B4,C5,C5,D5,B4,E5')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('A4,C5,A4,A4,E4,F4,G4,A4,B4,G4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('B4,C5,F4,F4,E5,F5,B4,G4,G5,A4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('G3,B4,D4,E4,G3,D5,D5,D5,E5,C5')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('G4,D5,F5,B4,F4,F4,F4,C5,E5,G4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('B3,A4,G4,G5,E4,B4,D4,E4,G5,E4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('E5,F4,D4,G4,D5,A4,F4,A4,A3,C4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('C5,C5,G5,B4,G4,C5,C5,G5,E5,G4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('G4,C4,F4,B3,G3,B3,D4,E4,A3,D4')));
-        melodies.push(new Melody_1.Melody(this.createNoteArray('G5,E5,D5,B4,F4,A4,G4,A4,E4,G4')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('C4,G4,D4,A4,B4,C5,C5,D5')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('A4,C5,A4,A4,E4,F4,G4,A4')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('B4,C5,F4,F4,E5,F5,B4,G4')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('G3,B4,D4,E4,G3,D5,D5,D5')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('G4,D5,F5,B4,F4,F4,F4,C5')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('B3,A4,G4,G5,E4,B4,D4,E4')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('E5,F4,D4,G4,D5,A4,F4,A4')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('C5,C5,G5,B4,G4,C5,C5,G5')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('G4,C4,F4,B3,G3,B3,D4,E4')));
+        melodies.push(new Melody_1.Melody(this.createNoteArray('G5,E5,D5,B4,F4,A4,G4,A4')));
         return melodies;
     };
     GaWorker.prototype.createNoteArray = function (s) {
