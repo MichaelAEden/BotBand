@@ -48,7 +48,6 @@ class Individual
         }
     }
 
-
     public compareIndividual(best_individual){
         var comparedFitness = 0
         var dist = new Array()
