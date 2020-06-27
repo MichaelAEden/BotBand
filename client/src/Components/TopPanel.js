@@ -41,15 +41,18 @@ class TopPanel extends Component {
 
     render() {
       if (!this.state.bots) return null;
+      
+      const bots = this.state.bots.map((bot, i) => (
+        <MDBCol key={i} size="3">
+          <img src="Robot1.png" className="robot" onClick={() => this.handleRobotClick(i)}></img>
+        </MDBCol>
+      ));
 
       return(
         <div id="top-panel">
           <MDBRow>
             <MDBCol size="1"></MDBCol>
-              {this.state.bots.map((bot, i) => (<MDBCol key={i} size="3">
-                  <img src="Robot1.png" className="robot" onClick={() => this.handleRobotClick(i)}></img>
-                </MDBCol>)
-              )}
+              {bots}
           </MDBRow>
         </div>
       );
