@@ -82,7 +82,6 @@ class Individual
         }
         
         this.setFitnessValue(fitness)
-
         return fitness;
     }
 }

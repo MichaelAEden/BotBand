@@ -29,7 +29,13 @@ app.get("/test", async (req, res) => {
  * Expected request body
  * {bots : [{rating, melody}, {...}, ...]}
  */
-app.post("createbots/rating", async (req, res) => {
+app.post("/createbots/rating", async (req, res) => {
+  let worker = new GaWorker();
+  if (!req.body) {
+    res.status(200).json({'bots' : worker.generateStartingMelody()});
+    return;
+  }
+  
   let botReqs = req.body.bots;
   let botList = new Array<Bot>();
 
@@ -38,7 +44,6 @@ app.post("createbots/rating", async (req, res) => {
     botList.push(new Bot(botData.rating, botData.melody.map(s => new Note(s))));
   }
 
-  let worker = new GaWorker();
   let nextGeneration = worker.generateNewBots(botList);
 
   // TODO send nextGen
@@ -49,7 +54,13 @@ app.post("createbots/rating", async (req, res) => {
  * Expected request body
  * {bots : [{rating, melody}, {...}, ...]}
  */
-app.post("createbots/usage", async (req, res) => {
+app.post("/createbots/usage", async (req, res) => {
+  let worker = new GaWorker();
+  if (!req.body) {
+    res.status(200).json({'bots' : worker.generateStartingMelody()});
+    return;
+  }
+  
   let botReqs = req.body.bots;
   let botList = new Array<Bot>();
 
@@ -58,11 +69,14 @@ app.post("createbots/usage", async (req, res) => {
     botList.push(new Bot(botData.count, botData.melody.map(s => new Note(s))));
   }
 
-  let worker = new GaWorker();
   let nextGeneration = worker.generateNewBots(botList);
   
   // TODO send nextGen
   res.status(200).send("Usage");
 });
+
+app.get('*', (req, res) => {
+  res.send(404);
+})
 
 export default app;
