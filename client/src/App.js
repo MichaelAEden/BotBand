@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MDBContainer } from "mdbreact";
 import { render } from '@testing-library/react';
-import TopPanel from './Components/TopPanel';
+import Test from './Components/Test';
 
 class App extends Component {
   constructor() {
@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return(
       <MDBContainer id="App">
-        <TopPanel />
+        <Test />
       </MDBContainer>
     );
   }
