@@ -6,3 +6,16 @@
     width: 200px;
     height: 200px;
 }
+
+#top-panel .robot-toolbar {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#top-panel .toolbar-btn {
+    padding: 0.15rem;
+}
+
+#top-panel .toolbar-btn:hover {
+    cursor: pointer;
+}
