@@ -1,0 +1,8 @@
+#top-panel {
+    border: 1px solid black;
+}
+
+#top-panel .robot {
+    width: 200px;
+    height: 200px;
+}

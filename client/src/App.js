@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { Component } from 'react';
+import { MDBContainer } from "mdbreact";
+import { render } from '@testing-library/react';
+import TopPanel from './Components/TopPanel';
 
-const API_URL = process.env.REACT_APP_API_URL;
+class App extends Component {
+  constructor() {
+    super();
+  }
 
-function App() {
-  const [test, setTest] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(API_URL + "/test");
-      console.log(response);
-      setTest(response.status);
-    };
-    fetchData();
-  });
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Server response {test}</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  render() {
+    return(
+      <MDBContainer id="App">
+        <TopPanel />
+      </MDBContainer>
+    );
+  }
 }
 
 export default App;
