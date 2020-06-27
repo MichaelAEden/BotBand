@@ -9,7 +9,6 @@ class TopPanel extends Component {
         super();
         this.state = {}
         this.handlePlayClick = this.handlePlayClick.bind(this);
-        this.handleHover = this.handleHover.bind(this);
         this.handleThumbsUp = this.handleThumbsUp.bind(this);
         this.handleThumbsDown = this.handleThumbsDown.bind(this);
     }
