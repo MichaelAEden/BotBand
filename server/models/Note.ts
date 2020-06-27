@@ -27,7 +27,7 @@ export class Note {
     }
 
     // this note - arg note
-    compare(note: Note): Number {
+    compare(note: Note): number {
         let dOctave = (Number(this.getOctave()) - Number(note.getOctave())) * 8;
         let dNote = this.getKey().charCodeAt(0) - note.getKey().charCodeAt(0);
 
