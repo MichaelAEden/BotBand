@@ -1,4 +1,5 @@
 import * as express from "express";
+import {GaWorker} from "./GaWorker";
 
 const app = express();
 
@@ -17,7 +18,17 @@ app.use((req, res, next) => {
 });
 
 app.get("/test", async (req, res) => {
+  let worker = new GaWorker();
+  console.log(worker.createStartSet());
   res.status(200).send("Hello, world!");
+});
+
+app.post("createbots/rating", async (req, res) => {
+  res.status(200).send("Rating");
+});
+
+app.post("createbots/usage", async (req, res) => {
+  res.status(200).send("Rating");
 });
 
 export default app;
