@@ -20,20 +20,22 @@ class TopPanel extends Component {
   }
 
   playMelody(m) {
-    let synth = new Tone.Synth().toMaster();
-    let sequence = new Tone.Sequence(function(time, note){
+    Tone.Transport.clear();
+    const synth = new Tone.Synth().toMaster();
+    const sequence = new Tone.Sequence(function(time, note){
       synth.triggerAttackRelease(note, "4n", time);
     }, m, "4n");
-    sequence.start();
-    sequence.loop = 1;
-    Tone.Transport.toggle();
+    sequence.start(Tone.Transport.time);
+    sequence.loop = false;
+    Tone.Transport.start();
   }
 
-  handlePlayClick(e) {
-    console.log("hello");
-    let m = ["C4", "E4", "G4", "A4"]
-    this.playMelody(m);
-  }
+  handlePlayClick(i) {
+    console.log(`Playing ${i}`);
+    const melody = this.state.bots[i].melody.map(note => note.key);
+    this.playMelody(melody);
+    
+    }
 
     handleThumbsUp(e) {
       console.log("thumbs up");
@@ -42,15 +44,16 @@ class TopPanel extends Component {
     handleThumbsDown(e) {
       console.log("thumbs down");
     }
-
+    
     render() {
+      console.log("hello", this.state.bots);
       if (!this.state.bots) return null;
       
       const bots = this.state.bots.map((bot, i) => (
         <MDBCol key={i} size="3">
           <div>
             <div className="robot-toolbar">
-              <MDBIcon far icon="play-circle" className="toolbar-btn" onClick={this.handlePlayClick}/>
+              <MDBIcon far icon="play-circle" className="toolbar-btn" onClick={() => this.handlePlayClick(i)}/>
               <MDBIcon far icon="thumbs-up" className="toolbar-btn" onClick={this.handleThumbsUp}/>
               <MDBIcon far icon="thumbs-down" className="toolbar-btn" onClick={this.handleThumbsDown}/>
             </div>
@@ -62,8 +65,8 @@ class TopPanel extends Component {
     return(
       <div id="top-panel">
         <MDBRow>
-          <MDBCol size="1"></MDBCol>
-            {bots}
+          {bots}
+
         </MDBRow>
       </div>
     );
