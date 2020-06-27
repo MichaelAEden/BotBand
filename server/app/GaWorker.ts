@@ -1,34 +1,42 @@
 import { Bot } from '../models/Bot';
 import { Rule } from '../models/Rule';
-import { BotRating } from '../models/BotRating';
+import { BotFitness } from '../models/BotFitness';
 
 export class GaWorker {
     
     rules: Rule[];
 
-    generateNewBots(oldGeneration: Bot[]) {
-        let newGeneration: Bot[];
+    generateNewBots(oldGeneration: Bot[]): Bot[] {
+        // create new pool of bots
+        let newGeneration: Bot[] = this.selectPool(this.evaluateFitness(oldGeneration));
 
+        // apply mutations in accordance with ruleset
+        this.mutateBots(newGeneration);
+
+        return newGeneration;
     }
 
-    evaluateFitness(oldGeneration: Bot[]): BotRating[] {
-        return new Array<BotRating>();
+    private evaluateFitness(oldGeneration: Bot[]): BotFitness[] {
+        return new Array<BotFitness>();
     }
 
     // uses weights to psuedo-random select the next generation bots
-    selectPool(ratings: BotRating[]): Bot[] {
+    private selectPool(ratings: BotFitness[]): Bot[] {
         return new Array<Bot>();
     }
 
-    mutateBots(bots: Bot[]) {
-
+    private mutateBots(bots: Bot[]) {
+        bots.forEach(bot => {
+            this.applyRuleSet(bot);
+        });
     }
 
-    applyRuleSet(bot: Bot) {
-        
+    private applyRuleSet(bot: Bot) {
+        // let startSet = this.createStartSet();
+        console.log("Applying rules to bots...");
     }
 
-    // helper function.
+    // helper function to generate 3 octaves of notes.
     createStartSet(): Array<String> {
         let startSet = new Array<String>();
 

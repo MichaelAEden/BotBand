@@ -1,6 +1,6 @@
 import { Bot } from './Bot';
 
-export class BotRating {
+export class BotFitness {
     bot: Bot;
     fitScore: Number;
 
