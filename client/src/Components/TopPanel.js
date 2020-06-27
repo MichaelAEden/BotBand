@@ -7,35 +7,27 @@ import Tone from 'tone';
 class TopPanel extends Component {
     constructor() {
         super();
-        this.state = {}
         this.handlePlayClick = this.handlePlayClick.bind(this);
         this.handleThumbsUp = this.handleThumbsUp.bind(this);
         this.handleThumbsDown = this.handleThumbsDown.bind(this);
     }
 
-  async componentDidMount() {
-    const response = await fetchJson('/createbots/rating', {method: 'POST'});
-    console.log(response);
-    if (response.data) this.setState({ bots: response.data.bots })
-  }
-
-  playMelody(m) {
-    Tone.Transport.clear();
-    const synth = new Tone.Synth().toMaster();
-    const sequence = new Tone.Sequence(function(time, note){
-      synth.triggerAttackRelease(note, "4n", time);
-    }, m, "4n");
-    sequence.start(Tone.Transport.time);
-    sequence.loop = false;
-    Tone.Transport.start();
-  }
-
-  handlePlayClick(i) {
-    console.log(`Playing ${i}`);
-    const melody = this.state.bots[i].melody.map(note => note.key);
-    this.playMelody(melody);
-    
+    playMelody(m) {
+      Tone.Transport.clear();
+      const synth = new Tone.Synth().toMaster();
+      const sequence = new Tone.Sequence(function(time, note){
+        synth.triggerAttackRelease(note, "4n", time);
+      }, m, "4n");
+      sequence.start(Tone.Transport.time);
+      sequence.loop = false;
+      Tone.Transport.start();
     }
+
+    handlePlayClick(i) {
+      console.log(`Playing ${i}`);
+      const melody = this.props.bots[i].melody.map(note => note.key);
+      this.playMelody(melody);
+      }
 
     handleThumbsUp(e) {
       console.log("thumbs up");
@@ -46,10 +38,10 @@ class TopPanel extends Component {
     }
     
     render() {
-      console.log("hello", this.state.bots);
-      if (!this.state.bots) return null;
+      console.log("hello", this.props.bots);
+      if (!this.props.bots) return null;
       
-      const bots = this.state.bots.map((bot, i) => (
+      const bots = this.props.bots.map((bot, i) => (
         <MDBCol key={i} size="3">
           <div>
             <div className="robot-toolbar">
