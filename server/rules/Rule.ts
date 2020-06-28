@@ -1,5 +1,5 @@
-import { Melody } from "./Melody";
-import { Note } from "./Note";
+import { Melody } from "../models/Melody";
+import { Note } from "../models/Note";
 
 export abstract class Rule {
   abstract apply(
