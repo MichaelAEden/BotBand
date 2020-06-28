@@ -17,8 +17,7 @@ export class GaWorker {
   rules: Rule[];
 
   constructor() {
-    this.rules.push(new LeapRule());
-    this.rules.push(new TritoneRule());
+    this.rules = [new LeapRule(), new TritoneRule()];
   }
 
   initialBots(): Bot[] {
@@ -66,7 +65,7 @@ export class GaWorker {
 
     const index = Math.floor(bot.melody.notes.length * Math.random());
     const notes = this.getPossibleNotesFromRules(index, bot);
-    
+
     if (!notes.length) {
       return;
     }
