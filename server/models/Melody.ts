@@ -1,79 +1,10 @@
-import { Note } from "./Note";
+import { Note } from './Note';
 
 export class Melody {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    melody: Note[]
-    num_notes: number
+    notes: Note[];
     
-=======
-    melody: Note[];
-    num_notes: number;
-    fitnessValue: number;
-
->>>>>>> added models and rules
-    constructor(melody: Note[]) {
-        this.melody = melody;
+    constructor(notes: Note[]) {
+        this.notes = notes;
     }
 
-<<<<<<< HEAD
-=======
-    compareIndividual(best_individual){
-        var comparedFitness = 0;
-        var diff = new Array();
-        var diff_best = new Array();
-
-        for(var i = 0; i<this.num_notes-1; i++) {
-            diff.push(this.melody[i].compare(this.melody[i+1]));
-            diff_best.push(best_individual.melody[i].compare(best_individual.melody[i+1]));
-
-            if (Math.abs(diff[i]) > 1 == Math.abs(diff_best[i]) > 1) {
-                if (diff[i] < 0 == diff_best[i] < 0) {
-                    comparedFitness+=2;
-                } else {
-                    comparedFitness+=1;
-                }
-            }
-        }
-
-        return comparedFitness/(this.num_notes*2);
-    }
-
-    mutate() {
-        var index = Math.floor(Math.random()*this.num_notes);
-        var note = NOTES[Math.floor(Math.random()*NOTES.length)] + Math.floor(Math.random()*2 + 3).toString(); 
-        // flip
-        this.melody[index].note = note;    
-    }
-
-    evaluate(best_individuals) {
-        var fitness = 0;
-        
-        // Selection-based fitness component
-        // (Comparing melody with selected melodies)
-        for (var i = 0; i < best_individuals.length; i++) {
-           var comparedFitness = this.compareIndividual(best_individuals[i]);
-           if (comparedFitness > fitness) {
-               fitness = comparedFitness;
-           }
-        }
-        
-        // Musical rules-based fitness component
-
-        this.fitnessValue = fitness
-        return fitness;
-    }
-    
-    getMelody(): Note[] {
-        return this.melody;
-    }
->>>>>>> added models and rules
 }
-=======
-  notes: Note[];
-
-  constructor(notes: Note[]) {
-    this.notes = notes;
-  }
-}
->>>>>>> Refactoring and prettifying
