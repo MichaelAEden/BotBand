@@ -59,11 +59,17 @@ export class GaWorker {
   }
 
   private mutateBot(bot: Bot): Bot {
-    if (Math.random() < this.MUTATION_RATE) return bot;
+    if (Math.random() < this.MUTATION_RATE) {
+      return bot;
+    }
 
     const index = Math.floor(bot.melody.notes.length * Math.random());
     const notes = this.getPossibleNotesFromRules(index, bot);
-    if (!notes.length) return;
+    
+    if (!notes.length) {
+      return;
+    }
+    
     bot.melody.notes[index] = selectRandom(notes);
     return bot;
   }
