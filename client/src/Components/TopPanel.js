@@ -35,7 +35,7 @@ class TopPanel extends Component {
               <MDBIcon far icon="thumbs-up" className="toolbar-btn" onClick={this.handleThumbsUp}/>
               <MDBIcon far icon="thumbs-down" className="toolbar-btn" onClick={this.handleThumbsDown}/>
             </div>
-            <img src="walle_purple.png" className="robot" onClick={() => {this.props.handleRobotClick(i)}}></img>
+            <img src={this.props.bots[i].img} className="robot" onClick={() => {this.props.handleRobotClick(i)}}></img>
           </div>
         </MDBCol>
       ));

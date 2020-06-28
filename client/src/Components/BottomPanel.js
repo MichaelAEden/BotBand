@@ -22,7 +22,7 @@ class BottomPanel extends Component {
   render() {
     const composition = this.props.composition.map( (bot, i) => (
         <MDBCol key={i} size="2">
-          <img src="walle_purple.png" className="robot"></img>
+          <img src={this.props.bots[i].img} className="robot"></img>
         </MDBCol>
     ));
 
