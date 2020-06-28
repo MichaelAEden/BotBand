@@ -2,15 +2,16 @@ import { Melody } from './Melody';
 
 export class Bot {
     // This will represent the usage count or the like / dislike depending on the GA interpretation.
-    metric : Number;
+    metric : number;
     melody: Melody;
     fitnessValue: number;
 
-    constructor(usage: Number, melody: Melody) {
+    constructor(usage: number, melody: Melody) {
         this.metric = usage;
         this.melody = melody;
     }
 
+<<<<<<< HEAD
     // Determines part of fitness score from similarities in steps and leaps
     // between the bot and one of the highest-usage bots
     compareBot(best_bot){
@@ -62,5 +63,13 @@ export class Bot {
 
         this.fitnessValue = fitness
         return fitness;
+=======
+    getMelody(): Melody {
+        return this.melody;
+    }
+
+    getMetric(): number {
+        return this.metric;
+>>>>>>> 2dc4033e8d740e948e499e4ee17cc801d2985ff2
     }
 }

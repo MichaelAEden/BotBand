@@ -3,10 +3,15 @@ import { Rule } from '../models/Rule';
 import { BotFitness } from '../models/BotFitness';
 import { Melody } from '../models/Melody';
 import { Note } from '../models/Note';
+import  { LeapRule }  from '../models/RulesImpl';
 
 export class GaWorker {
     
     rules: Rule[];
+
+    constructor() {
+        this.rules.push(new LeapRule());
+    }
 
     generateStartingMelody(): Melody[] {
         let melodies = new Array<Melody>();
@@ -49,18 +54,23 @@ export class GaWorker {
     }
 
     private mutateBots(bots: Bot[]) {
+        // TODO need to randomize, integrate with GA etc.
+        let mutationIndex = 4;
         bots.forEach(bot => {
-            this.applyRuleSet(bot);
+            this.getPossibleNotesFromRules(mutationIndex, bot);
         });
     }
 
-    private applyRuleSet(bot: Bot) {
-        // let startSet = this.createStartSet();
-        console.log("Applying rules to bots...");
+    private getPossibleNotesFromRules(index: number, bot: Bot): Array<Note> {
+        let set = this.createStartSet();
+        this.rules.forEach(rule => {
+            set = rule.apply(index, set, bot.getMelody());
+        });
+        return set;
     }
 
     // helper function to generate 3 octaves of notes.
-    createStartSet(): Array<String> {
+    createStartSet(): Array<Note> {
         let startSet = new Array<String>();
 
         new Array<String>('A', 'B', 'C', 'D', 'E', 'F', 'G').forEach(s => {
@@ -69,6 +79,6 @@ export class GaWorker {
             startSet.push(s + '5');
         });
 
-        return startSet;
+        return startSet.map(s => new Note(s));
     }
 }
