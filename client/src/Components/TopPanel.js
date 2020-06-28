@@ -12,7 +12,7 @@ class TopPanel extends Component {
 
     handlePlayClick(i) {
       console.log(`Playing ${i}`);
-      const melody = this.props.bots[i].melody.map(note => note.key);
+      const melody = this.props.bots[i].melody.notes.map(note => note.key);
       this.props.playMelody(melody);
     }
 
