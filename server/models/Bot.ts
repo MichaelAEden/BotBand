@@ -1,12 +1,12 @@
-import { Melody } from './Melody';
+import { Melody } from "./Melody";
 
 export class Bot {
-    // This will represent the usage count or the like / dislike depending on the GA interpretation.
-    metric : Number;
-    melody: Melody;
+  // This will represent the usage count or the like / dislike depending on the GA interpretation.
+  metric: number;
+  melody: Melody;
 
-    constructor(usage: Number, melody: Melody) {
-        this.metric = usage;
-        this.melody = melody;
-    }
+  constructor(metric: number, melody: Melody) {
+    this.metric = metric;
+    this.melody = melody;
+  }
 }

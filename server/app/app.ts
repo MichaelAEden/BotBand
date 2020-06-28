@@ -1,6 +1,7 @@
 import * as express from "express";
-import {GaWorker} from "./GaWorker";
-import {Bot} from "../models/Bot"
+
+import { GaWorker } from "./GaWorker";
+import { Bot } from "../models/Bot";
 import { Note } from "../models/Note";
 
 const app = express();
@@ -19,35 +20,27 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/test", async (req, res) => {
-  let worker = new GaWorker();
-  console.log(worker.createStartSet());
-  res.status(200).send("Hello, world!");
-});
-
 /**
  * Expected request body
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/rating", async (req, res) => {
-  let worker = new GaWorker();
+  const worker = new GaWorker();
   if (!req.body) {
-    res.status(200).json({'bots' : worker.generateStartingMelody()});
+    res.status(200).json({ bots: worker.initialBots() });
     return;
   }
-  
-  let botReqs = req.body.bots;
-  let botList = new Array<Bot>();
 
-  for (let key in botReqs) {
-    let botData = botReqs[key];
-    botList.push(new Bot(botData.rating, botData.melody.map(s => new Note(s))));
-  }
+  const bots = req.body.bots.map(
+    (bot) =>
+      new Bot(
+        bot.metric,
+        bot.melody.notes.map((note) => new Note(note.note))
+      )
+  );
+  const newBots = worker.generateNewBots(bots);
 
-  let nextGeneration = worker.generateNewBots(botList);
-
-  // TODO send nextGen
-  res.status(200).send("Rating");
+  res.status(200).json({ bots: newBots });
 });
 
 /**
@@ -57,26 +50,24 @@ app.post("/createbots/rating", async (req, res) => {
 app.post("/createbots/usage", async (req, res) => {
   let worker = new GaWorker();
   if (!req.body) {
-    res.status(200).json({'bots' : worker.generateStartingMelody()});
+    res.status(200).json({ bots: worker.initialBots() });
     return;
   }
-  
-  let botReqs = req.body.bots;
-  let botList = new Array<Bot>();
 
-  for (let key in botReqs) {
-    let botData = botReqs[key];
-    botList.push(new Bot(botData.count, botData.melody.map(s => new Note(s))));
-  }
+  const bots = req.body.bots.map(
+    (bot) =>
+      new Bot(
+        bot.metric,
+        bot.melody.notes.map((note) => new Note(note.note))
+      )
+  );
+  const newBots = worker.generateNewBots(bots);
 
-  let nextGeneration = worker.generateNewBots(botList);
-  
-  // TODO send nextGen
-  res.status(200).send("Usage");
+  res.status(200).json({ bots: newBots });
 });
 
-app.get('*', (req, res) => {
+app.get("*", (req, res) => {
   res.send(404);
-})
+});
 
 export default app;
