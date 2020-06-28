@@ -15,7 +15,7 @@ app.use((req, res, next) => {
     );
   // TODO: add production URL.
   const origin = process.env.ENV === "dev" ? "http://localhost:3000" : "";
-  res.set("Access-Control-Allow-Origin", origin);
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
 
   next();
 });

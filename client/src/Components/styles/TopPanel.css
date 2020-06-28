@@ -1,8 +1,23 @@
 #top-panel {
     border: 1px solid black;
+    background-image: url("https://i.pinimg.com/originals/39/2f/38/392f38884a695299b0b0a295f5edb1a2.png");
+    background-size: cover;
 }
 
-#top-panel .robot {
+.robot {
     width: 200px;
     height: 200px;
+}
+
+#top-panel .robot-toolbar {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#top-panel .toolbar-btn {
+    padding: 0.15rem;
+}
+
+#top-panel .toolbar-btn:hover {
+    cursor: pointer;
 }

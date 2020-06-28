@@ -1,9 +1,10 @@
 import { Note } from "./Note";
 
 export class Melody {
-  notes: Note[];
+    notes: Note[];
+    
+    constructor(notes: Note[]) {
+        this.notes = notes;
+    }
 
-  constructor(notes: Note[]) {
-    this.notes = notes;
-  }
 }

@@ -1,62 +1,55 @@
 import React, { Component } from 'react';
-import { MDBRow, MDBCol } from 'mdbreact';
-import { fetchJson } from '../Utils/request'
-
-import './styles/TopPanel.css'
+import { MDBRow, MDBCol, MDBIcon } from 'mdbreact';
+import './styles/TopPanel.css';
 
 class TopPanel extends Component {
     constructor() {
         super();
-        this.state = {}
-        this.handleRobotClick = this.handleRobotClick.bind(this);
+        this.handlePlayClick = this.handlePlayClick.bind(this);
+        this.handleThumbsUp = this.handleThumbsUp.bind(this);
+        this.handleThumbsDown = this.handleThumbsDown.bind(this);
     }
 
-    async componentDidMount() {
-      // const response = await fetchJson('/createbots/rating')
-      // if (response.data) this.setState({ bots: response.bots })
-      const mockData = {
-        bots: [
-          {
-            melody: [
-              { note: 'A4' },
-              { note: 'B4' },
-              { note: 'C4' }
-            ]
-          },
-          {
-             melody: [
-               { note: 'A4' },
-               { note: 'B4' },
-               { note: 'C4' }
-             ]
-          },
-        ]
-      }
-      this.setState({bots: mockData.bots})
+    handlePlayClick(i) {
+      console.log(`Playing ${i}`);
+      const melody = this.props.bots[i].melody.map(note => note.key);
+      this.props.playMelody(melody);
     }
 
-    handleRobotClick(i) {
-      console.log(i);
+    handleThumbsUp(e) {
+      console.log("thumbs up");
     }
 
+    handleThumbsDown(e) {
+      console.log("thumbs down");
+    }
+    
     render() {
-      if (!this.state.bots) return null;
+      console.log("hello", this.props.bots);
+      if (!this.props.bots) return null;
       
-      const bots = this.state.bots.map((bot, i) => (
+      const bots = this.props.bots.map((bot, i) => (
         <MDBCol key={i} size="3">
-          <img src="Robot1.png" className="robot" onClick={() => this.handleRobotClick(i)}></img>
+          <div>
+            <div className="robot-toolbar">
+              <MDBIcon far icon="play-circle" className="toolbar-btn" onClick={() => this.handlePlayClick(i)}/>
+              <MDBIcon far icon="thumbs-up" className="toolbar-btn" onClick={this.handleThumbsUp}/>
+              <MDBIcon far icon="thumbs-down" className="toolbar-btn" onClick={this.handleThumbsDown}/>
+            </div>
+            <img src="walle_purple.png" className="robot" onClick={() => {this.props.handleRobotClick(i)}}></img>
+          </div>
         </MDBCol>
       ));
 
-      return(
-        <div id="top-panel">
-          <MDBRow>
-            <MDBCol size="1"></MDBCol>
-              {bots}
-          </MDBRow>
-        </div>
-      );
-    }
+    return(
+      <div id="top-panel">
+        <MDBRow>
+          {bots}
+
+        </MDBRow>
+      </div>
+    );
+  }
 }
 
 export default TopPanel;
