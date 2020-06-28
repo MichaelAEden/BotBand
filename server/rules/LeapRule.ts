@@ -1,6 +1,6 @@
 import { Rule } from "./Rule";
-import { Melody } from "./Melody";
-import { Note } from "./Note";
+import { Melody } from "../models/Melody";
+import { Note } from "../models/Note";
 
 export class LeapRule extends Rule {
   apply(index: number, changeSet: Array<Note>, melody: Melody): Array<Note> {

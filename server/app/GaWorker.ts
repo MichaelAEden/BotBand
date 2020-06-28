@@ -1,11 +1,11 @@
 import { Bot } from "../models/Bot";
-import { Rule } from "../models/Rule";
-import { BotFitness } from "../models/BotFitness";
+import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandomWeighted } from "../utils/Utils";
+import { evaluate } from "./FitnessConvention";
 
-import { LeapRule } from "../models/RulesImpl";
+import { LeapRule } from "../rules/LeapRule";
 
 export class GaWorker {
   ELITISM_K = 5; // ???
@@ -39,10 +39,10 @@ export class GaWorker {
     let generation = startingPopulation;
     for (let i = 0; i < this.ITERATIONS; i++) {
       // Create new pool of bots
-      let botFitnesses = []; // TODO
-      let generation = selectRandomWeighted(
-        botFitnesses,
-        (b: BotFitness) => b.fitScore,
+      let fitnesses = evaluate(generation);
+      generation = selectRandomWeighted(
+        generation,
+        fitnesses,
         this.POPULATION_SIZE
       );
 
