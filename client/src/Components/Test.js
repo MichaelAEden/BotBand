@@ -22,7 +22,7 @@ class TopPanel extends Component {
   handleRobotClick(i) {
     Tone.Transport.clear();
     console.log(`Playing ${i}`)
-    const melody = this.state.bots[i].melody.map(note => note.key)
+    const melody = this.state.bots[i].melody.notes.map(note => note.note)
     const synth = new Tone.Synth().toMaster();
     const sequence = new Tone.Sequence(function(time, note){
       synth.triggerAttackRelease(note, "4n", time);

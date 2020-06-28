@@ -70,6 +70,7 @@ class App extends Component {
         />
         <BottomPanel
           composition={this.state.composition}
+          bots={this.state.bots}
           playMelody={this.playMelody}
           handleClearClick={this.handleClearClick}
         />
