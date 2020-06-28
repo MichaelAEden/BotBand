@@ -68,7 +68,6 @@ export const evaluate = (bots: Bot[]) => {
       fitness = 1
     }
 
-
 }
 
 
