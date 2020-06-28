@@ -32,8 +32,9 @@ class BottomPanel extends Component {
           <h2>Composition</h2>
         </div>
         <MDBRow>
-          <MDBCol size="2">
-            <MDBIcon icon="play-circle" size="3x" id="play" onClick={this.handlePlayComposition}/>
+          <MDBCol size="2" id="bottom-toolbar">
+            <MDBIcon icon="play-circle" size="3x" onClick={this.handlePlayComposition}/>
+            <MDBIcon icon="trash-alt" size="3x" onClick={this.props.handleClearClick}/>
           </MDBCol>
           {composition}
         </MDBRow>

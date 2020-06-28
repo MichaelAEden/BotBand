@@ -6,3 +6,8 @@
   background-color: #D3FFEA;
   text-align: center;
 }
+
+#bottom-toolbar {
+  display: flex;
+  flex-direction: column;
+}

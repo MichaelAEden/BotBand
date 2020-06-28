@@ -21,3 +21,15 @@
 #top-panel .toolbar-btn:hover {
     cursor: pointer;
 }
+
+#refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#generate-btn {
+    font-size: 1rem;
+    width: 400px;
+    background-color: orange !important;
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBRow, MDBCol, MDBIcon } from 'mdbreact';
+import { MDBRow, MDBCol, MDBIcon, MDBBtn } from 'mdbreact';
 import './styles/TopPanel.css';
 
 class TopPanel extends Component {
@@ -25,7 +25,6 @@ class TopPanel extends Component {
     }
     
     render() {
-      console.log("hello", this.props.bots);
       if (!this.props.bots) return null;
       
       const bots = this.props.bots.map((bot, i) => (
@@ -45,7 +44,10 @@ class TopPanel extends Component {
       <div id="top-panel">
         <MDBRow>
           {bots}
-
+          <MDBCol size="2"></MDBCol>
+          <MDBCol size="2" id="refresh">
+            <MDBBtn id="generate-btn">Generate New Bots</MDBBtn>
+          </MDBCol>
         </MDBRow>
       </div>
     );
