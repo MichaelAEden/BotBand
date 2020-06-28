@@ -1,3 +1,8 @@
+export const selectRandom = (items) => {
+  if (!items.length) throw new Error("Empty items!");
+  return items[Math.floor(Math.random() * items.length)];
+};
+
 export const selectRandomWeighted = (items, weights, n) => {
   if (items.length !== weights.length)
     throw new Error("Items and weights must be same length!");

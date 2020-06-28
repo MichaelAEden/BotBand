@@ -2,14 +2,13 @@ import { Bot } from "../models/Bot";
 import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
-import { selectRandomWeighted } from "../utils/Utils";
-import { evaluate } from "./FitnessUser";
-// import { evaluate } from "./FitnessConvention";
+import { selectRandom, selectRandomWeighted } from "../utils/Utils";
+import { evaluate } from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
 
 export class GaWorker {
-  ITERATIONS = 50; // Times GA will iterate
+  ITERATIONS = 20; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
   MUTATION_RATE = 0.5; // Probability of mutation
 
@@ -19,19 +18,20 @@ export class GaWorker {
     this.rules.push(new LeapRule());
   }
 
-  generateStartingMelody(): Melody[] {
-    const createNoteArray = (s: string) => s.split(",").map((s) => new Note(s));
+  initialBots(): Bot[] {
+    const createBot = (s: string) =>
+      new Bot(0, new Melody(s.split(",").map((s) => new Note(s))));
     return [
-      new Melody(createNoteArray("C4,G4,D4,A4,B4,C5,C5,D5,B4,E5")),
-      new Melody(createNoteArray("A4,C5,A4,A4,E4,F4,G4,A4,B4,G4")),
-      new Melody(createNoteArray("B4,C5,F4,F4,E5,F5,B4,G4,G5,A4")),
-      new Melody(createNoteArray("G3,B4,D4,E4,G3,D5,D5,D5,E5,C5")),
-      new Melody(createNoteArray("G4,D5,F5,B4,F4,F4,F4,C5,E5,G4")),
-      new Melody(createNoteArray("B3,A4,G4,G5,E4,B4,D4,E4,G5,E4")),
-      new Melody(createNoteArray("E5,F4,D4,G4,D5,A4,F4,A4,A3,C4")),
-      new Melody(createNoteArray("C5,C5,G5,B4,G4,C5,C5,G5,E5,G4")),
-      new Melody(createNoteArray("G4,C4,F4,B3,G3,B3,D4,E4,A3,D4")),
-      new Melody(createNoteArray("G5,E5,D5,B4,F4,A4,G4,A4,E4,G4")),
+      createBot("C4,G4,D4,A4,B4,C5,C5,D5,B4,E5"),
+      createBot("A4,C5,A4,A4,E4,F4,G4,A4,B4,G4"),
+      createBot("B4,C5,F4,F4,E5,F5,B4,G4,G5,A4"),
+      createBot("G3,B4,D4,E4,G3,D5,D5,D5,E5,C5"),
+      createBot("G4,D5,F5,B4,F4,F4,F4,C5,E5,G4"),
+      createBot("B3,A4,G4,G5,E4,B4,D4,E4,G5,E4"),
+      createBot("E5,F4,D4,G4,D5,A4,F4,A4,A3,C4"),
+      createBot("C5,C5,G5,B4,G4,C5,C5,G5,E5,G4"),
+      createBot("G4,C4,F4,B3,G3,B3,D4,E4,A3,D4"),
+      createBot("G5,E5,D5,B4,F4,A4,G4,A4,E4,G4"),
     ];
   }
 
@@ -50,19 +50,19 @@ export class GaWorker {
         this.POPULATION_SIZE
       );
 
-      // Apply a mutation in accordance with ruleset
-      generation = generation.map((bot) =>
-        Math.random() < this.MUTATION_RATE ? this.mutateBot(bot) : bot
-      );
+      // Apply mutations in accordance with ruleset
+      generation = generation.map((bot) => this.mutateBot(bot));
     }
     return generation;
   }
 
   private mutateBot(bot: Bot): Bot {
-    // select random index.
-    // perform mutations on incidicies.
-    this.getPossibleNotesFromRules(4, bot); 
-    // randomly select a new note from filtered set and change at specified index.
+    if (Math.random() < this.MUTATION_RATE) return bot;
+
+    const index = Math.floor(bot.melody.notes.length * Math.random());
+    const notes = this.getPossibleNotesFromRules(index, bot);
+    if (!notes.length) return;
+    bot.melody.notes[index] = selectRandom(notes);
     return bot;
   }
 
