@@ -13,11 +13,17 @@ class App extends Component {
       composition: []
     }
     this.handleRobotClick = this.handleRobotClick.bind(this);
+    this.handleClearClick = this.handleClearClick.bind(this);
   }
 
   async componentDidMount() {
     const response = await fetchJson('/createbots/rating', {method: 'POST'});
     console.log(response);
+    let bots = response.data.bots;
+    bots.forEach( (bot) => {
+      bot["count"] = 0;
+    });
+    console.log(bots);
     if (response.data) this.setState({ bots: response.data.bots })
   }
 
@@ -33,11 +39,22 @@ class App extends Component {
   }
 
   handleRobotClick(i) {
-    console.log(this.state.bots);
     let new_composition = this.state.composition.slice();
     const clicked_melody = this.state.bots[i];
     new_composition.push(clicked_melody);
-    this.setState({composition: new_composition});
+
+    //record usage
+    let bots_copy = this.state.bots.slice();
+    let json_copy = {};
+    json_copy = Object.assign(json_copy, bots_copy[i]);
+    json_copy["count"] += 1;
+    bots_copy[i] = json_copy;
+    this.setState({composition: new_composition, bots: bots_copy});
+  }
+
+  handleClearClick(e) {
+    console.log("clearing composition");
+    this.setState({composition: []});
   }
 
   render() {
@@ -51,6 +68,7 @@ class App extends Component {
         <BottomPanel
           composition={this.state.composition}
           playMelody={this.playMelody}
+          handleClearClick={this.handleClearClick}
         />
       </MDBContainer>
     );
