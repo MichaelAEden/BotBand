@@ -6,6 +6,7 @@ import { selectRandom, selectRandomWeighted } from "../utils/Utils";
 import { evaluate } from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
+import { TritoneRule } from "../rules/TritoneRule";
 
 export class GaWorker {
   ITERATIONS = 20; // Times GA will iterate
@@ -16,6 +17,7 @@ export class GaWorker {
 
   constructor() {
     this.rules.push(new LeapRule());
+    this.rules.push(new TritoneRule());
   }
 
   initialBots(): Bot[] {
