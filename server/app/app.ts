@@ -1,6 +1,6 @@
 import * as express from "express";
-import {GaWorker} from "./GaWorker";
-import {Bot} from "../models/Bot"
+import { GaWorker } from "./GaWorker";
+import { Bot } from "../models/Bot";
 import { Note } from "../models/Note";
 
 const app = express();
@@ -32,16 +32,21 @@ app.get("/test", async (req, res) => {
 app.post("/createbots/rating", async (req, res) => {
   let worker = new GaWorker();
   if (!req.body) {
-    res.status(200).json({'bots' : worker.generateStartingMelody()});
+    res.status(200).json({ bots: worker.generateStartingMelody() });
     return;
   }
-  
+
   let botReqs = req.body.bots;
   let botList = new Array<Bot>();
 
   for (let key in botReqs) {
     let botData = botReqs[key];
-    botList.push(new Bot(botData.rating, botData.melody.map(s => new Note(s))));
+    botList.push(
+      new Bot(
+        botData.rating,
+        botData.melody.map((s) => new Note(s))
+      )
+    );
   }
 
   let nextGeneration = worker.generateNewBots(botList);
@@ -57,26 +62,31 @@ app.post("/createbots/rating", async (req, res) => {
 app.post("/createbots/usage", async (req, res) => {
   let worker = new GaWorker();
   if (!req.body) {
-    res.status(200).json({'bots' : worker.generateStartingMelody()});
+    res.status(200).json({ bots: worker.generateStartingMelody() });
     return;
   }
-  
+
   let botReqs = req.body.bots;
   let botList = new Array<Bot>();
 
   for (let key in botReqs) {
     let botData = botReqs[key];
-    botList.push(new Bot(botData.count, botData.melody.map(s => new Note(s))));
+    botList.push(
+      new Bot(
+        botData.count,
+        botData.melody.map((s) => new Note(s))
+      )
+    );
   }
 
   let nextGeneration = worker.generateNewBots(botList);
-  
+
   // TODO send nextGen
   res.status(200).send("Usage");
 });
 
-app.get('*', (req, res) => {
+app.get("*", (req, res) => {
   res.send(404);
-})
+});
 
 export default app;
