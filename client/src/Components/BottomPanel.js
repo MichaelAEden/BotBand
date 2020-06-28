@@ -12,7 +12,7 @@ class BottomPanel extends Component {
 
   handlePlayComposition(i) {
     let melodies = [];
-    this.props.composition.forEach( (bot) => {
+    this.props.composition.forEach((bot) => {
       let melody = bot.melody.notes.map(note => note.note);
       melodies = melodies.concat(melody);
     });
@@ -22,7 +22,7 @@ class BottomPanel extends Component {
   render() {
     const composition = this.props.composition.map((bot, i) => (
         <MDBCol key={i} size="2">
-          <img src={this.props.bots[i].img} className="robot"></img>
+          <img src={bot.img} className="robot"></img>
         </MDBCol>
     ));
 
