@@ -3,12 +3,12 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandomWeighted } from "../utils/Utils";
-import { evaluate } from "./FitnessConvention";
+import { evaluate } from "./FitnessUser";
+// import { evaluate } from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
 
 export class GaWorker {
-  ELITISM_K = 5; // ???
   ITERATIONS = 50; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
   MUTATION_RATE = 0.5; // Probability of mutation
@@ -37,16 +37,20 @@ export class GaWorker {
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
+
+    // Number of generations to iterate before returning to client
     for (let i = 0; i < this.ITERATIONS; i++) {
-      // Create new pool of bots
+      // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
+
+      // Normalize the scores to select a new generation
       generation = selectRandomWeighted(
         generation,
         fitnesses,
         this.POPULATION_SIZE
       );
 
-      // Apply mutations in accordance with ruleset
+      // Apply a mutation in accordance with ruleset
       generation = generation.map((bot) =>
         Math.random() < this.MUTATION_RATE ? this.mutateBot(bot) : bot
       );
@@ -55,9 +59,10 @@ export class GaWorker {
   }
 
   private mutateBot(bot: Bot): Bot {
-    // TODO need to randomize, integrate with GA etc.
-    console.log("Mutating bot...");
-    this.getPossibleNotesFromRules(4, bot); // TODO
+    // select random index.
+    // perform mutations on incidicies.
+    this.getPossibleNotesFromRules(4, bot); 
+    // randomly select a new note from filtered set and change at specified index.
     return bot;
   }
 
