@@ -4,6 +4,7 @@ import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
 import { evaluate } from "./FitnessConvention";
+// import { evaluate } from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
@@ -69,7 +70,7 @@ export class GaWorker {
     if (!notes.length) {
       return;
     }
-    
+
     bot.melody.notes[index] = selectRandom(notes);
     return bot;
   }
