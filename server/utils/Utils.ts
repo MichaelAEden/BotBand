@@ -1,8 +1,11 @@
-export const selectRandomWeighted = (items, getFitness, n) => {
+export const selectRandomWeighted = (items, weights, n) => {
+  if (items.length !== weights.length)
+    throw new Error("Items and weights must be same length!");
+
   let sum = 0;
   let segments = new Array();
-  for (let i = 0; i < items.length; i++) {
-    sum += getFitness(items[i]);
+  for (let i = 0; i < weights.length; i++) {
+    sum += weights[i];
     segments.push(sum);
   }
 
