@@ -46,7 +46,7 @@ class TopPanel extends Component {
           {bots}
           <MDBCol size="2"></MDBCol>
           <MDBCol size="2" id="refresh">
-            <MDBBtn id="generate-btn">Generate New Bots</MDBBtn>
+            <MDBBtn onClick={this.props.generateBots} id="generate-btn">Generate New Bots</MDBBtn>
           </MDBCol>
         </MDBRow>
       </div>
