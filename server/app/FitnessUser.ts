@@ -1,6 +1,4 @@
 import { Bot } from "../models/Bot";
 
-export const evaluate = (bots: Bot[]) => {
-  // TODO
-  return bots.map(() => Math.random());
-};
+// Usage score purely represents fitness.
+export const evaluate = (bots: Bot[]) => bots.map(bot => bot.metric);
