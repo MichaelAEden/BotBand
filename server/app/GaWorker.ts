@@ -1,10 +1,11 @@
-import { Bot } from '../models/Bot';
-import { Rule } from '../models/Rule';
-import { BotFitness } from '../models/BotFitness';
-import { Melody } from '../models/Melody';
-import { Note } from '../models/Note';
-import { LeapRule }  from '../models/RulesImpl';
+import { Bot } from "../models/Bot";
+import { Rule } from "../models/Rule";
+import { BotFitness } from "../models/BotFitness";
+import { Melody } from "../models/Melody";
+import { Note } from "../models/Note";
+import { selectRandomWeighted } from "../utils/Utils";
 
+<<<<<<< HEAD
 export class GaWorker {
     
     rules: Rule[];
@@ -68,17 +69,82 @@ export class GaWorker {
         });
         return set;
     }
+=======
+import { LeapRule } from "../models/RulesImpl";
+>>>>>>> Refactoring and prettifying
 
-    // helper function to generate 3 octaves of notes.
-    createStartSet(): Array<Note> {
-        let startSet = new Array<String>();
+export class GaWorker {
+  ELITISM_K = 5; // ???
+  ITERATIONS = 50; // Times GA will iterate
+  POPULATION_SIZE = 10; // Population size
+  MUTATION_RATE = 0.5; // Probability of mutation
 
-        new Array<String>('A', 'B', 'C', 'D', 'E', 'F', 'G').forEach(s => {
-            startSet.push(s + '3');
-            startSet.push(s + '4');
-            startSet.push(s + '5');
-        });
+  rules: Rule[];
 
-        return startSet.map(s => new Note(s));
+  constructor() {
+    this.rules.push(new LeapRule());
+  }
+
+  generateStartingMelody(): Melody[] {
+    const createNoteArray = (s: string) => s.split(",").map((s) => new Note(s));
+    return [
+      new Melody(createNoteArray("C4,G4,D4,A4,B4,C5,C5,D5,B4,E5")),
+      new Melody(createNoteArray("A4,C5,A4,A4,E4,F4,G4,A4,B4,G4")),
+      new Melody(createNoteArray("B4,C5,F4,F4,E5,F5,B4,G4,G5,A4")),
+      new Melody(createNoteArray("G3,B4,D4,E4,G3,D5,D5,D5,E5,C5")),
+      new Melody(createNoteArray("G4,D5,F5,B4,F4,F4,F4,C5,E5,G4")),
+      new Melody(createNoteArray("B3,A4,G4,G5,E4,B4,D4,E4,G5,E4")),
+      new Melody(createNoteArray("E5,F4,D4,G4,D5,A4,F4,A4,A3,C4")),
+      new Melody(createNoteArray("C5,C5,G5,B4,G4,C5,C5,G5,E5,G4")),
+      new Melody(createNoteArray("G4,C4,F4,B3,G3,B3,D4,E4,A3,D4")),
+      new Melody(createNoteArray("G5,E5,D5,B4,F4,A4,G4,A4,E4,G4")),
+    ];
+  }
+
+  generateNewBots(startingPopulation: Bot[]): Bot[] {
+    let generation = startingPopulation;
+    for (let i = 0; i < this.ITERATIONS; i++) {
+      // Create new pool of bots
+      let botFitnesses = []; // TODO
+      let generation = selectRandomWeighted(
+        botFitnesses,
+        (b: BotFitness) => b.fitScore,
+        this.POPULATION_SIZE
+      );
+
+      // Apply mutations in accordance with ruleset
+      generation = generation.map((bot) =>
+        Math.random() < this.MUTATION_RATE ? this.mutateBot(bot) : bot
+      );
     }
+    return generation;
+  }
+
+  private mutateBot(bot: Bot): Bot {
+    // TODO need to randomize, integrate with GA etc.
+    console.log("Mutating bot...");
+    this.getPossibleNotesFromRules(4, bot); // TODO
+    return bot;
+  }
+
+  private getPossibleNotesFromRules(index: number, bot: Bot): Array<Note> {
+    let set = this.createStartSet();
+    this.rules.forEach((rule) => {
+      set = rule.apply(index, set, bot.melody);
+    });
+    return set;
+  }
+
+  // Helper function to generate 3 octaves of notes.
+  createStartSet(): Array<Note> {
+    let startSet = new Array<String>();
+
+    new Array<String>("A", "B", "C", "D", "E", "F", "G").forEach((s) => {
+      startSet.push(s + "3");
+      startSet.push(s + "4");
+      startSet.push(s + "5");
+    });
+
+    return startSet.map((s) => new Note(s));
+  }
 }

@@ -1,8 +1,7 @@
-import { Note } from './Note';
-
-const NOTES = ['A','B','C','D','E','F','G']
+import { Note } from "./Note";
 
 export class Melody {
+<<<<<<< HEAD
 <<<<<<< HEAD
     melody: Note[]
     num_notes: number
@@ -70,3 +69,11 @@ export class Melody {
     }
 >>>>>>> added models and rules
 }
+=======
+  notes: Note[];
+
+  constructor(notes: Note[]) {
+    this.notes = notes;
+  }
+}
+>>>>>>> Refactoring and prettifying
