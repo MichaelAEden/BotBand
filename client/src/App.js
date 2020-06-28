@@ -16,16 +16,19 @@ class App extends Component {
     this.handleClearClick = this.handleClearClick.bind(this);
   }
 
+  robot_images = ["Robot_2_-_Blue.png", "Robot_2_-_Green.png", "Robot_2_-_Yellow.png", "Robot1.png", "walle_purple.png"]
+
   async componentDidMount() {
     const response = await fetchJson('/createbots/rating', {method: 'POST'});
     console.log(response);
     let bots = response.data.bots;
     bots.forEach( (bot) => {
       bot["count"] = 0;
+      bot["img"] = this.robot_images[Math.floor(Math.random() * this.robot_images.length)];
     });
-    console.log(bots);
-    if (response.data) this.setState({ bots: response.data.bots })
+    if (response.data) this.setState({ bots: response.data.bots });
   }
+
 
   playMelody(m) {
     Tone.Transport.clear();
