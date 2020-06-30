@@ -12,7 +12,7 @@ import { TritoneRule } from "../rules/TritoneRule";
 export class GaWorker {
   ITERATIONS = 20; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
-  MUTATION_RATE = 0.5; // Probability of mutation
+  MUTATION_RATE = 0.05; // Probability of mutation
 
   rules: Rule[];
 
