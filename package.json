@@ -1,7 +1,7 @@
 {
   "name": "botband-backend",
-  "version": "0.0.1",
   "description": "Backend for BotBand",
+  "version": "0.0.1",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -11,5 +11,12 @@
     "@types/lodash": "^4.14.157",
     "@types/node": "^14.0.14",
     "typescript": "^3.9.5"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "start": "node build/index.local.js",
+    "build": "npx tsc -p tsconfig.json"
   }
 }
