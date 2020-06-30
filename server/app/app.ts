@@ -41,7 +41,7 @@ app.get("/", async (req, res) => {
 app.post("/createbots/rating", async (req, res) => {
   const worker = new GaWorker();
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  if (!req.body) {
+  if (req.body.bots && req.body.bots.length === 0) {
     console.log(`First request initialized from ${ip}`);
     res.status(200).json({ bots: worker.initialBots() });
     return;
@@ -63,7 +63,7 @@ app.post("/createbots/usage", async (req, res) => {
   let worker = new GaWorker();
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  if (!req.body) {
+  if (req.body.bots && req.body.bots.length === 0) {
     console.log(`First request initialized from ${ip}`);
     res.status(200).json({ bots: worker.initialBots() });
     return;
