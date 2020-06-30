@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as bodyParser from "body-parser";
 
 import { GaWorker } from "./GaWorker";
 import { Bot } from "../models/Bot";
@@ -19,6 +20,10 @@ const app = express();
 
 //   next();
 // });
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.get("/", async (req, res) => {
   res.status(200).send("Hello, world!");
