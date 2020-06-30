@@ -1,6 +1,6 @@
 # BotBand
 
-GA-generated music.
+Music generated with genetic algorithms.
 
 # Project Structure
 
@@ -21,13 +21,11 @@ When installing **client dependencies**, run `npm install <package>` from **clie
 ## Run Backend
 
 1. Install [Node](https://nodejs.org/en/).
-1. Open project with VS Code.
-1. Select `Terminal > Run Build Task` from menu, then select `tsc: watch`.
-1. Run `node build/index.local.js` from root directory.
+1. Run `npm run build` and `npm start` from root directory.
 
 **NOTE**\
 Code changes will not come into effect unless the server is restarted.\
-If you make code changes, terminate the server and rerun `node build/index.local.js`.
+If you make code changes, terminate the server and rerun the above commands.
 
 ## Run Frontend
 
