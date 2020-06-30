@@ -39,6 +39,7 @@ app.get("/", async (req, res) => {
 /**
  * Expected request body
  * {fitness}
+ * Purpose: Feature flagging via API configuration
  */
 app.post("/config/fitness", async (req, res) => {
   console.log(req.body);
@@ -64,7 +65,7 @@ app.post("/config/fitness", async (req, res) => {
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/rating", async (req, res) => {
-  const worker = new GaWorker();
+  const worker = new GaWorker(fitnessMethod);
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   if (!req.body.bots || req.body.bots.length === 0) {
     console.log(`First request initialized from ${ip}`);
@@ -85,7 +86,7 @@ app.post("/createbots/rating", async (req, res) => {
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/usage", async (req, res) => {
-  let worker = new GaWorker();
+  let worker = new GaWorker(fitnessMethod);
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
   if (!req.body.bots || req.body.bots.length === 0) {

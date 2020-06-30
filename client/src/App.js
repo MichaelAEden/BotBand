@@ -24,7 +24,7 @@ class App extends Component {
   async generateBots() {
     const response = await fetchJson('/createbots/rating', {
       method: 'POST',
-      body: JSON.stringify({ bots: this.state.bots })
+      body: JSON.stringify({ bots: this.state.bots }),
       headers: { 'Content-Type': 'application/json' },
     });
     if (response.error) console.log(`Error fetching bots: ${response.error}`)

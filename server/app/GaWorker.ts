@@ -3,8 +3,8 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
-import { evaluate } from "./FitnessConvention";
-// import { evaluate } from "./FitnessUser";
+import { evaluate as evaluateConvention } from "./FitnessConvention";
+import { evaluate as evaluateUser } from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
@@ -15,8 +15,11 @@ export class GaWorker {
   MUTATION_RATE = 0.05; // Probability of mutation
 
   rules: Rule[];
+  // feature flagging
+  fitnessFunction: string = "USER";
 
-  constructor() {
+  constructor(fitnessFunction: string) {
+    this.fitnessFunction = fitnessFunction;
     this.rules = [new LeapRule(), new TritoneRule()];
   }
 
@@ -42,6 +45,10 @@ export class GaWorker {
 
     // Number of generations to iterate before returning to client
     for (let i = 0; i < this.ITERATIONS; i++) {
+
+      // Feature flagging
+      let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
+      
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
 
