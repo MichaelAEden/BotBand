@@ -7,6 +7,13 @@ import { Note } from "../models/Note";
 
 const app = express();
 
+// Parse body to JSON
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+
 // Middleware
 app.use((req, res, next) => {
   console.log(
@@ -15,7 +22,7 @@ app.use((req, res, next) => {
   );
   const allowedOrigins = [
     "http://localhost:3000",
-    "https://thebotband.herokuapp.com",
+    "https://botband-983c7.web.app",
   ];
   const origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
@@ -23,12 +30,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
 
 app.get("/", async (req, res) => {
   res.status(200).send("Hello, world!");
@@ -61,7 +62,7 @@ app.post("/createbots/rating", async (req, res) => {
  */
 app.post("/createbots/usage", async (req, res) => {
   let worker = new GaWorker();
-  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
   if (req.body.bots && req.body.bots.length === 0) {
     console.log(`First request initialized from ${ip}`);
@@ -85,7 +86,7 @@ const getReqBots = (req) => {
         bot.melody.notes.map((note) => new Note(note.note))
       )
   );
-}
+};
 
 app.get("*", (req, res) => {
   res.sendStatus(404);
