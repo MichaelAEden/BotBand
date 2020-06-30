@@ -71,7 +71,7 @@ app.post("/createbots/usage", async (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.send(404);
+  res.sendStatus(404);
 });
 
 export default app;
