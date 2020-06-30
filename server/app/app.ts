@@ -35,18 +35,16 @@ app.get("/", async (req, res) => {
  */
 app.post("/createbots/rating", async (req, res) => {
   const worker = new GaWorker();
+  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   if (!req.body) {
+    console.log(`First request initialized from ${ip}`);
     res.status(200).json({ bots: worker.initialBots() });
     return;
   }
 
-  const bots = req.body.bots.map(
-    (bot) =>
-      new Bot(
-        bot.metric,
-        bot.melody.notes.map((note) => new Note(note.note))
-      )
-  );
+  console.log(`Handling request from ${ip}`);
+
+  const bots = getReqBots(req);
   const newBots = worker.generateNewBots(bots);
 
   res.status(200).json({ bots: newBots });
@@ -58,22 +56,31 @@ app.post("/createbots/rating", async (req, res) => {
  */
 app.post("/createbots/usage", async (req, res) => {
   let worker = new GaWorker();
+  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
   if (!req.body) {
+    console.log(`First request initialized from ${ip}`);
     res.status(200).json({ bots: worker.initialBots() });
     return;
   }
 
-  const bots = req.body.bots.map(
+  console.log(`Handling request from ${ip}`);
+
+  const bots: Bot[] = getReqBots(req);
+  const newBots = worker.generateNewBots(bots);
+
+  res.status(200).json({ bots: newBots });
+});
+
+const getReqBots = (req) => {
+  return req.body.bots.map(
     (bot) =>
       new Bot(
         bot.metric,
         bot.melody.notes.map((note) => new Note(note.note))
       )
   );
-  const newBots = worker.generateNewBots(bots);
-
-  res.status(200).json({ bots: newBots });
-});
+}
 
 app.get("*", (req, res) => {
   res.sendStatus(404);
