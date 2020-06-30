@@ -22,6 +22,7 @@ app.use((req, res, next) => {
   if (allowedOrigins.indexOf(origin) > -1) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
   console.log(
     `Received request from origin: '${origin}', body: ${JSON.stringify(
       req.body,
