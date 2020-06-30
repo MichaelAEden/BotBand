@@ -13,11 +13,7 @@ let fitnessMethod = "USER";
 const app = express();
 
 // Parse body to JSON
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
+app.use(bodyParser.json());
 
 // Middleware
 app.use((req, res, next) => {
