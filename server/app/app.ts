@@ -5,6 +5,11 @@ import { GaWorker } from "./GaWorker";
 import { Bot } from "../models/Bot";
 import { Note } from "../models/Note";
 
+const FITNESS_USER = "USER";
+const FITNESS_CONVENTION = "CONVENTION";
+
+let fitnessMethod = "USER";
+
 const app = express();
 
 // Parse body to JSON
@@ -37,12 +42,35 @@ app.get("/", async (req, res) => {
 
 /**
  * Expected request body
+ * {fitness}
+ */
+app.post("/config/fitness", async (req, res) => {
+  console.log(req.body);
+  if (req.body.fitness) {
+    switch (req.body.fitness) {
+      case FITNESS_USER:
+        fitnessMethod = FITNESS_USER;
+        break;
+      case FITNESS_CONVENTION:
+        fitnessMethod = FITNESS_CONVENTION;
+        break;
+      default:
+        res
+          .status(400)
+          .send(`Invalid setting for fitness: ${req.body.fitness}`);
+    }
+  }
+  res.sendStatus(200);
+});
+
+/**
+ * Expected request body
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/rating", async (req, res) => {
   const worker = new GaWorker();
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  if (!req.body) {
+  if (!req.body.bots || req.body.bots.length === 0) {
     console.log(`First request initialized from ${ip}`);
     res.status(200).json({ bots: worker.initialBots() });
     return;
@@ -50,7 +78,7 @@ app.post("/createbots/rating", async (req, res) => {
 
   console.log(`Handling request from ${ip}`);
 
-  const bots = getReqBots(req);
+  const bots = parseBotsFromReq(req);
   const newBots = worker.generateNewBots(bots);
 
   res.status(200).json({ bots: newBots });
@@ -64,7 +92,7 @@ app.post("/createbots/usage", async (req, res) => {
   let worker = new GaWorker();
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
-  if (!req.body) {
+  if (!req.body.bots || req.body.bots.length === 0) {
     console.log(`First request initialized from ${ip}`);
     res.status(200).json({ bots: worker.initialBots() });
     return;
@@ -72,13 +100,13 @@ app.post("/createbots/usage", async (req, res) => {
 
   console.log(`Handling request from ${ip}`);
 
-  const bots: Bot[] = getReqBots(req);
+  const bots: Bot[] = parseBotsFromReq(req);
   const newBots = worker.generateNewBots(bots);
 
   res.status(200).json({ bots: newBots });
 });
 
-const getReqBots = (req) => {
+const parseBotsFromReq = (req) => {
   return req.body.bots.map(
     (bot) =>
       new Bot(
