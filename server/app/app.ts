@@ -4,6 +4,7 @@ import * as bodyParser from "body-parser";
 import { GaWorker } from "./GaWorker";
 import { Bot } from "../models/Bot";
 import { Note } from "../models/Note";
+import { Melody } from "../models/Melody";
 
 const FITNESS_USER = "USER";
 const FITNESS_CONVENTION = "CONVENTION";
@@ -116,7 +117,7 @@ const parseBotsFromReq = (req) => {
     (bot) =>
       new Bot(
         bot.metric,
-        bot.melody.notes.map((note) => new Note(note.note))
+        new Melody(bot.melody.notes.map((note) => new Note(note.note)))
       )
   );
 };

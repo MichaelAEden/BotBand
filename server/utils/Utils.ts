@@ -19,14 +19,19 @@ export const selectRandomWeighted = (items, weights, n) => {
     segments.push(sum);
   }
 
+  console.log(weights);
+
   let choices = new Array();
+  console.log(segments);
   for (let i = 0; i < n; i++) {
-    const item =
-      items[
-        segments.filter((segment) => segment <= Math.random() * sum).length
-      ];
+    const index = segments.filter((segment) => segment <= Math.random() * sum)
+      .length;
+    console.log(`index ${index}`);
+    const item = items[index];
     choices.push(item);
   }
+
+  console.log(choices);
 
   return choices;
 };
