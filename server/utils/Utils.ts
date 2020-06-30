@@ -10,7 +10,7 @@ export const selectRandomWeighted = (items, weights, n) => {
   // If weights are all 0, set all values to 1
   // Otherwise, array of undefined elements is returned
   if (!weights.some((weight) => weight !== 0))
-    weights.map((weight) => weight + 1);
+    weights = weights.map((weight) => weight + 1);
 
   let sum = 0;
   let segments = new Array();
