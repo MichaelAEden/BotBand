@@ -23,13 +23,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
   res.setHeader("Access-Control-Allow-Headers", "content-type");
-  console.log(
-    `Received request from origin: '${origin}', body: ${JSON.stringify(
-      req.body,
-      null,
-      2
-    )}`
-  );
+  console.log(`Received request from origin: '${origin}'`);
   next();
 });
 
@@ -46,6 +40,9 @@ app.get("/", async (req, res) => {
  * Purpose: Feature flagging via API configuration
  */
 app.post("/config/fitness", async (req, res) => {
+  console.log(
+    `Received request with body: ${JSON.stringify(req.body, null, 2)}`
+  );
   if (req.body.fitness) {
     switch (req.body.fitness) {
       case FITNESS_USER:
@@ -68,6 +65,10 @@ app.post("/config/fitness", async (req, res) => {
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/rating", async (req, res) => {
+  console.log(
+    `Received request with body: ${JSON.stringify(req.body, null, 2)}`
+  );
+
   const worker = new GaWorker(fitnessMethod);
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
@@ -89,6 +90,10 @@ app.post("/createbots/rating", async (req, res) => {
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/usage", async (req, res) => {
+  console.log(
+    `Received request with body: ${JSON.stringify(req.body, null, 2)}`
+  );
+
   let worker = new GaWorker(fitnessMethod);
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 

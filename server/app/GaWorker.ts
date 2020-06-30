@@ -43,12 +43,14 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
+    console.log(`Starting generation: ${generation}`);
+
     // Number of generations to iterate before returning to client
     for (let i = 0; i < this.ITERATIONS; i++) {
-
       // Feature flagging
-      let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
-      
+      let evaluate =
+        this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
+
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
 
@@ -58,6 +60,8 @@ export class GaWorker {
         fitnesses,
         this.POPULATION_SIZE
       );
+
+      console.log(`Generation ${i}: ${generation}`);
 
       // Apply mutations in accordance with ruleset
       generation = generation.map((bot) => this.mutateBot(bot));
