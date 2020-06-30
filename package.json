@@ -16,7 +16,7 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "node build/index.local.js",
+    "start": "node build/index.js",
     "build": "npx tsc -p tsconfig.json"
   }
 }
