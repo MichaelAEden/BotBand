@@ -25,6 +25,7 @@ class App extends Component {
     const response = await fetchJson('/createbots/rating', {
       method: 'POST',
       body: JSON.stringify({ bots: this.state.bots })
+      headers: { 'Content-Type': 'application/json' },
     });
     if (response.error) console.log(`Error fetching bots: ${response.error}`)
     else {
