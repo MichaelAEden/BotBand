@@ -13,7 +13,7 @@ export class GaWorker {
   // TODO: change these values.
   ITERATIONS = 5; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
-  MUTATION_RATE = 0.5; // Probability of mutation
+  MUTATION_RATE = 0.2; // Probability of mutation
 
   rules: Rule[];
   // feature flagging
@@ -72,18 +72,18 @@ export class GaWorker {
   }
 
   private mutateBot(bot: Bot): Bot {
-    if (Math.random() < this.MUTATION_RATE) {
-      return bot;
+    // Expected value of ~1 mutation per bot.
+    for (var index = 0; index < bot.melody.notes.length; index++) {
+      if (Math.random() < this.MUTATION_RATE) {
+        const notes = this.getPossibleNotesFromRules(index, bot);
+  
+        if (!notes.length) {
+          return;
+        }
+  
+        bot.melody.notes[index] = selectRandom(notes);
+      }
     }
-
-    const index = Math.floor(bot.melody.notes.length * Math.random());
-    const notes = this.getPossibleNotesFromRules(index, bot);
-
-    if (!notes.length) {
-      return;
-    }
-
-    bot.melody.notes[index] = selectRandom(notes);
     return bot;
   }
 
