@@ -3,20 +3,24 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
-import { evaluate } from "./FitnessConvention";
-// import { evaluate } from "./FitnessUser";
+import { evaluate as evaluateConvention } from "./FitnessConvention";
+import { evaluate as evaluateUser } from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
 
 export class GaWorker {
-  ITERATIONS = 20; // Times GA will iterate
+  // TODO: change these values.
+  ITERATIONS = 5; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
   MUTATION_RATE = 0.5; // Probability of mutation
 
   rules: Rule[];
+  // feature flagging
+  fitnessFunction: string = "USER";
 
-  constructor() {
+  constructor(fitnessFunction: string) {
+    this.fitnessFunction = fitnessFunction;
     this.rules = [new LeapRule(), new TritoneRule()];
   }
 
@@ -40,8 +44,14 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
+    console.log(`Starting generation: ${generation}`);
+
     // Number of generations to iterate before returning to client
     for (let i = 0; i < this.ITERATIONS; i++) {
+      // Feature flagging
+      let evaluate =
+        this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
+
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
 
@@ -51,6 +61,9 @@ export class GaWorker {
         fitnesses,
         this.POPULATION_SIZE
       );
+
+      console.log(`Generation ${i}: ${generation}`);
+      console.log(`Fitnesses ${i}: ${fitnesses}`);
 
       // Apply mutations in accordance with ruleset
       generation = generation.map((bot) => this.mutateBot(bot));

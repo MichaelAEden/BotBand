@@ -31,7 +31,8 @@ export class Note {
 
   increment(change: number): Note {
     if (change > 7) {
-      throw Error("Number is too high!");
+      // TODO investigate
+      change = 7;
     }
 
     let octave = Number(this.getOctave());

@@ -1,14 +1,8 @@
-/*
-console.log('Loading function');
+require("dotenv").config();
 
-import app from './app/app';
-import awsServerlessExpress = require('aws-serverless-express');
+import app from "./app/app";
 
-const server = awsServerlessExpress.createServer(app);
+// PORT env variable is provided by Heroku
+const port = process.env.PORT || 9000;
 
-const handler = (event, context): void => {
-  awsServerlessExpress.proxy(server, event, context);
-};
-
-exports.handler = handler;
-*/
+app.listen(port, () => console.log(`Listening on port ${port}`));
