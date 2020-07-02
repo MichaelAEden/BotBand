@@ -112,7 +112,7 @@ app.post("/createbots/usage", async (req, res) => {
   res.status(200).json({ bots: newBots });
 });
 
-const parseBotsFromReq = (req) => {
+export const parseBotsFromReq = (req) => {
   return req.body.bots.map(
     (bot) =>
       new Bot(

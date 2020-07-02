@@ -9,6 +9,6 @@
     "moduleResolution": "node",
     "sourceMap": true
   },
-  "include": ["server/**/*"],
+  "include": ["server/src/**/*"],
   "exclude": ["node_modules/"]
 }
