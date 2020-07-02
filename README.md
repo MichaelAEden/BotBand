@@ -27,6 +27,10 @@ When installing **client dependencies**, run `npm install <package>` from **clie
 Code changes will not come into effect unless the server is restarted.\
 If you make code changes, terminate the server and rerun the above commands.
 
+## Run Backend Tests
+
+Run `npm run test` from root directory.
+
 ## Run Frontend
 
 Run `npm start` from `client` directory.
