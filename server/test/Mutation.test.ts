@@ -4,6 +4,8 @@ import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
 import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
+import { OctiveRule } from "../src/rules/OctiveRule";
+import { Note } from "../src/models/Note";
 
 test("user fitness evaluator performs correctly", () => {
     let worker = new GaWorker("USER");
@@ -70,10 +72,6 @@ test("mutation tritone rule returns correct set", () => {
     let set = startSet.filter(n => n.note === "B4");
     let expectedOutput = ["B4", "E4", "F3"];
     let output = rule.apply(5, set, bot.melody).map(n => n.note);
-
-    console.log(output);
-    console.log(expectedOutput);
-
     expect(output.length).toBe(expectedOutput.length);
     expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true);
 
@@ -84,4 +82,16 @@ test("mutation tritone rule returns correct set", () => {
     expect(output.length).toBe(expectedOutput.length);
     expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true);
 
+});
+
+test("octive rule works", () => {
+    let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
+    let rule = new OctiveRule();
+
+    console.log("stays within octive");
+    let set = ["D3", "G3", "A4", "B4", "D4", "G4", "A5", "G5"].map(s => new Note(s));
+    let expectedOutput = ["G3", "A4", "B4", "D4", "G4", "A5", "G5"];
+    let output = rule.apply(2, set, bot.melody).map(n => n.note);
+    expect(output.length).toBe(expectedOutput.length);
+    expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true);
 });
