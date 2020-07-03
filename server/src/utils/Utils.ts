@@ -1,14 +1,12 @@
+import * as _ from "lodash";
+
 import { Bot } from "../models/Bot";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 
 export const parseBotsFromReq = (req) => {
   return req.body.bots.map(
-    (bot) =>
-      new Bot(
-        bot.metric,
-        new Melody(bot.melody.notes.map((note) => new Note(note.note)))
-      )
+    (bot) => new Bot(bot.metric, new Melody(bot.melody.notes.map((note) => new Note(note.note))))
   );
 };
 
@@ -18,13 +16,11 @@ export const selectRandom = (items) => {
 };
 
 export const selectRandomWeighted = (items, weights, n) => {
-  if (items.length !== weights.length)
-    throw new Error("Items and weights must be same length!");
+  if (items.length !== weights.length) throw new Error("Items and weights must be same length!");
 
   // If weights are all 0, set all values to 1
   // Otherwise, array of undefined elements is returned
-  if (!weights.some((weight) => weight !== 0))
-    weights = weights.map((weight) => weight + 1);
+  if (!weights.some((weight) => weight !== 0)) weights = weights.map((weight) => weight + 1);
 
   let sum = 0;
   let segments = new Array();
@@ -38,7 +34,8 @@ export const selectRandomWeighted = (items, weights, n) => {
     const random = Math.random() * sum;
     const index = segments.filter((segment) => segment <= random).length;
     const item = items[index];
-    choices.push(item);
+    const newItem = _.cloneDeep(item);
+    choices.push(newItem);
   }
 
   return choices;
