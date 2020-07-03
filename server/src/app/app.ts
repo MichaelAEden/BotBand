@@ -45,11 +45,11 @@ app.post("/config", async (req, res) => {
   console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
   
   if (req.body.mutationRate) {
-    GaWorker.MUTATION_RATE = req.body.mutationRate;
+    GaWorker.MUTATION_RATE = Number(req.body.mutationRate);
   }
 
   if (req.body.iterations) {
-    GaWorker.ITERATIONS = req.body.iterations;
+    GaWorker.ITERATIONS = Number(req.body.iterations);
   }
   
   if (req.body.fitness) {
@@ -72,7 +72,7 @@ app.post("/config", async (req, res) => {
 });
 
 app.get("/config", async (req, res) => {
-  res.status(400).json({
+  res.status(200).json({
     'fitness' : fitnessMethod,
     'iterations' : GaWorker.ITERATIONS,
     'mutationRate' : GaWorker.MUTATION_RATE
