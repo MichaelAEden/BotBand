@@ -2,6 +2,8 @@ import { GaWorker } from "../src/app/gaworker";
 import evaluate from "../src/app/FitnessUser";
 import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
+import { Bot } from "../src/models/Bot";
+import { Melody } from "../src/models/Melody";
 
 test("user fitness evaluator performs correctly", () => {
     let worker = new GaWorker("USER");
@@ -25,7 +27,7 @@ test("mutation leap rule returns correct set", () => {
     let worker = new GaWorker("USER");
   
     let startSet = worker.createStartSet();
-    let bot = worker.createBot("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4");
+    let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
   
     let rule = new LeapRule();
   
@@ -60,7 +62,7 @@ test("mutation tritone rule returns correct set", () => {
     let worker = new GaWorker("USER");
   
     let startSet = worker.createStartSet();
-    let bot = worker.createBot("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4");
+    let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
   
     let rule = new TritoneRule();
   
