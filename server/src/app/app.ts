@@ -41,16 +41,16 @@ app.get("/", async (req, res) => {
  * {fitness}
  * Purpose: Feature flagging via API configuration
  */
-app.post("/config/fitness", async (req, res) => {
-  console.log(
-    `Received request with body: ${JSON.stringify(req.body, null, 2)}`
-  );
+app.post("/config", async (req, res) => {
+  console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
   if (req.body.fitness) {
     switch (req.body.fitness) {
       case FITNESS_USER:
+        console.log(`Changed to ${FITNESS_USER}`);
         fitnessMethod = FITNESS_USER;
         break;
       case FITNESS_CONVENTION:
+        console.log(`Changed to ${FITNESS_CONVENTION}`);
         fitnessMethod = FITNESS_CONVENTION;
         break;
       default:
@@ -60,6 +60,12 @@ app.post("/config/fitness", async (req, res) => {
     }
   }
   res.sendStatus(200);
+});
+
+app.get("/config", async (req, res) => {
+  res.status(400).json({
+    'fitness' : fitnessMethod
+  });
 });
 
 /**
