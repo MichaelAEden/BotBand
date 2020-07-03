@@ -66,7 +66,15 @@ class App extends Component {
 
   handleClearClick(e) {
     console.log("clearing composition");
-    this.setState({composition: []});
+    let bots_copy = this.state.bots.slice();
+    let json_copy = {};
+
+    bots_copy.forEach( (bot, i) => {
+      json_copy = Object.assign(json_copy, bot);
+      json_copy["count"] = 0;
+      bots_copy[i] = json_copy;
+    });
+    this.setState({composition: [], bots: bots_copy});
   }
 
   render() {
