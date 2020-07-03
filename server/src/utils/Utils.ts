@@ -1,3 +1,17 @@
+import { Bot } from "../models/Bot";
+import { Melody } from "../models/Melody";
+import { Note } from "../models/Note";
+
+export const parseBotsFromReq = (req) => {
+  return req.body.bots.map(
+    (bot) =>
+      new Bot(
+        bot.metric,
+        new Melody(bot.melody.notes.map((note) => new Note(note.note)))
+      )
+  );
+};
+
 export const selectRandom = (items) => {
   if (!items.length) throw new Error("Empty items!");
   return items[Math.floor(Math.random() * items.length)];
@@ -19,19 +33,13 @@ export const selectRandomWeighted = (items, weights, n) => {
     segments.push(sum);
   }
 
-  console.log(weights);
-
   let choices = new Array();
-  console.log(segments);
   for (let i = 0; i < n; i++) {
-    const index = segments.filter((segment) => segment <= Math.random() * sum)
-      .length;
-    console.log(`index ${index}`);
+    const random = Math.random() * sum;
+    const index = segments.filter((segment) => segment <= random).length;
     const item = items[index];
     choices.push(item);
   }
-
-  console.log(choices);
 
   return choices;
 };

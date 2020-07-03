@@ -3,8 +3,8 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
-import { evaluate as evaluateConvention } from "./FitnessConvention";
-import { evaluate as evaluateUser } from "./FitnessUser";
+import evaluateConvention from "./FitnessConvention";
+import evaluateUser from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
@@ -25,45 +25,35 @@ export class GaWorker {
   }
 
   initialBots(): Bot[] {
-    const createBot = (s: string) =>
-      new Bot(0, new Melody(s.split(",").map((s) => new Note(s))));
     return [
-      createBot("C4,G4,D4,A4,B4,C5,C5,D5,B4,E5"),
-      createBot("A4,C5,A4,A4,E4,F4,G4,A4,B4,G4"),
-      createBot("B4,C5,F4,F4,E5,F5,B4,G4,G5,A4"),
-      createBot("G3,B4,D4,E4,G3,D5,D5,D5,E5,C5"),
-      createBot("G4,D5,F5,B4,F4,F4,F4,C5,E5,G4"),
-      createBot("B3,A4,G4,G5,E4,B4,D4,E4,G5,E4"),
-      createBot("E5,F4,D4,G4,D5,A4,F4,A4,A3,C4"),
-      createBot("C5,C5,G5,B4,G4,C5,C5,G5,E5,G4"),
-      createBot("G4,C4,F4,B3,G3,B3,D4,E4,A3,D4"),
-      createBot("G5,E5,D5,B4,F4,A4,G4,A4,E4,G4"),
-    ];
+      "C4,G4,D4,A4,B4,C5,C5,D5,B4,E5",
+      "A4,C5,A4,A4,E4,F4,G4,A4,B4,G4",
+      "B4,C5,F4,F4,E5,F5,B4,G4,G5,A4",
+      "G3,B4,D4,E4,G3,D5,D5,D5,E5,C5",
+      "G4,D5,F5,B4,F4,F4,F4,C5,E5,G4",
+      "B3,A4,G4,G5,E4,B4,D4,E4,G5,E4",
+      "E5,F4,D4,G4,D5,A4,F4,A4,A3,C4",
+      "C5,C5,G5,B4,G4,C5,C5,G5,E5,G4",
+      "G4,C4,F4,B3,G3,B3,D4,E4,A3,D4",
+      "G5,E5,D5,B4,F4,A4,G4,A4,E4,G4",
+    ].map((str) => new Bot(0, Melody.fromString(str)));
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    console.log(`Starting generation: ${generation}`);
+    console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
 
     // Number of generations to iterate before returning to client
     for (let i = 0; i < this.ITERATIONS; i++) {
       // Feature flagging
-      let evaluate =
-        this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
+      let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
 
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
 
       // Normalize the scores to select a new generation
-      generation = selectRandomWeighted(
-        generation,
-        fitnesses,
-        this.POPULATION_SIZE
-      );
-
-      console.log(`Generation ${i}: ${generation}`);
-      console.log(`Fitnesses ${i}: ${fitnesses}`);
+      generation = selectRandomWeighted(generation, fitnesses, this.POPULATION_SIZE);
 
       // Apply mutations in accordance with ruleset
       generation = generation.map((bot) => this.mutateBot(bot));
@@ -76,11 +66,11 @@ export class GaWorker {
     for (var index = 0; index < bot.melody.notes.length; index++) {
       if (Math.random() < this.MUTATION_RATE) {
         const notes = this.getPossibleNotesFromRules(index, bot);
-  
+
         if (!notes.length) {
           return;
         }
-  
+
         bot.melody.notes[index] = selectRandom(notes);
       }
     }
@@ -97,14 +87,14 @@ export class GaWorker {
 
   // Helper function to generate 3 octaves of notes.
   createStartSet(): Array<Note> {
-    let startSet = new Array<String>();
+    let startSet = new Array<string>();
 
-    new Array<String>("A", "B", "C", "D", "E", "F", "G").forEach((s) => {
+    ["A", "B", "C", "D", "E", "F", "G"].forEach((s) => {
       startSet.push(s + "3");
       startSet.push(s + "4");
       startSet.push(s + "5");
     });
 
-    return startSet.map((s) => new Note(s));
+    return startSet.map((s: string) => new Note(s));
   }
 }
