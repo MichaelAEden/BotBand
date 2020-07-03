@@ -8,7 +8,6 @@ import evaluateUser from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
-import { timeStamp } from "console";
 
 export class GaWorker {
 
