@@ -1,5 +1,5 @@
 import { GaWorker } from "../src/app/gaworker";
-import { evaluate } from "../src/app/FitnessUser";
+import evaluate from "../src/app/FitnessUser";
 import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
 

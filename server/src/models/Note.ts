@@ -1,32 +1,36 @@
 // TODO: consideration for sharps and flats.
 export class Note {
-  note: String;
+  note: string;
 
-  constructor(note: String) {
+  constructor(note: string) {
     this.validate(note);
     this.note = note;
   }
 
-  validate(note: String) {
+  validate(note: string) {
     if (note.length !== 2) {
       throw new Error("Validation Error: Note malformed");
     }
   }
 
-  getOctave(): String {
-    return this.note.charAt(1);
+  getOctave(): number {
+    return Number(this.note.charAt(1));
   }
 
-  getKey(): String {
+  getKey(): string {
     return this.note.charAt(0);
+  }
+
+  toNumber(): number {
+    // Maps keys to numbers, starting with A1 -> 1.
+    let octave = this.getOctave() * 8;
+    let note = this.getKey().charCodeAt(0) - "A".charCodeAt(0) + 1;
+    return octave + note;
   }
 
   // Get displacement between this note and given note
   compare(note: Note): number {
-    let dOctave = (Number(this.getOctave()) - Number(note.getOctave())) * 8;
-    let dNote = this.getKey().charCodeAt(0) - note.getKey().charCodeAt(0);
-
-    return dOctave + dNote;
+    return this.toNumber() - note.toNumber();
   }
 
   increment(change: number): Note {
@@ -35,7 +39,7 @@ export class Note {
       change = 7;
     }
 
-    let octave = Number(this.getOctave());
+    let octave = this.getOctave();
     let letter;
 
     let nUnicode = this.getKey().charCodeAt(0) + change;
@@ -44,15 +48,11 @@ export class Note {
       letter = String.fromCharCode(nUnicode);
     } else if (nUnicode > "G".charCodeAt(0)) {
       // -1 is needed just from trial and error
-      letter = String.fromCharCode(
-        "A".charCodeAt(0) + nUnicode - "G".charCodeAt(0) - 1
-      );
+      letter = String.fromCharCode("A".charCodeAt(0) + nUnicode - "G".charCodeAt(0) - 1);
       octave++;
     } else {
       // +1 is needed just from trial and error
-      letter = String.fromCharCode(
-        "G".charCodeAt(0) - ("A".charCodeAt(0) - nUnicode) + 1
-      );
+      letter = String.fromCharCode("G".charCodeAt(0) - ("A".charCodeAt(0) - nUnicode) + 1);
       octave--;
     }
 
