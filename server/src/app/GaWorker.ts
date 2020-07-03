@@ -42,7 +42,7 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    console.log(`Starting generation: ${generation}`);
+    console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
 
     // Number of generations to iterate before returning to client
     for (let i = 0; i < this.ITERATIONS; i++) {
@@ -54,9 +54,6 @@ export class GaWorker {
 
       // Normalize the scores to select a new generation
       generation = selectRandomWeighted(generation, fitnesses, this.POPULATION_SIZE);
-
-      console.log(`Generation ${i}: ${generation}`);
-      console.log(`Fitnesses ${i}: ${fitnesses}`);
 
       // Apply mutations in accordance with ruleset
       generation = generation.map((bot) => this.mutateBot(bot));
@@ -90,9 +87,9 @@ export class GaWorker {
 
   // Helper function to generate 3 octaves of notes.
   createStartSet(): Array<Note> {
-    let startSet = new Array<String>();
+    let startSet = new Array<string>();
 
-    new Array<String>("A", "B", "C", "D", "E", "F", "G").forEach((s) => {
+    ["A", "B", "C", "D", "E", "F", "G"].forEach((s) => {
       startSet.push(s + "3");
       startSet.push(s + "4");
       startSet.push(s + "5");
