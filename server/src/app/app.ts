@@ -1,10 +1,11 @@
-import * as express from "express";
 import * as bodyParser from "body-parser";
 
 import { GaWorker } from "./GaWorker";
 import { Bot } from "../models/Bot";
-import { Note } from "../models/Note";
-import { Melody } from "../models/Melody";
+import { parseBotsFromReq } from "../utils/Utils";
+
+// Must use a require statement for testing for unknown reason
+const express = require("express");
 
 const FITNESS_USER = "USER";
 const FITNESS_CONVENTION = "CONVENTION";
@@ -111,16 +112,6 @@ app.post("/createbots/usage", async (req, res) => {
 
   res.status(200).json({ bots: newBots });
 });
-
-export const parseBotsFromReq = (req) => {
-  return req.body.bots.map(
-    (bot) =>
-      new Bot(
-        bot.metric,
-        new Melody(bot.melody.notes.map((note) => new Note(note.note)))
-      )
-  );
-};
 
 app.get("*", (req, res) => {
   res.sendStatus(404);
