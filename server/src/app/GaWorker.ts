@@ -10,10 +10,11 @@ import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
 
 export class GaWorker {
-  // TODO: change these values.
-  ITERATIONS = 5; // Times GA will iterate
+
+  // Default Values
+  static ITERATIONS = 5; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
-  MUTATION_RATE = 0.2; // Probability of mutation
+  static MUTATION_RATE = 0.15; // Probability of mutation
 
   rules: Rule[];
   // feature flagging
@@ -22,6 +23,12 @@ export class GaWorker {
   constructor(fitnessFunction: string) {
     this.fitnessFunction = fitnessFunction;
     this.rules = [new LeapRule(), new TritoneRule()];
+
+    console.log(`
+      Creating GaWorker with configs: 
+      iterations - ${GaWorker.ITERATIONS} , 
+      mutation_rate - ${GaWorker.MUTATION_RATE}
+    `);
   }
 
   initialBots(): Bot[] {
@@ -45,7 +52,7 @@ export class GaWorker {
     console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
 
     // Number of generations to iterate before returning to client
-    for (let i = 0; i < this.ITERATIONS; i++) {
+    for (let i = 0; i < GaWorker.ITERATIONS; i++) {
       // Feature flagging
       let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
 
@@ -64,7 +71,7 @@ export class GaWorker {
   private mutateBot(bot: Bot): Bot {
     // Expected value of ~1 mutation per bot.
     for (var index = 0; index < bot.melody.notes.length; index++) {
-      if (Math.random() < this.MUTATION_RATE) {
+      if (Math.random() < GaWorker.MUTATION_RATE) {
         const notes = this.getPossibleNotesFromRules(index, bot);
 
         if (!notes.length) {
