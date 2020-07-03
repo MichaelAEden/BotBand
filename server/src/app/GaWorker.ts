@@ -98,6 +98,6 @@ export class GaWorker {
       startSet.push(s + "5");
     });
 
-    return startSet.map((s) => new Note(s));
+    return startSet.map((s: string) => new Note(s));
   }
 }
