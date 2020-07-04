@@ -95,3 +95,40 @@ test("octive rule works", () => {
     expect(output.length).toBe(expectedOutput.length);
     expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true);
 });
+
+test("GA octaves", () => {
+
+  let worker = new GaWorker("USER");
+
+  let highNotes = 0;
+  let totalNotes = 0;
+  let lowNotes = 0;
+  // Represents tenor range
+  let high = new Note('C5');
+  let low = new Note('C3');
+
+  for (var i = 0; i < 100; i++) {
+    let newBots = worker.generateNewBots(worker.initialBots());
+
+    newBots.forEach(bot => {
+      bot.melody.notes.forEach(note => {
+        totalNotes++;
+
+        if (high.compare(note) <= 0) {
+          highNotes++;
+        }
+
+        if (low.compare(note) >= 0) {
+          lowNotes++;
+        }
+
+      });
+    });
+  }
+
+  console.log(`results: high - ${highNotes} , low - ${lowNotes} , total - ${totalNotes}`);
+  console.log(`fraction high notes: ${highNotes / totalNotes}`);
+  console.log(`fraction low notes: ${lowNotes / totalNotes}`);
+
+  expect(true).toBe(true);
+});

@@ -35,7 +35,7 @@ export class Note {
 
   increment(change: number): Note {
     if (change > 7) {
-      console.log("WARNING: Melody wants to jump by an octave! Restricting leap.");
+      // console.log("WARNING: Melody wants to jump by an octave! Restricting leap.");
       change = 7;
     }
 
