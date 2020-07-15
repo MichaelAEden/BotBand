@@ -50,7 +50,7 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
+    // console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
 
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
@@ -97,9 +97,15 @@ export class GaWorker {
   createStartSet(): Array<Note> {
     let startSet = new Array<string>();
 
-    ["A", "B", "C", "D", "E", "F", "G"].forEach((s) => {
+    ["E", "F", "F"].forEach((s) => {
       startSet.push(s + "3");
+    });
+
+    ["A", "B", "C", "D", "E", "F", "G"].forEach((s) => {
       startSet.push(s + "4");
+    });
+
+    ["A", "B", "C", "D", "E"].forEach((s) => {
       startSet.push(s + "5");
     });
 
