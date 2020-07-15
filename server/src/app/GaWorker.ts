@@ -34,17 +34,17 @@ export class GaWorker {
 
   initialBots(): Bot[] {
     return [
-      "C4,G4,D4,A4,B4,C5,C5,D5,B4,E5",
-      "A4,C5,A4,A4,E4,F4,G4,A4,B4,G4",
-      "B4,C5,F4,F4,E5,F5,B4,G4,G5,A4",
-      "G3,B4,D4,E4,G3,D5,D5,D5,E5,C5",
-      "G4,D5,F5,B4,F4,F4,F4,C5,E5,G4",
-      "B3,A4,G4,G5,E4,B4,D4,E4,G5,E4",
-      "E5,F4,D4,G4,D5,A4,F4,A4,A3,C4",
-      "C5,C5,G5,B4,G4,C5,C5,G5,E5,G4",
-      "G4,C4,F4,B3,G3,B3,D4,E4,A3,D4",
-      "G5,E5,D5,B4,F4,A4,G4,A4,E4,G4",
-    ].map((str) => new Bot(0, Melody.fromString(str)));
+      "C2,G2,G2,F2",
+      "A2,B2,G2,E2",
+      "G2,B2,D3,E3",
+      "E3,E3,E3,A3",
+      "B3,A3,G3,D3",
+      "D2,G2,C3,D3",
+      "E3,G3,E3,D3",
+      "A3,G3,F3,E3",
+      "F3,C3,B2,A2",
+      "C3,B2,A2,C3",
+      ].map((str) => new Bot(0, Melody.fromString(str)));
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
