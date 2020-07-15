@@ -1,6 +1,7 @@
 #top-panel {
     border: 1px solid black;
-    background-image: url("https://i.pinimg.com/originals/39/2f/38/392f38884a695299b0b0a295f5edb1a2.png");
+    background-image: url(../../cartoon-background.jpg);
+    background-position: center;
     background-size: cover;
 }
 

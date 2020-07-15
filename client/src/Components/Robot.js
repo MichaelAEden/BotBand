@@ -3,6 +3,17 @@ import { MDBIcon } from "mdbreact";
 
 import { play } from "../Utils/melody";
 
+// Based on Scriabin's colour mapping
+const colour_map = {
+  "C":"Robot_Red.png",
+  "D":"Robot_Orange.png",
+  "E":"Robot_Yellow.png",
+  "F":"Robot_Green.png",
+  "G":"Robot_Teal.png",
+  "A":"Robot_Blue.png",
+  "B":"Robot_Purple.png",
+};
+
 class Robot extends Component {
   constructor() {
     super();
@@ -23,8 +34,8 @@ class Robot extends Component {
   }
 
   getImage() {
-    // TODO
-    return "Robot_2_-_Blue.png";
+    const note = this.props.melody.notes[0]["note"];
+    return colour_map[note.charAt(0)];
   }
 
   render() {
