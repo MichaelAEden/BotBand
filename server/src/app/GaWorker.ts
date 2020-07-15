@@ -36,16 +36,16 @@ export class GaWorker {
 
   initialBots(): Bot[] {
     return [
-      "C2,G2,G2,F2",
-      "A2,B2,G2,E2",
-      "G2,B2,D3,E3",
-      "E3,E3,E3,A3",
-      "B3,A3,G3,D3",
-      "D2,G2,C3,D3",
-      "E3,G3,E3,D3",
-      "A3,G3,F3,E3",
-      "F3,C3,B2,A2",
-      "C3,B2,A2,C3",
+      "C4,G4,G4,F4",
+      "A4,B4,G4,E4",
+      "G4,B4,D5,E5",
+      "E4,E4,E4,A4",
+      "B4,A4,G4,D4",
+      "D4,G4,C5,D5",
+      "E4,G4,E4,D4",
+      "A4,G3,F3,E3",
+      "F3,C4,B4,A4",
+      "C4,B4,A4,C4",
       ].map((str) => new Bot(0, Melody.fromString(str)));
   }
 
