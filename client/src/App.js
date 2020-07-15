@@ -1,53 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
-import { fetchJson } from './Utils/request';
-import TopPanel from './Components/TopPanel';
-import BottomPanel from './Components/BottomPanel';
-import Tone from 'tone';
+
+import TopPanel from "./Components/TopPanel";
+import BottomPanel from "./Components/BottomPanel";
+import { fetchJson } from "./Utils/request";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       bots: [],
-      composition: []
-    }
+      composition: [],
+    };
     this.handleRobotClick = this.handleRobotClick.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
   }
 
   async componentDidMount() {
-    this.generateBots()
+    this.generateBots();
   }
 
   async generateBots() {
-    const response = await fetchJson('/createbots/rating', {
-      method: 'POST',
+    const response = await fetchJson("/createbots/rating", {
+      method: "POST",
       body: JSON.stringify({ bots: this.state.bots }),
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
-    if (response.error) console.log(`Error fetching bots: ${response.error}`)
-    else {
-      const bots = response.data.bots;
-      const botImages = ["Robot_2_-_Blue.png", "Robot_2_-_Green.png", "Robot_2_-_Yellow.png", "Robot1.png", "walle_purple.png"]
-      bots.forEach((bot) => {
-        bot["count"] = 0;
-        bot["img"] = botImages[Math.floor(Math.random() * botImages.length)];
-      });
-      this.setState({ bots })
-    };
-  }
-
-  playMelody(melody) {
-    Tone.Transport.clear();
-    const synth = new Tone.Synth().toMaster();
-    const sequence = new Tone.Sequence(function(time, note){
-      synth.triggerAttackRelease(note, "4n", time);
-    }, melody, "4n");
-    sequence.start(Tone.Transport.time);
-    sequence.loop = false;
-    Tone.Transport.start();
+    if (response.error) console.log(`Error fetching bots: ${response.error}`);
+    else this.setState({ bots: response.data.bots });
   }
 
   handleRobotClick(i) {
@@ -61,7 +42,7 @@ class App extends Component {
     json_copy = Object.assign(json_copy, bots_copy[i]);
     json_copy["count"] += 1;
     bots_copy[i] = json_copy;
-    this.setState({composition: new_composition, bots: bots_copy});
+    this.setState({ composition: new_composition, bots: bots_copy });
   }
 
   handleClearClick(e) {
@@ -69,16 +50,16 @@ class App extends Component {
     let bots_copy = this.state.bots.slice();
     let json_copy = {};
 
-    bots_copy.forEach( (bot, i) => {
+    bots_copy.forEach((bot, i) => {
       json_copy = Object.assign(json_copy, bot);
       json_copy["count"] = 0;
       bots_copy[i] = json_copy;
     });
-    this.setState({composition: [], bots: bots_copy});
+    this.setState({ composition: [], bots: bots_copy });
   }
 
   render() {
-    return(
+    return (
       <MDBContainer id="App">
         <TopPanel
           bots={this.state.bots}

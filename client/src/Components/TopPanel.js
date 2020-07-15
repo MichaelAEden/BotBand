@@ -1,52 +1,43 @@
-import React, { Component } from 'react';
-import { MDBRow, MDBCol, MDBIcon, MDBBtn } from 'mdbreact';
-import './styles/TopPanel.css';
+import React, { Component } from "react";
+import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
+
+import Robot from "./Robot";
+import "./styles/TopPanel.css";
 
 class TopPanel extends Component {
-    constructor() {
-        super();
-        this.handlePlayClick = this.handlePlayClick.bind(this);
-        this.handleThumbsUp = this.handleThumbsUp.bind(this);
-        this.handleThumbsDown = this.handleThumbsDown.bind(this);
-    }
+  constructor() {
+    super();
+    this.handlePlayClick = this.handlePlayClick.bind(this);
+    this.handleFavourite = this.handleFavourite.bind(this);
+  }
 
-    handlePlayClick(i) {
-      console.log(`Playing ${i}`);
-      const melody = this.props.bots[i].melody.notes.map(note => note.note);
-      this.props.playMelody(melody);
-    }
+  handlePlayClick(i) {
+    console.log(`Playing ${i}`);
+    const melody = this.props.bots[i].melody.notes.map((note) => note.note);
+    this.props.playMelody(melody);
+  }
 
-    handleThumbsUp(e) {
-      console.log("thumbs up");
-    }
+  handleFavourite(i) {
+    // TODO
+    console.log(`Favourited: ${i}`);
+  }
 
-    handleThumbsDown(e) {
-      console.log("thumbs down");
-    }
-    
-    render() {
-      if (!this.props.bots) return null;
-      
-      const bots = this.props.bots.map((bot, i) => (
-        <MDBCol key={i} size="3">
-          <div>
-            <div className="robot-toolbar">
-              <MDBIcon far icon="play-circle" className="toolbar-btn" onClick={() => this.handlePlayClick(i)}/>
-              <MDBIcon far icon="thumbs-up" className="toolbar-btn" onClick={this.handleThumbsUp}/>
-              <MDBIcon far icon="thumbs-down" className="toolbar-btn" onClick={this.handleThumbsDown}/>
-            </div>
-            <img src={this.props.bots[i].img} className="robot" onClick={() => {this.props.handleRobotClick(i)}}></img>
-          </div>
-        </MDBCol>
-      ));
+  render() {
+    if (!this.props.bots) return null;
 
-    return(
+    return (
       <div id="top-panel">
         <MDBRow>
-          {bots}
+          {this.props.bots.map((bot, i) => (
+            <MDBCol key={i} size="3">
+              <Robot melody={bot.melody}></Robot>
+            </MDBCol>
+          ))}
           <MDBCol size="2"></MDBCol>
           <MDBCol size="2" id="refresh">
-            <MDBBtn onClick={this.props.generateBots} id="generate-btn">Generate New Bots</MDBBtn>
+            <MDBBtn onClick={this.props.generateBots} id="generate-btn">
+              Generate New Bots
+            </MDBBtn>
           </MDBCol>
         </MDBRow>
       </div>
