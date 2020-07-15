@@ -6,7 +6,7 @@ import { Note } from "../models/Note";
  * TODO: Deprecate this with the weighted average rule from GA Team.
  */
 
-export class TritoneRule extends Rule {
+export class StepwiseRule extends Rule {
     apply(index: number, changeSet: Array<Note>, melody: Melody): Array<Note> {
         if (index > 0) {
             let prevNote = melody.notes[index - 1];

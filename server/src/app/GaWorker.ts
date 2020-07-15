@@ -9,6 +9,8 @@ import evaluateUser from "./FitnessUser";
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
 import { OctiveRule } from "../rules/OctiveRule";
+import { CounterTenorRule } from "../rules/CounterTenorRule";
+import { StepwiseRule } from "../rules/StepwiseRule";
 
 export class GaWorker {
 
@@ -23,7 +25,7 @@ export class GaWorker {
 
   constructor(fitnessFunction: string) {
     this.fitnessFunction = fitnessFunction;
-    this.rules = [new LeapRule(), new TritoneRule(), new OctiveRule()];
+    this.rules = [new LeapRule(), new TritoneRule(), new OctiveRule(), new StepwiseRule(), new CounterTenorRule()];
 
     console.log(`
       Creating GaWorker with configs: 
@@ -50,7 +52,7 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
+    // console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
 
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
@@ -97,9 +99,15 @@ export class GaWorker {
   createStartSet(): Array<Note> {
     let startSet = new Array<string>();
 
-    ["A", "B", "C", "D", "E", "F", "G"].forEach((s) => {
+    ["E", "F", "F"].forEach((s) => {
       startSet.push(s + "3");
+    });
+
+    ["A", "B", "C", "D", "E", "F", "G"].forEach((s) => {
       startSet.push(s + "4");
+    });
+
+    ["A", "B", "C", "D", "E"].forEach((s) => {
       startSet.push(s + "5");
     });
 

@@ -2,6 +2,7 @@ import { GaWorker } from "../src/app/gaworker";
 import evaluate from "../src/app/FitnessUser";
 import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
+import { CounterTenorRule } from "../src/rules/CounterTenorRule";
 import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
 import { OctiveRule } from "../src/rules/OctiveRule";
@@ -60,7 +61,6 @@ test("mutation leap rule returns correct set", () => {
 });
 
 test("mutation tritone rule returns correct set", () => {
-
     let worker = new GaWorker("USER");
   
     let startSet = worker.createStartSet();
@@ -74,14 +74,6 @@ test("mutation tritone rule returns correct set", () => {
     let output = rule.apply(5, set, bot.melody).map(n => n.note);
     expect(output.length).toBe(expectedOutput.length);
     expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true);
-
-    console.log("no double add");
-    expectedOutput = startSet.map(n => n.note);
-    output = rule.apply(5, startSet, bot.melody).map(n => n.note);
-
-    expect(output.length).toBe(expectedOutput.length);
-    expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true);
-
 });
 
 test("octive rule works", () => {
@@ -131,4 +123,18 @@ test("GA octaves", () => {
   console.log(`fraction low notes: ${lowNotes / totalNotes}`);
 
   expect(true).toBe(true);
+});
+
+test("Vocal Range Rules", () => {
+  let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4"));
+
+  let rule = new CounterTenorRule();
+  let set = ['E6', 'F5', 'E5', 'D5', 'A3', 'E3', 'F3'].map(s => new Note(s));;
+
+  let output = rule.apply(0, set, bot.melody).map(n => n.note);
+  let expectedOutput = ["E5", "D5", "E3", "F3"];
+
+  expect(output.length).toBe(expectedOutput.length);
+  expect(output.filter(o => !expectedOutput.includes(o)).length === 0).toBe(true)
+
 });
