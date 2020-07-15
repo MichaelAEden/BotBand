@@ -5,23 +5,6 @@ import Robot from "./Robot";
 import "./styles/TopPanel.css";
 
 class TopPanel extends Component {
-  constructor() {
-    super();
-    this.handlePlayClick = this.handlePlayClick.bind(this);
-    this.handleFavourite = this.handleFavourite.bind(this);
-  }
-
-  handlePlayClick(i) {
-    console.log(`Playing ${i}`);
-    const melody = this.props.bots[i].melody.notes.map((note) => note.note);
-    this.props.playMelody(melody);
-  }
-
-  handleFavourite(i) {
-    // TODO
-    console.log(`Favourited: ${i}`);
-  }
-
   render() {
     if (!this.props.bots) return null;
 
@@ -30,7 +13,10 @@ class TopPanel extends Component {
         <MDBRow>
           {this.props.bots.map((bot, i) => (
             <MDBCol key={i} size="3">
-              <Robot melody={bot.melody}></Robot>
+              <Robot
+                melody={bot.melody}
+                onFavouriteToggled={(favourite) => this.props.onFavouriteToggled(i, favourite)}
+              ></Robot>
             </MDBCol>
           ))}
           <MDBCol size="2"></MDBCol>

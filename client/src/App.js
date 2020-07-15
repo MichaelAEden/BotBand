@@ -12,7 +12,7 @@ class App extends Component {
       bots: [],
       composition: [],
     };
-    this.handleRobotClick = this.handleRobotClick.bind(this);
+    this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
   }
@@ -31,31 +31,24 @@ class App extends Component {
     else this.setState({ bots: response.data.bots });
   }
 
-  handleRobotClick(i) {
-    let new_composition = this.state.composition.slice();
-    const clicked_melody = this.state.bots[i];
-    new_composition.push(clicked_melody);
+  hanldeRobotDragged(i) {
+    // TODO: this function is not called by anything, currently using as a placeholder.
+    let newComposition = this.state.composition.slice();
+    const clickedMelody = this.state.bots[i];
+    newComposition.push(clickedMelody);
+  }
 
-    // Record usage
-    let bots_copy = this.state.bots.slice();
-    let json_copy = {};
-    json_copy = Object.assign(json_copy, bots_copy[i]);
-    json_copy["count"] += 1;
-    bots_copy[i] = json_copy;
-    this.setState({ composition: new_composition, bots: bots_copy });
+  handleRobotFavouriteToggled(i, favourite) {
+    console.log(`Toggled favourite to ${favourite} for robot ${i}`);
+    const bot = { ...this.state.bots[i], metric: 0 + favourite };
+    const bots = [...this.state.bots];
+    bots[i] = bot;
+    this.setState({ ...this.state, bots });
   }
 
   handleClearClick(e) {
-    console.log("clearing composition");
-    let bots_copy = this.state.bots.slice();
-    let json_copy = {};
-
-    bots_copy.forEach((bot, i) => {
-      json_copy = Object.assign(json_copy, bot);
-      json_copy["count"] = 0;
-      bots_copy[i] = json_copy;
-    });
-    this.setState({ composition: [], bots: bots_copy });
+    console.log("Clearing composition");
+    this.setState({ ...this.state, composition: [] });
   }
 
   render() {
@@ -63,7 +56,7 @@ class App extends Component {
       <MDBContainer id="App">
         <TopPanel
           bots={this.state.bots}
-          handleRobotClick={this.handleRobotClick}
+          onFavouriteToggled={this.handleRobotFavouriteToggled}
           playMelody={this.playMelody}
           generateBots={this.generateBots}
         />
