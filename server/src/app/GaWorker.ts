@@ -9,6 +9,8 @@ import evaluateUser from "./FitnessUser";
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
 import { OctiveRule } from "../rules/OctiveRule";
+import { CounterTenorRule } from "../rules/CounterTenorRule";
+import { StepwiseRule } from "../rules/StepwiseRule";
 
 export class GaWorker {
 
@@ -23,7 +25,7 @@ export class GaWorker {
 
   constructor(fitnessFunction: string) {
     this.fitnessFunction = fitnessFunction;
-    this.rules = [new LeapRule(), new TritoneRule(), new OctiveRule()];
+    this.rules = [new LeapRule(), new TritoneRule(), new OctiveRule(), new StepwiseRule(), new CounterTenorRule()];
 
     console.log(`
       Creating GaWorker with configs: 
