@@ -6,12 +6,6 @@ import { parseBotsFromReq } from "../utils/Utils";
 
 // Must use a require statement for testing for unknown reason
 const express = require("express");
-
-const FITNESS_USER = "USER";
-const FITNESS_CONVENTION = "CONVENTION";
-
-let fitnessMethod = "USER";
-
 const app = express();
 
 // Middleware
@@ -60,28 +54,11 @@ app.post("/config", async (req, res) => {
     GaWorker.MUSICAL_FITNESS_WEIGHT = Number(req.body.musicalFitnessWeight);
   }
 
-  if (req.body.fitness) {
-    switch (req.body.fitness) {
-      case FITNESS_USER:
-        console.log(`Changed to ${FITNESS_USER}`);
-        fitnessMethod = FITNESS_USER;
-        break;
-      case FITNESS_CONVENTION:
-        console.log(`Changed to ${FITNESS_CONVENTION}`);
-        fitnessMethod = FITNESS_CONVENTION;
-        break;
-      default:
-        res
-          .status(400)
-          .send(`Invalid setting for fitness: ${req.body.fitness}`);
-    }
-  }
   res.sendStatus(200);
 });
 
 app.get("/config", async (req, res) => {
   res.status(200).json({
-    'fitness' : fitnessMethod,
     'iterations' : GaWorker.ITERATIONS,
     'mutationRate' : GaWorker.MUTATION_RATE
   });
@@ -96,7 +73,7 @@ app.post("/createbots/rating", async (req, res) => {
     `Received request with body: ${JSON.stringify(req.body, null, 2)}`
   );
 
-  const worker = new GaWorker(fitnessMethod);
+  const worker = new GaWorker();
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
     console.log(`First request initialized from ${ip}`);
@@ -121,7 +98,7 @@ app.post("/createbots/usage", async (req, res) => {
     `Received request with body: ${JSON.stringify(req.body, null, 2)}`
   );
 
-  let worker = new GaWorker(fitnessMethod);
+  let worker = new GaWorker();
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
