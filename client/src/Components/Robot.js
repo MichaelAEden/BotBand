@@ -56,7 +56,10 @@ class Robot extends Component {
   render() {
     return (
       <div className="robot">
-        <div className="robot-toolbar">
+        <div
+          className="robot-toolbar"
+          style={{ visibility: this.props.hideToolbar ? "hidden" : undefined }}
+        >
           <MDBIcon
             far
             size="lg"
@@ -76,7 +79,7 @@ class Robot extends Component {
         <Melody melody={this.props.melody}></Melody>
         <img
           src={this.getImage()}
-          className="robot"
+          className="robot-avatar"
           alt="Robot"
           draggable
           onMouseDown={() => {

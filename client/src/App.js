@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       bots: [],
       composition: [],
-      dragIndex: 0
+      dragIndex: 0,
     };
     this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
@@ -35,16 +35,14 @@ class App extends Component {
   }
 
   onDragStart(i) {
-    this.setState({dragIndex: i}, () => {
-      console.log(this.state.dragIndex);
-    });
+    this.setState({ dragIndex: i });
   }
 
   onDrop() {
     let newComposition = this.state.composition.slice();
     const clickedMelody = this.state.bots[this.state.dragIndex];
     newComposition.push(clickedMelody);
-    this.setState({composition: newComposition});
+    this.setState({ composition: newComposition });
   }
 
   handleRobotPlayToggled(i, isPlaying) {

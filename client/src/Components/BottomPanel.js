@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 
 import Robot from "./Robot";
+import { play } from "../Utils/melody";
 import "./styles/BottomPanel.css";
 
 class BottomPanel extends Component {
   constructor() {
     super();
     this.state = {};
+    this.handlePlayComposition = this.handlePlayComposition.bind(this);
   }
 
   handlePlayComposition(i) {
@@ -16,20 +18,19 @@ class BottomPanel extends Component {
       let melody = bot.melody.notes.map((note) => note.note);
       melodies = melodies.concat(melody);
     });
-    this.props.playMelody(melodies);
+    play(melodies);
   }
 
   onDrag(e) {
     e.preventDefault();
-    console.log("on drags");
   }
 
   render() {
     const composition = this.props.composition.map((bot, i) => (
       <MDBCol key={i} size="2">
-        <Robot 
+        <Robot
           melody={bot.melody}
-          hidePlayback
+          hideToolbar
           className="robot"
           onDragStart={this.props.onDragStart}
         ></Robot>
