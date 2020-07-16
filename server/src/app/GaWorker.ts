@@ -17,6 +17,7 @@ export class GaWorker {
   static ITERATIONS = 5; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
   static MUTATION_RATE = 0.15; // Probability of mutation
+  static NO_FAVOURITE_RATE = 0.5; // weight of selection is weaker if bot not favourited
 
   rules: Rule[];
   // feature flagging
@@ -62,7 +63,7 @@ export class GaWorker {
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
       // Feature flagging
-      let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
+      let evaluate = this.fitnessFunction === "CONVENTION" ? evaluateUser : evaluateConvention;
 
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);

@@ -1,6 +1,7 @@
 import { Bot } from "../models/Bot";
 import { Melody } from "../models/Melody";
 import { OCTAVE } from "../models/Note";
+import { GaWorker } from "./GaWorker";
 
 export const evaluateRange = (melody: Melody): number => {
   // Convention 1: All notes within an octave and a half
@@ -61,9 +62,12 @@ export const evaluateWhoop = (melody: Melody): number => {
 
 export default (bots: Bot[]): number[] => {
   return bots.map((bot) => {
+    const userFitness = bot.metric != 0 ? bot.metric : GaWorker.NO_FAVOURITE_RATE;
     // Fitness will be determined from the combined fitness of musical rules.
-    const musicalFitness =
-      (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
-    return musicalFitness > 1 ? 1 : musicalFitness;
+    let musicalFitness = (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
+    // TODO normalize this, don't just ceiling it.
+    musicalFitness = musicalFitness > 1 ? 1 : musicalFitness;
+    // TODO make weights configurable
+    return userFitness + musicalFitness;
   });
 };
