@@ -9,6 +9,6 @@ export class Melody {
 
   static fromString(str: string) {
     // Parses melody from string (e.g., "A3,B4,A5")
-    return new Melody(str.split(",").map((str) => new Note(str)));
+    return new Melody(str.split(",").map((str) => Note.fromString(str)));
   }
 }

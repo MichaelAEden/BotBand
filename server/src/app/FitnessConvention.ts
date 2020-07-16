@@ -3,7 +3,7 @@ import { Melody } from "../models/Melody";
 
 export const evaluateRange = (melody: Melody): number => {
   // Convention 1: All notes within an octave and a half
-  const notes = melody.notes.map((note) => note.toNumber());
+  const notes = melody.notes.map((note) => note.code);
   const minNote = Math.min(...notes);
   const maxNote = Math.max(...notes);
   const octave = 8;
@@ -23,7 +23,7 @@ export const evaluateStepwise = (melody: Melody): number => {
   let stepFitness = 0;
 
   for (let i = 0; i < melody.notes.length - 1; i++) {
-    let noteDiff = melody.notes[i].compare(melody.notes[i + 1]);
+    let noteDiff = melody.notes[i].code - melody.notes[i + 1].code;
     // TODO: diminishing returns after 1?
     if (Math.abs(noteDiff) <= 1) {
       stepFitness += 1;

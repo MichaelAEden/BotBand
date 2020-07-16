@@ -10,9 +10,7 @@ test("parse bots from request", () => {
     },
   };
   const bots = parseBotsFromReq(req);
-  expect(JSON.stringify(bots)).toBe(
-    JSON.stringify([new Bot(0.5, new Melody([new Note("A1"), new Note("A2")]))])
-  );
+  expect(JSON.stringify(bots)).toBe(JSON.stringify([new Bot(0.5, Melody.fromString("A1,A2"))]));
 });
 
 test("select only item with non-zero weight", () => {
