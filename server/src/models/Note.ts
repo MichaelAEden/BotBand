@@ -1,4 +1,4 @@
-// TODO: replace incorrect values for this.
+// TODO: replace hardcoded octave values with this constant.
 export const OCTAVE = 7;
 
 // TODO: consideration for sharps and flats.
