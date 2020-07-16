@@ -55,8 +55,6 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    // console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
-
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
       // Feature flagging
@@ -68,12 +66,21 @@ export class GaWorker {
       generation = selectRandomWeighted(generation, fitnesses, this.POPULATION_SIZE);
 
       // Apply mutations in accordance with ruleset
-      generation = generation.map((bot) => this.mutateBot(bot));
+      generation.forEach((bot) => this.mutateBot(bot));
     }
+
+    // Reset metrics for new generation
+    generation.forEach((bot) => (bot.metric = 0));
+
+    // Ensure favourited robots are persisted
+    startingPopulation.forEach((bot, i) => {
+      if (bot.metric === 1) generation[i] = bot;
+    });
+
     return generation;
   }
 
-  private mutateBot(bot: Bot): Bot {
+  private mutateBot(bot: Bot): void {
     // Expected value of ~1 mutation per bot.
     for (var index = 0; index < bot.melody.notes.length; index++) {
       if (Math.random() < GaWorker.MUTATION_RATE) {
@@ -86,7 +93,6 @@ export class GaWorker {
         bot.melody.notes[index] = selectRandom(notes);
       }
     }
-    return bot;
   }
 
   private getPossibleNotesFromRules(index: number, bot: Bot): Array<Note> {
