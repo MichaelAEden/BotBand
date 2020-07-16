@@ -3,7 +3,7 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
-import { evaluate as evaluateConvention } from "./FitnessConvention";
+import evaluateConvention from "./FitnessConvention";
 import evaluateUser from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";

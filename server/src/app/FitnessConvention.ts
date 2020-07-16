@@ -69,7 +69,7 @@ export const getMusicalFitness = (bot: Bot) => {
   return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
 }
 
-export const evaluate = (bots: Bot[]): number[] => {
+export default (bots: Bot[]): number[] => {
   // Normalization
   const sumMusicalFitness = bots.map(getMusicalFitness).reduce((sum, currentFitness) => sum + currentFitness);
   const sumUserFitness = bots.map(getUserFitness).reduce((sum, currentFitness) => sum + currentFitness);
