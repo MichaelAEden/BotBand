@@ -82,9 +82,7 @@ class Robot extends Component {
           className="robot-avatar"
           alt="Robot"
           draggable
-          onMouseDown={() => {
-            this.props.onDragStart(this.props.index);
-          }}
+          onMouseDown={this.props.onDragStart}
         ></img>
       </div>
     );
