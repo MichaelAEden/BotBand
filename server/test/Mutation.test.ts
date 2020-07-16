@@ -7,6 +7,7 @@ import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
 import { OctaveRule } from "../src/rules/OctaveRule";
 import { Note } from "../src/models/Note";
+<<<<<<< HEAD
 
 test("user fitness evaluator performs correctly", () => {
   let worker = new GaWorker("USER");
@@ -24,6 +25,9 @@ test("user fitness evaluator performs correctly", () => {
   }
 });
 
+=======
+  
+>>>>>>> more changes
 test("mutation leap rule returns correct set", () => {
   let worker = new GaWorker("USER");
 

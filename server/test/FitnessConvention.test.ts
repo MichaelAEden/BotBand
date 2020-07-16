@@ -1,4 +1,4 @@
-import { evaluateRange, evaluateStepwise, evaluateWhoop } from "../src/app/FitnessConvention";
+import { evaluateRange, evaluateStepwise, evaluateWhoop, evaluate, getMusicalFitness, getUserFitness } from "../src/app/FitnessConvention";
 import { Melody } from "../src/models/Melody";
 
 describe("Range evaluator", () => {

@@ -60,14 +60,24 @@ export const evaluateWhoop = (melody: Melody): number => {
   return whoopFitness;
 };
 
-export default (bots: Bot[]): number[] => {
+export const getUserFitness = (bot: Bot) => {
+  return bot.metric != 0 ? bot.metric : GaWorker.NO_FAVOURITE_RATE;
+}
+
+// Fitness will be determined from the combined fitness of musical rules.
+export const getMusicalFitness = (bot: Bot) => {
+  return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
+}
+
+export const evaluate = (bots: Bot[]): number[] => {
+  // Normalization
+  const sumMusicalFitness = bots.map(getMusicalFitness).reduce((sum, currentFitness) => sum + currentFitness);
+  const sumUserFitness = bots.map(getUserFitness).reduce((sum, currentFitness) => sum + currentFitness);
+
   return bots.map((bot) => {
-    const userFitness = bot.metric != 0 ? bot.metric : GaWorker.NO_FAVOURITE_RATE;
-    // Fitness will be determined from the combined fitness of musical rules.
-    let musicalFitness = (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
-    // TODO normalize this, don't just ceiling it.
-    musicalFitness = musicalFitness > 1 ? 1 : musicalFitness;
-    // TODO make weights configurable
-    return userFitness + musicalFitness;
+    const userFitness = getUserFitness(bot) / sumUserFitness;
+    const musicalFitness = getMusicalFitness(bot) / sumMusicalFitness;
+
+    return userFitness + GaWorker.MUSICAL_FITNESS_WEIGHT * musicalFitness;
   });
 };

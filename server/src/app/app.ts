@@ -52,6 +52,14 @@ app.post("/config", async (req, res) => {
     GaWorker.ITERATIONS = Number(req.body.iterations);
   }
   
+  if (req.body.noFavourateRate) {
+    GaWorker.NO_FAVOURITE_RATE = Number(req.body.noFavourateRate);
+  }
+
+  if (req.body.musicalFitnessWeight) {
+    GaWorker.MUSICAL_FITNESS_WEIGHT = Number(req.body.musicalFitnessWeight);
+  }
+
   if (req.body.fitness) {
     switch (req.body.fitness) {
       case FITNESS_USER:
