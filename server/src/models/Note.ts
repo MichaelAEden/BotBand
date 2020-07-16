@@ -22,11 +22,19 @@ export class Note {
   }
 
   private static validateNote(note: string) {
-    if (note.length !== 2) throw new Error(`Invalid note: ${note}`);
+    if (note.length !== 2) {
+      const msg = `Invalid note: ${note}`;
+      console.log(msg);
+      throw new Error(msg);
+    }
   }
 
   private static validateCode(code: number) {
-    if (code < 1) throw new Error(`Invalid code: ${code}`);
+    if (code < 1) {
+      const msg = `Invalid code: ${code}`;
+      console.log(msg);
+      throw new Error(msg);
+    }
   }
 
   private static getNote(code: number): string {
