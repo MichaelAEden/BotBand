@@ -60,7 +60,7 @@ class Robot extends Component {
           <MDBIcon
             far
             size="lg"
-            icon={this.props.isPlaying ? "pause-circle" : "play-circle"}
+            icon={this.props.isPlaying ? "stop-circle" : "play-circle"}
             className="toolbar-btn"
             onClick={this.handlePlayClicked}
           />
