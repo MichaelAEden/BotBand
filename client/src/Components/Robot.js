@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { MDBIcon } from "mdbreact";
+import Tone from "tone";
 
 import Melody from "./Melody";
 import { play } from "../Utils/melody";
@@ -19,20 +20,32 @@ const COLOUR_MAP = {
 class Robot extends Component {
   constructor() {
     super();
-    this.state = { favourite: false };
-    this.handlePlayClick = this.handlePlayClick.bind(this);
-    this.handleFavouriteToggled = this.handleFavouriteToggled.bind(this);
+    this.state = { isFavourite: false };
+    this.handlePlayClicked = this.handlePlayClicked.bind(this);
+    this.handleFavouriteClicked = this.handleFavouriteClicked.bind(this);
   }
 
-  handlePlayClick() {
+  handlePlayClicked(e) {
+    const isPlaying = this.props.isPlaying;
+    this.props.onPlayToggled(!isPlaying);
+
+    // Stop any melodies which are currently playing.
+    Tone.Transport.cancel();
+
+    if (isPlaying) return;
+
     const melody = this.props.melody.notes.map((note) => note.note);
     play(melody);
+
+    const endTime = Tone.Transport.seconds + 2;
+    Tone.Transport.schedule((time) => {
+      this.props.onPlayToggled(false);
+    }, endTime);
   }
 
-  handleFavouriteToggled(e) {
-    // TODO
-    this.props.onFavouriteToggled(!this.state.favourite);
-    this.setState({ favourite: !this.state.favourite });
+  handleFavouriteClicked(e) {
+    this.props.onFavouriteToggled(!this.state.isFavourite);
+    this.setState({ isFavourite: !this.state.isFavourite });
   }
 
   getImage() {
@@ -41,24 +54,23 @@ class Robot extends Component {
   }
 
   render() {
-    // TODO: change play button depending on whether melody is currently playing.
     return (
       <div className="robot">
         <div className="robot-toolbar">
           <MDBIcon
             far
             size="lg"
-            icon="play-circle"
+            icon={this.props.isPlaying ? "stop-circle" : "play-circle"}
             className="toolbar-btn"
-            onClick={this.handlePlayClick}
+            onClick={this.handlePlayClicked}
           />
           <MDBIcon
-            far={!this.state.favourite}
-            fas={this.state.favourite}
+            far={!this.state.isFavourite}
+            fas={this.state.isFavourite}
             size="lg"
             icon="star"
             className="toolbar-btn"
-            onClick={this.handleFavouriteToggled}
+            onClick={this.handleFavouriteClicked}
           />
         </div>
         <Melody melody={this.props.melody}></Melody>

@@ -12,6 +12,7 @@ class App extends Component {
       bots: [],
       composition: [],
     };
+    this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
@@ -38,9 +39,20 @@ class App extends Component {
     newComposition.push(clickedMelody);
   }
 
-  handleRobotFavouriteToggled(i, favourite) {
-    console.log(`Toggled favourite to ${favourite} for robot ${i}`);
-    const bot = { ...this.state.bots[i], metric: 0 + favourite };
+  handleRobotPlayToggled(i, isPlaying) {
+    console.log(`Toggled play to ${isPlaying} for robot ${i}`);
+    // Increment robot play counter if robot is being played.
+    if (isPlaying) {
+      const bot = { ...this.state.bots[i], playCount: (this.state.bots[i].playCount || 0) + 1 };
+      const bots = [...this.state.bots];
+      bots[i] = bot;
+      this.setState({ ...this.state, bots });
+    }
+  }
+
+  handleRobotFavouriteToggled(i, isFavourite) {
+    console.log(`Toggled favourite to ${isFavourite} for robot ${i}`);
+    const bot = { ...this.state.bots[i], metric: 0 + isFavourite };
     const bots = [...this.state.bots];
     bots[i] = bot;
     this.setState({ ...this.state, bots });
@@ -56,6 +68,7 @@ class App extends Component {
       <MDBContainer id="App">
         <TopPanel
           bots={this.state.bots}
+          onPlayToggled={this.handleRobotPlayToggled}
           onFavouriteToggled={this.handleRobotFavouriteToggled}
           playMelody={this.playMelody}
           generateBots={this.generateBots}
