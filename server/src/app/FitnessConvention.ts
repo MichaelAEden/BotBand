@@ -1,19 +1,19 @@
 import { Bot } from "../models/Bot";
 import { Melody } from "../models/Melody";
+import { OCTAVE } from "../models/Note";
 
 export const evaluateRange = (melody: Melody): number => {
   // Convention 1: All notes within an octave and a half
+  const octaveRange = 1.5;
   const notes = melody.notes.map((note) => note.code);
   const minNote = Math.min(...notes);
   const maxNote = Math.max(...notes);
-  const octave = 8;
-  const octaveRange = 3;
 
   let octaveFitness = 0;
-  if (maxNote - minNote < octave * octaveRange) {
+  if (maxNote - minNote < OCTAVE * octaveRange) {
     octaveFitness = 1;
   } else {
-    octaveFitness = (1.0 / (maxNote - minNote)) * octave;
+    octaveFitness = (1.0 / (maxNote - minNote)) * OCTAVE;
   }
   return octaveFitness;
 };
