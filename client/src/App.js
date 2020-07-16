@@ -87,6 +87,7 @@ class App extends Component {
           bots={this.state.bots}
           playMelody={this.playMelody}
           handleClearClick={this.handleClearClick}
+          onDragStart={this.onDragStart}
           onDrop={this.onDrop}
         />
       </MDBContainer>
