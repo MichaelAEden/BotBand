@@ -1,5 +1,4 @@
 import { GaWorker } from "../src/app/gaworker";
-import evaluate from "../src/app/FitnessUser";
 import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
 import { CounterTenorRule } from "../src/rules/CounterTenorRule";
@@ -8,24 +7,8 @@ import { Melody } from "../src/models/Melody";
 import { OctaveRule } from "../src/rules/OctaveRule";
 import { Note } from "../src/models/Note";
 
-test("user fitness evaluator performs correctly", () => {
-  let worker = new GaWorker("USER");
-  let bots = worker.initialBots();
-
-  bots.map((bot) => (bot.metric = Math.round(Math.random() * 3)));
-
-  let expectedFitness = bots.map((bot) => bot.metric);
-  let fitnesses = evaluate(bots);
-
-  expect(expectedFitness.length === fitnesses.length).toBe(true);
-
-  for (var i = 0; i < expectedFitness.length; i++) {
-    expect(expectedFitness[i] === fitnesses[i]).toBe(true);
-  }
-});
-
 test("mutation leap rule returns correct set", () => {
-  let worker = new GaWorker("USER");
+  let worker = new GaWorker();
 
   let startSet = worker.createStartSet();
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
@@ -58,7 +41,7 @@ test("mutation leap rule returns correct set", () => {
 });
 
 test("mutation tritone rule returns correct set", () => {
-  let worker = new GaWorker("USER");
+  let worker = new GaWorker();
 
   let startSet = worker.createStartSet();
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
@@ -86,7 +69,7 @@ test("Octave rule works", () => {
 });
 
 test("GA octaves", () => {
-  let worker = new GaWorker("USER");
+  let worker = new GaWorker();
 
   let highNotes = 0;
   let totalNotes = 0;

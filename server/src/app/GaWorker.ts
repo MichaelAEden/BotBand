@@ -3,8 +3,7 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
-import evaluateConvention from "./FitnessConvention";
-import evaluateUser from "./FitnessUser";
+import evaluate from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
@@ -17,13 +16,12 @@ export class GaWorker {
   static ITERATIONS = 5; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
   static MUTATION_RATE = 0.15; // Probability of mutation
+  static NO_FAVOURITE_RATE = 0.5; // weight of selection is weaker if bot not favourited
+  static MUSICAL_FITNESS_WEIGHT = 1; // relative weight of melody vs user fitness in convention algo
 
   rules: Rule[];
-  // feature flagging
-  fitnessFunction: string = "USER";
 
-  constructor(fitnessFunction: string) {
-    this.fitnessFunction = fitnessFunction;
+  constructor() {
     this.rules = [
       new LeapRule(),
       new TritoneRule(),
@@ -62,7 +60,6 @@ export class GaWorker {
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
       // Feature flagging
-      let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
 
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
