@@ -1,5 +1,4 @@
 import { GaWorker } from "../src/app/gaworker";
-import evaluate from "../src/app/FitnessUser";
 import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
 import { CounterTenorRule } from "../src/rules/CounterTenorRule";
@@ -9,7 +8,7 @@ import { OctaveRule } from "../src/rules/OctaveRule";
 import { Note } from "../src/models/Note";
 
 test("mutation leap rule returns correct set", () => {
-  let worker = new GaWorker("USER");
+  let worker = new GaWorker();
 
   let startSet = worker.createStartSet();
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
@@ -42,7 +41,7 @@ test("mutation leap rule returns correct set", () => {
 });
 
 test("mutation tritone rule returns correct set", () => {
-  let worker = new GaWorker("USER");
+  let worker = new GaWorker();
 
   let startSet = worker.createStartSet();
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
@@ -70,7 +69,7 @@ test("Octave rule works", () => {
 });
 
 test("GA octaves", () => {
-  let worker = new GaWorker("USER");
+  let worker = new GaWorker();
 
   let highNotes = 0;
   let totalNotes = 0;
