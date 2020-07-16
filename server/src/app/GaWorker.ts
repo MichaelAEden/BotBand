@@ -57,8 +57,6 @@ export class GaWorker {
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    // console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
-
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
       // Feature flagging
@@ -73,6 +71,15 @@ export class GaWorker {
       // Apply mutations in accordance with ruleset
       generation = generation.map((bot) => this.mutateBot(bot));
     }
+
+    // Reset metrics for new generation
+    generation.forEach((bot) => (bot.metric = 0));
+
+    // Ensure favourited robots are not deleted
+    startingPopulation.forEach((bot, i) => {
+      if (bot.metric === 1) generation[i] = bot;
+    });
+
     return generation;
   }
 
