@@ -11,6 +11,7 @@ import { TritoneRule } from "../rules/TritoneRule";
 import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
+import * as _ from "lodash";
 
 export class GaWorker {
   // Default Values
@@ -69,13 +70,13 @@ export class GaWorker {
       generation = selectRandomWeighted(generation, fitnesses, this.POPULATION_SIZE);
 
       // Apply mutations in accordance with ruleset
-      generation = generation.map((bot) => this.mutateBot(bot));
+      generation.forEach((bot) => this.mutateBot(bot));
     }
 
     // Reset metrics for new generation
     generation.forEach((bot) => (bot.metric = 0));
 
-    // Ensure favourited robots are not deleted
+    // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {
       if (bot.metric === 1) generation[i] = bot;
     });
@@ -83,7 +84,7 @@ export class GaWorker {
     return generation;
   }
 
-  private mutateBot(bot: Bot): Bot {
+  private mutateBot(bot: Bot): void {
     // Expected value of ~1 mutation per bot.
     for (var index = 0; index < bot.melody.notes.length; index++) {
       if (Math.random() < GaWorker.MUTATION_RATE) {
@@ -96,7 +97,6 @@ export class GaWorker {
         bot.melody.notes[index] = selectRandom(notes);
       }
     }
-    return bot;
   }
 
   private getPossibleNotesFromRules(index: number, bot: Bot): Array<Note> {
