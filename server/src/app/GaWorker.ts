@@ -14,7 +14,8 @@ import { StepwiseRule } from "../rules/StepwiseRule";
 export class GaWorker {
   // Default Values
   static ITERATIONS = 5; // Times GA will iterate
-  POPULATION_SIZE = 10; // Population size
+  // TODO decouple this
+  POPULATION_SIZE = 7; // Population size
   static MUTATION_RATE = 0.15; // Probability of mutation
   static NO_FAVOURITE_RATE = 0.5; // weight of selection is weaker if bot not favourited
   static MUSICAL_FITNESS_WEIGHT = 1; // relative weight of melody vs user fitness in convention algo
@@ -37,6 +38,12 @@ export class GaWorker {
     `);
   }
 
+  /*
+      "A4,G3,F3,E3",
+      "F3,C4,B4,A4",
+      "C4,B4,A4,C4",
+   */
+
   initialBots(): Bot[] {
     return [
       "C4,G4,G4,F4",
@@ -45,10 +52,7 @@ export class GaWorker {
       "E4,E4,E4,A4",
       "B4,A4,G4,D4",
       "D4,G4,C5,D5",
-      "E4,G4,E4,D4",
-      "A4,G3,F3,E3",
-      "F3,C4,B4,A4",
-      "C4,B4,A4,C4",
+      "E4,G4,E4,D4"
     ].map((str) => new Bot(0, Melody.fromString(str)));
   }
 
