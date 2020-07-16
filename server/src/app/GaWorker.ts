@@ -11,7 +11,6 @@ import { TritoneRule } from "../rules/TritoneRule";
 import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
-import * as _ from "lodash";
 
 export class GaWorker {
   // Default Values
