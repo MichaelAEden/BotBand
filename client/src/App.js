@@ -39,17 +39,20 @@ class App extends Component {
     newComposition.push(clickedMelody);
   }
 
-  handleRobotPlayToggled(i, play) {
-    console.log(`Toggled play to ${play} for robot ${i}`);
-    const bot = { ...this.state.bots[i], metric: 0 + play };
-    const bots = [...this.state.bots];
-    bots[i] = bot;
-    this.setState({ ...this.state, bots });
+  handleRobotPlayToggled(i, isPlaying) {
+    console.log(`Toggled play to ${isPlaying} for robot ${i}`);
+    // Increment robot play counter if robot is being played.
+    if (isPlaying) {
+      const bot = { ...this.state.bots[i], playCount: (this.state.bots[i].playCount || 0) + 1 };
+      const bots = [...this.state.bots];
+      bots[i] = bot;
+      this.setState({ ...this.state, bots });
+    }
   }
 
-  handleRobotFavouriteToggled(i, favourite) {
-    console.log(`Toggled favourite to ${favourite} for robot ${i}`);
-    const bot = { ...this.state.bots[i], metric: 0 + favourite };
+  handleRobotFavouriteToggled(i, isFavourite) {
+    console.log(`Toggled favourite to ${isFavourite} for robot ${i}`);
+    const bot = { ...this.state.bots[i], metric: 0 + isFavourite };
     const bots = [...this.state.bots];
     bots[i] = bot;
     this.setState({ ...this.state, bots });

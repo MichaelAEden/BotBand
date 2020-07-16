@@ -20,43 +20,32 @@ const COLOUR_MAP = {
 class Robot extends Component {
   constructor() {
     super();
-    this.state = { play: false, favourite: false, end_time: 0 };
-    this.handlePlayClick = this.handlePlayClick.bind(this);
-    this.handlePlayToggled = this.handlePlayToggled.bind(this);
-    this.handleFavouriteToggled = this.handleFavouriteToggled.bind(this);
+    this.state = { isFavourite: false };
+    this.handlePlayClicked = this.handlePlayClicked.bind(this);
+    this.handleFavouriteClicked = this.handleFavouriteClicked.bind(this);
   }
 
-  handlePlayClick() {
-    if (this.state.play) {
-      Tone.Transport.cancel();
-      this.handlePlayToggled();
-      return;
-    }
+  handlePlayClicked(e) {
+    const isPlaying = this.props.isPlaying;
+    this.props.onPlayToggled(!isPlaying);
 
-    this.handlePlayToggled();
-    // Tone.Timeline.cancelBefore(Tone.Transport.time);
-    // BUG: When multiple bots are clicked consecutively, the previous bots play buttons don't return to normal
-    // because the event is cleared from the timeline by the following line
+    // Stop any melodies which are currently playing.
     Tone.Transport.cancel();
+
+    if (isPlaying) return;
 
     const melody = this.props.melody.notes.map((note) => note.note);
     play(melody);
 
-    this.end_time = Tone.Transport.seconds + 2;
+    const endTime = Tone.Transport.seconds + 2;
     Tone.Transport.schedule((time) => {
-      this.handlePlayToggled();
-    }, this.end_time);
+      this.props.onPlayToggled(false);
+    }, endTime);
   }
 
-  handlePlayToggled(e) {
-    this.props.onPlayToggled(!this.state.play);
-    this.setState({ play: !this.state.play });
-  }
-
-  handleFavouriteToggled(e) {
-    // TODO
-    this.props.onFavouriteToggled(!this.state.favourite);
-    this.setState({ favourite: !this.state.favourite });
+  handleFavouriteClicked(e) {
+    this.props.onFavouriteToggled(!this.state.isFavourite);
+    this.setState({ isFavourite: !this.state.isFavourite });
   }
 
   getImage() {
@@ -69,20 +58,19 @@ class Robot extends Component {
       <div className="robot">
         <div className="robot-toolbar">
           <MDBIcon
-            far={!this.state.play}
-            fas={this.state.play}
+            far
             size="lg"
-            icon="play-circle"
+            icon={this.props.isPlaying ? "pause-circle" : "play-circle"}
             className="toolbar-btn"
-            onClick={this.handlePlayClick}
+            onClick={this.handlePlayClicked}
           />
           <MDBIcon
-            far={!this.state.favourite}
-            fas={this.state.favourite}
+            far={!this.state.isFavourite}
+            fas={this.state.isFavourite}
             size="lg"
             icon="star"
             className="toolbar-btn"
-            onClick={this.handleFavouriteToggled}
+            onClick={this.handleFavouriteClicked}
           />
         </div>
         <Melody melody={this.props.melody}></Melody>

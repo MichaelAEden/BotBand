@@ -5,6 +5,20 @@ import Robot from "./Robot";
 import "./styles/TopPanel.css";
 
 class TopPanel extends Component {
+  constructor() {
+    super();
+    // TODO: stop robots from playing if composition is playing.
+    // Keep track of robot currently playing melody, if any. Only one may play at a time.
+    this.state = { robotPlaying: -1 };
+    this.handlePlayToggled = this.handlePlayToggled.bind(this);
+  }
+
+  handlePlayToggled(i, isPlaying) {
+    if (isPlaying) this.setState({ robotPlaying: i });
+    else this.setState({ robotPlaying: -1 });
+    this.props.onPlayToggled(i, isPlaying);
+  }
+
   render() {
     if (!this.props.bots) return null;
 
@@ -15,8 +29,9 @@ class TopPanel extends Component {
             <MDBCol key={i} size="3">
               <Robot
                 melody={bot.melody}
-                onPlayToggled={(play) => this.props.onPlayToggled(i, play)}
-                onFavouriteToggled={(favourite) => this.props.onFavouriteToggled(i, favourite)}
+                isPlaying={this.state.robotPlaying === i}
+                onPlayToggled={(isPlaying) => this.handlePlayToggled(i, isPlaying)}
+                onFavouriteToggled={(isFavourite) => this.props.onFavouriteToggled(i, isFavourite)}
               ></Robot>
             </MDBCol>
           ))}
