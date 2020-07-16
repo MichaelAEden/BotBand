@@ -64,12 +64,15 @@ export const evaluateWhoop = (melody: Melody): number => {
 
 export const getUserFitness = (bot: Bot) => {
   return bot.metric != 0 ? bot.metric : GaWorker.NO_FAVOURITE_RATE;
-}
+};
 
 // Fitness will be determined from the combined fitness of musical rules.
 export const getMusicalFitness = (bot: Bot) => {
-  return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody) + evaluateWhoop(bot.melody)) / MAX_MELODY_SCORE;
-}
+  return (
+    (evaluateRange(bot.melody) + evaluateStepwise(bot.melody) + evaluateWhoop(bot.melody)) /
+    MAX_MELODY_SCORE
+  );
+};
 
 export default (bots: Bot[]): number[] => {
   return bots.map((bot) => {
