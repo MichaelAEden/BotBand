@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { MDBIcon } from "mdbreact";
 
+import Melody from "./Melody";
 import { play } from "../Utils/melody";
+import "./styles/Robot.css";
 
 // Based on Scriabin's colour mapping
-const colour_map = {
-  "C":"Robot_Red.png",
-  "D":"Robot_Orange.png",
-  "E":"Robot_Yellow.png",
-  "F":"Robot_Green.png",
-  "G":"Robot_Teal.png",
-  "A":"Robot_Blue.png",
-  "B":"Robot_Purple.png",
+const COLOUR_MAP = {
+  C: "Robot_Red.png",
+  D: "Robot_Orange.png",
+  E: "Robot_Yellow.png",
+  F: "Robot_Green.png",
+  G: "Robot_Teal.png",
+  A: "Robot_Blue.png",
+  B: "Robot_Purple.png",
 };
 
 class Robot extends Component {
@@ -35,13 +37,13 @@ class Robot extends Component {
 
   getImage() {
     const note = this.props.melody.notes[0]["note"];
-    return colour_map[note.charAt(0)];
+    return COLOUR_MAP[note.charAt(0)];
   }
 
   render() {
     // TODO: change play button depending on whether melody is currently playing.
     return (
-      <div>
+      <div className="robot">
         <div className="robot-toolbar">
           <MDBIcon
             far
@@ -59,7 +61,8 @@ class Robot extends Component {
             onClick={this.handleFavouriteToggled}
           />
         </div>
-        <img src={this.getImage()} className="robot" alt="Robot"></img>
+        <Melody melody={this.props.melody}></Melody>
+        <img src={this.getImage()} className="robot-avatar" alt="Robot"></img>
       </div>
     );
   }
