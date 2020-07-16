@@ -17,8 +17,6 @@ test("user fitness evaluator performs correctly", () => {
   let expectedFitness = bots.map((bot) => bot.metric);
   let fitnesses = evaluate(bots);
 
-  console.log(fitnesses);
-
   expect(expectedFitness.length === fitnesses.length).toBe(true);
 
   for (var i = 0; i < expectedFitness.length; i++) {
@@ -79,7 +77,7 @@ test("octive rule works", () => {
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
   let rule = new OctiveRule();
 
-  console.log("stays within octive");
+  // Stays within octive
   let set = ["D3", "G3", "A4", "B4", "D4", "G4", "A5", "G5"].map((s) => Note.fromString(s));
   let expectedOutput = ["G3", "A4", "B4", "D4", "G4", "A5", "G5"];
   let output = rule.apply(2, set, bot.melody).map((n) => n.note);
@@ -118,8 +116,6 @@ test("GA octaves", () => {
   console.log(`results: high - ${highNotes} , low - ${lowNotes} , total - ${totalNotes}`);
   console.log(`fraction high notes: ${highNotes / totalNotes}`);
   console.log(`fraction low notes: ${lowNotes / totalNotes}`);
-
-  expect(true).toBe(true);
 });
 
 test("Vocal Range Rules", () => {
