@@ -38,5 +38,12 @@ export const selectRandomWeighted = (items, weights, n) => {
     choices.push(newItem);
   }
 
-  return choices;
+  // For randomly weighted mutations
+  if (n==1){
+    return choices[0];
+  // For randomly weighted population generation
+  }else{
+    return choices;
+  }
+  
 };
