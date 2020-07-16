@@ -8,7 +8,7 @@ import evaluateUser from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
-import { OctiveRule } from "../rules/OctiveRule";
+import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
 
@@ -27,7 +27,7 @@ export class GaWorker {
     this.rules = [
       new LeapRule(),
       new TritoneRule(),
-      new OctiveRule(),
+      new OctaveRule(),
       new StepwiseRule(),
       new CounterTenorRule(),
     ];

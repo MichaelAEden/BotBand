@@ -5,7 +5,7 @@ import { TritoneRule } from "../src/rules/TritoneRule";
 import { CounterTenorRule } from "../src/rules/CounterTenorRule";
 import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
-import { OctiveRule } from "../src/rules/OctiveRule";
+import { OctaveRule } from "../src/rules/OctaveRule";
 import { Note } from "../src/models/Note";
 
 test("user fitness evaluator performs correctly", () => {
@@ -73,11 +73,11 @@ test("mutation tritone rule returns correct set", () => {
   expect(output.filter((o) => !expectedOutput.includes(o)).length === 0).toBe(true);
 });
 
-test("octive rule works", () => {
+test("Octave rule works", () => {
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4,B4,B4,F4,B5,D4,E4"));
-  let rule = new OctiveRule();
+  let rule = new OctaveRule();
 
-  // Stays within octive
+  // Stays within Octave
   let set = ["D3", "G3", "A4", "B4", "D4", "G4", "A5", "G5"].map((s) => Note.fromString(s));
   let expectedOutput = ["G3", "A4", "B4", "D4", "G4", "A5", "G5"];
   let output = rule.apply(2, set, bot.melody).map((n) => n.note);
