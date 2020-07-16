@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MDBRow, MDBCol, MDBIcon } from "mdbreact";
 
 import Robot from "./Robot";
+import { play } from "../Utils/melody";
 import "./styles/BottomPanel.css";
 
 class BottomPanel extends Component {
@@ -17,18 +18,27 @@ class BottomPanel extends Component {
       let melody = bot.melody.notes.map((note) => note.note);
       melodies = melodies.concat(melody);
     });
-    this.props.playMelody(melodies);
+    play(melodies);
+  }
+
+  onDrag(e) {
+    e.preventDefault();
   }
 
   render() {
     const composition = this.props.composition.map((bot, i) => (
       <MDBCol key={i} size="2">
-        <Robot melody={bot.melody} hidePlayback className="robot"></Robot>
+        <Robot
+          melody={bot.melody}
+          hideToolbar
+          className="robot"
+          onDragStart={this.props.onDragStart}
+        ></Robot>
       </MDBCol>
     ));
 
     return (
-      <div id="bottom-panel">
+      <div id="bottom-panel" onDrop={this.props.onDrop} onDragOver={(e) => this.onDrag(e)}>
         <div id="bottom-panel-label">
           <h2>Composition</h2>
         </div>

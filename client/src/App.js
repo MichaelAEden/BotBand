@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
-
 import TopPanel from "./Components/TopPanel";
 import BottomPanel from "./Components/BottomPanel";
 import { fetchJson } from "./Utils/request";
@@ -11,11 +10,14 @@ class App extends Component {
     this.state = {
       bots: [],
       composition: [],
+      dragIndex: 0,
     };
     this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
   async componentDidMount() {
@@ -32,11 +34,15 @@ class App extends Component {
     else this.setState({ bots: response.data.bots });
   }
 
-  hanldeRobotDragged(i) {
-    // TODO: this function is not called by anything, currently using as a placeholder.
+  onDragStart(i) {
+    this.setState({ dragIndex: i });
+  }
+
+  onDrop() {
     let newComposition = this.state.composition.slice();
-    const clickedMelody = this.state.bots[i];
+    const clickedMelody = this.state.bots[this.state.dragIndex];
     newComposition.push(clickedMelody);
+    this.setState({ composition: newComposition });
   }
 
   handleRobotPlayToggled(i, isPlaying) {
@@ -72,12 +78,15 @@ class App extends Component {
           onFavouriteToggled={this.handleRobotFavouriteToggled}
           playMelody={this.playMelody}
           generateBots={this.generateBots}
+          onDragStart={this.onDragStart}
         />
         <BottomPanel
           composition={this.state.composition}
           bots={this.state.bots}
           playMelody={this.playMelody}
           handleClearClick={this.handleClearClick}
+          onDragStart={this.onDragStart}
+          onDrop={this.onDrop}
         />
       </MDBContainer>
     );
