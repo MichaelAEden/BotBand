@@ -74,7 +74,15 @@ class Robot extends Component {
           />
         </div>
         <Melody melody={this.props.melody}></Melody>
-        <img src={this.getImage()} className="robot-avatar" alt="Robot"></img>
+        <img
+          src={this.getImage()}
+          className="robot"
+          alt="Robot"
+          draggable
+          onMouseDown={() => {
+            this.props.onDragStart(this.props.index);
+          }}
+        ></img>
       </div>
     );
   }

@@ -8,7 +8,6 @@ class BottomPanel extends Component {
   constructor() {
     super();
     this.state = {};
-    this.handlePlayComposition = this.handlePlayComposition.bind(this);
   }
 
   handlePlayComposition(i) {
@@ -20,6 +19,11 @@ class BottomPanel extends Component {
     this.props.playMelody(melodies);
   }
 
+  onDrag(e) {
+    e.preventDefault();
+    console.log("on drags");
+  }
+
   render() {
     const composition = this.props.composition.map((bot, i) => (
       <MDBCol key={i} size="2">
@@ -28,7 +32,7 @@ class BottomPanel extends Component {
     ));
 
     return (
-      <div id="bottom-panel">
+      <div id="bottom-panel" onDrop={this.props.onDrop} onDragOver={(e) => this.onDrag(e)}>
         <div id="bottom-panel-label">
           <h2>Composition</h2>
         </div>

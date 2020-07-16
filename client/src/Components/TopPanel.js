@@ -29,9 +29,15 @@ class TopPanel extends Component {
             <MDBCol key={i} size="3">
               <Robot
                 melody={bot.melody}
+<<<<<<< HEAD
                 isPlaying={this.state.robotPlaying === i}
                 onPlayToggled={(isPlaying) => this.handlePlayToggled(i, isPlaying)}
                 onFavouriteToggled={(isFavourite) => this.props.onFavouriteToggled(i, isFavourite)}
+=======
+                onFavouriteToggled={(favourite) => this.props.onFavouriteToggled(i, favourite)}
+                index={i}
+                onDragStart={this.props.onDragStart}
+>>>>>>> implemented drag and drop
               ></Robot>
             </MDBCol>
           ))}
