@@ -7,27 +7,7 @@ import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
 import { OctaveRule } from "../src/rules/OctaveRule";
 import { Note } from "../src/models/Note";
-<<<<<<< HEAD
 
-test("user fitness evaluator performs correctly", () => {
-  let worker = new GaWorker("USER");
-  let bots = worker.initialBots();
-
-  bots.map((bot) => (bot.metric = Math.round(Math.random() * 3)));
-
-  let expectedFitness = bots.map((bot) => bot.metric);
-  let fitnesses = evaluate(bots);
-
-  expect(expectedFitness.length === fitnesses.length).toBe(true);
-
-  for (var i = 0; i < expectedFitness.length; i++) {
-    expect(expectedFitness[i] === fitnesses[i]).toBe(true);
-  }
-});
-
-=======
-  
->>>>>>> more changes
 test("mutation leap rule returns correct set", () => {
   let worker = new GaWorker("USER");
 
