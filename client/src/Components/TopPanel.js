@@ -15,6 +15,7 @@ class TopPanel extends Component {
             <MDBCol key={i} size="3">
               <Robot
                 melody={bot.melody}
+                onPlayToggled={(play) => this.props.onPlayToggled(i, play)}
                 onFavouriteToggled={(favourite) => this.props.onFavouriteToggled(i, favourite)}
               ></Robot>
             </MDBCol>

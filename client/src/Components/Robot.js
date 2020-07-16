@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { MDBIcon } from "mdbreact";
+import Tone from "tone";
 
 import Melody from "./Melody";
 import { play } from "../Utils/melody";
@@ -19,14 +20,37 @@ const COLOUR_MAP = {
 class Robot extends Component {
   constructor() {
     super();
-    this.state = { favourite: false };
+    this.state = { play: false, favourite: false, end_time: 0 };
     this.handlePlayClick = this.handlePlayClick.bind(this);
+    this.handlePlayToggled = this.handlePlayToggled.bind(this);
     this.handleFavouriteToggled = this.handleFavouriteToggled.bind(this);
   }
 
   handlePlayClick() {
+    if (this.state.play) {
+      Tone.Transport.cancel();
+      this.handlePlayToggled();
+      return;
+    }
+
+    this.handlePlayToggled();
+    // Tone.Timeline.cancelBefore(Tone.Transport.time);
+    // BUG: When multiple bots are clicked consecutively, the previous bots play buttons don't return to normal
+    // because the event is cleared from the timeline by the following line
+    Tone.Transport.cancel();
+
     const melody = this.props.melody.notes.map((note) => note.note);
     play(melody);
+
+    this.end_time = Tone.Transport.seconds + 2;
+    Tone.Transport.schedule((time) => {
+      this.handlePlayToggled();
+    }, this.end_time);
+  }
+
+  handlePlayToggled(e) {
+    this.props.onPlayToggled(!this.state.play);
+    this.setState({ play: !this.state.play });
   }
 
   handleFavouriteToggled(e) {
@@ -41,12 +65,12 @@ class Robot extends Component {
   }
 
   render() {
-    // TODO: change play button depending on whether melody is currently playing.
     return (
       <div className="robot">
         <div className="robot-toolbar">
           <MDBIcon
-            far
+            far={!this.state.play}
+            fas={this.state.play}
             size="lg"
             icon="play-circle"
             className="toolbar-btn"

@@ -12,6 +12,7 @@ class App extends Component {
       bots: [],
       composition: [],
     };
+    this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
@@ -38,6 +39,14 @@ class App extends Component {
     newComposition.push(clickedMelody);
   }
 
+  handleRobotPlayToggled(i, play) {
+    console.log(`Toggled play to ${play} for robot ${i}`);
+    const bot = { ...this.state.bots[i], metric: 0 + play };
+    const bots = [...this.state.bots];
+    bots[i] = bot;
+    this.setState({ ...this.state, bots });
+  }
+
   handleRobotFavouriteToggled(i, favourite) {
     console.log(`Toggled favourite to ${favourite} for robot ${i}`);
     const bot = { ...this.state.bots[i], metric: 0 + favourite };
@@ -56,6 +65,7 @@ class App extends Component {
       <MDBContainer id="App">
         <TopPanel
           bots={this.state.bots}
+          onPlayToggled={this.handleRobotPlayToggled}
           onFavouriteToggled={this.handleRobotFavouriteToggled}
           playMelody={this.playMelody}
           generateBots={this.generateBots}
