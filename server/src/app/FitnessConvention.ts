@@ -3,6 +3,8 @@ import { Melody } from "../models/Melody";
 import { OCTAVE } from "../models/Note";
 import { GaWorker } from "./GaWorker";
 
+const MAX_MELODY_SCORE = 3;
+
 export const evaluateRange = (melody: Melody): number => {
   // Convention 1: All notes within an octave and a half
   const octaveRange = 1.5;
@@ -66,18 +68,11 @@ export const getUserFitness = (bot: Bot) => {
 
 // Fitness will be determined from the combined fitness of musical rules.
 export const getMusicalFitness = (bot: Bot) => {
-  return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
+  return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody) + evaluateWhoop(bot.melody)) / MAX_MELODY_SCORE;
 }
 
 export default (bots: Bot[]): number[] => {
-  // Normalization
-  const sumMusicalFitness = bots.map(getMusicalFitness).reduce((sum, currentFitness) => sum + currentFitness);
-  const sumUserFitness = bots.map(getUserFitness).reduce((sum, currentFitness) => sum + currentFitness);
-
   return bots.map((bot) => {
-    const userFitness = getUserFitness(bot) / sumUserFitness;
-    const musicalFitness = getMusicalFitness(bot) / sumMusicalFitness;
-
-    return userFitness + GaWorker.MUSICAL_FITNESS_WEIGHT * musicalFitness;
+    return getUserFitness(bot) + GaWorker.MUSICAL_FITNESS_WEIGHT * getMusicalFitness(bot);
   });
 };
