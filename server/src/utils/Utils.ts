@@ -6,7 +6,8 @@ import { Note } from "../models/Note";
 
 export const parseBotsFromReq = (req) => {
   return req.body.bots.map(
-    (bot) => new Bot(bot.metric, new Melody(bot.melody.notes.map((note) => new Note(note.note))))
+    (bot) =>
+      new Bot(bot.metric, new Melody(bot.melody.notes.map((note) => Note.fromString(note.note))))
   );
 };
 

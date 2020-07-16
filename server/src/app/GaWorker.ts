@@ -8,12 +8,11 @@ import evaluateUser from "./FitnessUser";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
-import { OctiveRule } from "../rules/OctiveRule";
+import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
 
 export class GaWorker {
-
   // Default Values
   static ITERATIONS = 5; // Times GA will iterate
   POPULATION_SIZE = 10; // Population size
@@ -25,7 +24,13 @@ export class GaWorker {
 
   constructor(fitnessFunction: string) {
     this.fitnessFunction = fitnessFunction;
-    this.rules = [new LeapRule(), new TritoneRule(), new OctiveRule(), new StepwiseRule(), new CounterTenorRule()];
+    this.rules = [
+      new LeapRule(),
+      new TritoneRule(),
+      new OctaveRule(),
+      new StepwiseRule(),
+      new CounterTenorRule(),
+    ];
 
     console.log(`
       Creating GaWorker with configs: 
@@ -46,7 +51,7 @@ export class GaWorker {
       "A4,G3,F3,E3",
       "F3,C4,B4,A4",
       "C4,B4,A4,C4",
-      ].map((str) => new Bot(0, Melody.fromString(str)));
+    ].map((str) => new Bot(0, Melody.fromString(str)));
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
@@ -111,6 +116,6 @@ export class GaWorker {
       startSet.push(s + "5");
     });
 
-    return startSet.map((s: string) => new Note(s));
+    return startSet.map((s: string) => Note.fromString(s));
   }
 }

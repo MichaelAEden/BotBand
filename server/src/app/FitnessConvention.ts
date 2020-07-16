@@ -1,19 +1,19 @@
 import { Bot } from "../models/Bot";
 import { Melody } from "../models/Melody";
+import { OCTAVE } from "../models/Note";
 
 export const evaluateRange = (melody: Melody): number => {
   // Convention 1: All notes within an octave and a half
-  const notes = melody.notes.map((note) => note.toNumber());
+  const octaveRange = 1.5;
+  const notes = melody.notes.map((note) => note.code);
   const minNote = Math.min(...notes);
   const maxNote = Math.max(...notes);
-  const octave = 8;
-  const octaveRange = 3;
 
   let octaveFitness = 0;
-  if (maxNote - minNote < octave * octaveRange) {
+  if (maxNote - minNote < OCTAVE * octaveRange) {
     octaveFitness = 1;
   } else {
-    octaveFitness = (1.0 / (maxNote - minNote)) * octave;
+    octaveFitness = (1.0 / (maxNote - minNote)) * OCTAVE;
   }
   return octaveFitness;
 };
@@ -23,7 +23,7 @@ export const evaluateStepwise = (melody: Melody): number => {
   let stepFitness = 0;
 
   for (let i = 0; i < melody.notes.length - 1; i++) {
-    let noteDiff = melody.notes[i].compare(melody.notes[i + 1]);
+    let noteDiff = melody.notes[i].code - melody.notes[i + 1].code;
     // TODO: diminishing returns after 1?
     if (Math.abs(noteDiff) <= 1) {
       stepFitness += 1;
