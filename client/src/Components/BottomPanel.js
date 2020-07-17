@@ -33,21 +33,33 @@ class BottomPanel extends Component {
           hideToolbar
           className="robot"
           onDragStart={this.props.onDragStart}
+          onDropRobot={this.props.onDropRobot}
+          index={i}
+          rearrange
         ></Robot>
       </MDBCol>
     ));
+    const numSpaces = 6 - (composition.length % 6);
+    const emptySpaces = [];
+    for(let i = 0; i < numSpaces; i++) {
+      emptySpaces.push(
+        <MDBCol key={i} size="2" className="empty-space" onDrop={this.props.onDrop}>
+        </MDBCol>
+      );
+    }
 
     return (
-      <div id="bottom-panel" onDrop={this.props.onDrop} onDragOver={(e) => this.onDrag(e)}>
+      <div id="bottom-panel" onDragOver={(e) => this.onDrag(e)}>
         <div id="bottom-panel-label">
           <h2>Composition</h2>
         </div>
-        <MDBRow>
+        <MDBRow id="composition-row">
           <MDBCol size="2" id="bottom-toolbar">
             <MDBIcon icon="play-circle" size="3x" onClick={this.handlePlayComposition} />
             <MDBIcon icon="trash-alt" size="3x" onClick={this.props.handleClearClick} />
           </MDBCol>
           {composition}
+          {emptySpaces}
         </MDBRow>
       </div>
     );

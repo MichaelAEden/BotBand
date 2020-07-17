@@ -32,7 +32,8 @@ class TopPanel extends Component {
                 isPlaying={this.state.robotPlaying === i}
                 onPlayToggled={(isPlaying) => this.handlePlayToggled(i, isPlaying)}
                 onFavouriteToggled={(isFavourite) => this.props.onFavouriteToggled(i, isFavourite)}
-                onDragStart={() => this.props.onDragStart(i)}
+                index={i}
+                onDragStart={this.props.onDragStart}
               ></Robot>
             </MDBCol>
           ))}

@@ -11,3 +11,8 @@
   display: flex;
   flex-direction: column;
 }
+
+.empty-space {
+  width: 200px;
+  height: 200px;
+}
