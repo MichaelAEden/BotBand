@@ -13,7 +13,8 @@ class App extends Component {
       composition: [],
       dragIndex: 0,
       rearrange: false,
-      startY: 0
+      startY: 0,
+      selectIndex: null
     };
     this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
@@ -22,6 +23,7 @@ class App extends Component {
     this.onDragStart = this.onDragStart.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onDropRobot = this.onDropRobot.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
 
   async componentDidMount() {
@@ -110,7 +112,19 @@ class App extends Component {
 
   handleClearClick(e) {
     console.log("Clearing composition");
-    this.setState({ ...this.state, composition: [] });
+    let {selectIndex, composition} = this.state;
+    let newComposition = [];
+    if (selectIndex != null) {
+      newComposition = composition.slice();
+      newComposition.splice(selectIndex, 1);
+    }
+    this.setState({ ...this.state, composition: newComposition, selectIndex: null });
+  }
+
+  onSelect(i) {
+    let newIndex = i;
+    if (newIndex == this.state.selectIndex) newIndex = null;
+    this.setState({selectIndex: newIndex});
   }
 
   render() {
@@ -132,6 +146,8 @@ class App extends Component {
           onDragStart={this.onDragStart}
           onDrop={this.onDrop}
           onDropRobot={this.onDropRobot}
+          onSelect={this.onSelect}
+          selectIndex={this.state.selectIndex}
         />
       </MDBContainer>
     );

@@ -84,12 +84,14 @@ class Robot extends Component {
           }}
           onDrop={(e) => {if (this.props.rearrange) this.props.onDropRobot(e, this.props.index)}}
           onDragOver={(e) => e.preventDefault()}
+          onClick={() => this.props.onSelect(this.props.index)}
         >
           <Melody melody={this.props.melody}></Melody>
           <img
             src={this.getImage()}
             className="robot-avatar"
             alt="Robot"
+            style={ this.props.index == this.props.selectIndex ? {border: "1px solid red"} : {} }
           ></img>
         </div>
 

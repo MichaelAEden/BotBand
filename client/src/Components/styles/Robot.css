@@ -3,6 +3,10 @@
   cursor: grab;
 }
 
+.robot-border {
+  border: 1px solid red;
+}
+
 .robot .robot-avatar {
   position: relative;
   width: 200px;

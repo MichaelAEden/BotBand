@@ -36,6 +36,8 @@ class BottomPanel extends Component {
           onDropRobot={this.props.onDropRobot}
           index={i}
           rearrange
+          onSelect={this.props.onSelect}
+          selectIndex={this.props.selectIndex}
         ></Robot>
       </MDBCol>
     ));
@@ -55,8 +57,8 @@ class BottomPanel extends Component {
         </div>
         <MDBRow id="composition-row">
           <MDBCol size="2" id="bottom-toolbar">
-            <MDBIcon icon="play-circle" size="3x" onClick={this.handlePlayComposition} />
-            <MDBIcon icon="trash-alt" size="3x" onClick={this.props.handleClearClick} />
+            <MDBIcon icon="play-circle" size="3x" className="bottom-toolbar-icon" onClick={this.handlePlayComposition} />
+            <MDBIcon icon="trash-alt" size="3x" className="bottom-toolbar-icon" onClick={this.props.handleClearClick} />
           </MDBCol>
           {composition}
           {emptySpaces}

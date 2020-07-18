@@ -16,3 +16,7 @@
   width: 200px;
   height: 200px;
 }
+
+.bottom-toolbar-icon:hover {
+  cursor: pointer;
+}
