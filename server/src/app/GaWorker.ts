@@ -2,7 +2,7 @@ import { Bot } from "../models/Bot";
 import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
-import { selectRandom, selectRandomWeighted } from "../utils/Utils";
+import { selectRandom, selectRandomWeighted, assignNoteWeights, randomInitialization } from "../utils/Utils";
 import evaluate from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
@@ -45,15 +45,28 @@ export class GaWorker {
    */
 
   initialBots(): Bot[] {
-    return [
-      "C4,G4,G4,F4",
-      "A4,B4,G4,E4",
-      "G4,B4,D5,E5",
-      "E4,E4,E4,A4",
-      "B4,A4,G4,D4",
-      "D4,G4,C5,D5",
-      "E4,G4,E4,D4"
-    ].map((str) => new Bot(0, Melody.fromString(str)));
+    let random_initial = false;
+
+    if(random_initial){
+
+      let set = this.createStartSet();
+      let initialMelodies = randomInitialization(set, this.POPULATION_SIZE);
+      return initialMelodies.map((str) => new Bot(0, Melody.fromString(str)))
+
+    }else{
+
+      return [
+        "C4,G4,G4,F4",
+        "A4,B4,G4,E4",
+        "G4,B4,D5,E5",
+        "E4,E4,E4,A4",
+        "B4,A4,G4,D4",
+        "D4,G4,C5,D5",
+        "E4,G4,E4,D4"
+      ].map((str) => new Bot(0, Melody.fromString(str)));
+      
+    }
+    
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
@@ -89,7 +102,7 @@ export class GaWorker {
     for (var index = 0; index < bot.melody.notes.length; index++) {
       if (Math.random() < GaWorker.MUTATION_RATE) {
         const notes = this.getPossibleNotesFromRules(index, bot);
-        const weights = this.assignNoteWeights(index, notes, bot.melody);
+        const weights = assignNoteWeights(index, notes, bot.melody);
         if (!notes.length) {
           return;
         }
@@ -126,57 +139,4 @@ export class GaWorker {
     return startSet.map((s: string) => Note.fromString(s));
   }
 
-  // Function to assign weights to possible notes for mutation
-  private assignNoteWeights(index: number, mut_notes: Array<Note>, melody: Melody): Array<number> {
-    let noteWeights = new Array();
-    
-    const notes = melody.notes.map((note) => note.toNumber());
-    const mut_notes_num = mut_notes.map((note) => note.toNumber());
-    const minNote = Math.min(...notes);
-    const maxNote = Math.max(...notes);
-
-    for (let i = 0; i < mut_notes.length; i++){
-      let weight = 0;
-      
-      // Weighting based on octave range
-      const octave = 8;
-      const octaveRange = 2;
-      let octaveWeight = 0;
-      if (maxNote - mut_notes_num[i] < octave * octaveRange && mut_notes_num[i] - minNote) {
-        octaveWeight= 1;
-      }else{
-        let octDiff1 = Math.abs(minNote - mut_notes_num[i]);
-        let octDiff2 = Math.abs(maxNote - mut_notes_num[i]);
-        let octDiff = Math.max(octDiff1, octDiff2);
-
-        octaveWeight = 1 / octDiff;
-      }
-
-      // Weighting based on step interval
-      let stepWeight = 0;
-      let noteDiff = 0;
-      if (index == 0){
-        noteDiff = Math.abs(notes[index+1] - mut_notes_num[i]);
-      } else if( index == melody.notes.length - 1){
-        noteDiff = Math.abs(notes[index-1] - mut_notes_num[i]);
-      } else {
-        let noteDiff1 = Math.abs(notes[index-1] - mut_notes_num[i]);
-        let noteDiff2 = Math.abs(notes[index+1] - mut_notes_num[i]);
-        noteDiff = Math.max(noteDiff1,noteDiff2);
-      }
-
-      if (noteDiff <= 1) {
-        stepWeight = 1;
-      } else{
-        stepWeight = 1 / Math.abs(noteDiff);
-      }
-
-      // Total weighting
-      weight = (stepWeight + octaveWeight)/2;
-
-      noteWeights.push(weight);
-    }
-
-    return noteWeights;
-  }
 }
