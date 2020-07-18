@@ -9,6 +9,7 @@ class App extends Component {
     super();
     this.state = {
       bots: [],
+      startTime: Date.now(),
       composition: [],
       dragIndex: 0,
       rearrange: false,
@@ -30,11 +31,17 @@ class App extends Component {
   async generateBots() {
     const response = await fetchJson("/createbots/rating", {
       method: "POST",
-      body: JSON.stringify({ bots: this.state.bots }),
+      body: JSON.stringify(
+        { 
+        bots: this.state.bots,
+        startTime: this.state.startTime,
+        endTime: Date.now() 
+        }
+      ),
       headers: { "Content-Type": "application/json" },
     });
     if (response.error) console.log(`Error fetching bots: ${response.error}`);
-    else this.setState({ bots: response.data.bots });
+    else this.setState({ bots: response.data.bots, startTime: Date.now() });
   }
 
   onDragStart(e, i, rearrange) {
