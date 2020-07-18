@@ -10,15 +10,29 @@ class BottomPanel extends Component {
     super();
     this.state = {};
     this.handlePlayComposition = this.handlePlayComposition.bind(this);
+    this.handleShowComposition = this.handleShowComposition.bind(this);
   }
 
-  handlePlayComposition(i) {
+  collectMelodies(i) {
     let melodies = [];
     this.props.composition.forEach((bot) => {
       let melody = bot.melody.notes.map((note) => note.note);
       melodies = melodies.concat(melody);
     });
-    play(melodies);
+    return melodies
+  }
+
+  handlePlayComposition(i) {
+    play(this.collectMelodies());
+  }
+
+  handleShowComposition(i) {
+    console.log("Displaying composition");
+    let melody = this.collectMelodies().toString();
+    if (melody) {
+      alert(melody);
+    }
+    else alert("Composition is empty.");
   }
 
   onDrag(e) {
@@ -54,9 +68,10 @@ class BottomPanel extends Component {
           <h2>Composition</h2>
         </div>
         <MDBRow id="composition-row">
-          <MDBCol size="2" id="bottom-toolbar">
+          <MDBCol size="1" id="bottom-toolbar">
             <MDBIcon icon="play-circle" size="3x" onClick={this.handlePlayComposition} />
             <MDBIcon icon="trash-alt" size="3x" onClick={this.props.handleClearClick} />
+            <MDBIcon icon="file-download" size="3x" onClick={this.handleShowComposition} />
           </MDBCol>
           {composition}
           {emptySpaces}
