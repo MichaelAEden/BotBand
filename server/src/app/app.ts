@@ -1,7 +1,7 @@
 import * as bodyParser from "body-parser";
 
+import { MetadataCache } from "./MetadataCache";
 import { GaWorker } from "../ga/GaWorker";
-import { Bot } from "../models/Bot";
 import { parseBotsFromReq } from "../utils/Utils";
 
 const express = require("express"); // Must use a require statement for testing for unknown reason
@@ -15,12 +15,21 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
   res.setHeader("Access-Control-Allow-Headers", "content-type");
-  console.log(`Received request from origin: '${origin}'`);
   next();
 });
 
 // Middleware to parse body to JSON
 app.use(bodyParser.json());
+
+// Middleware to log request metadata
+app.use((req, _res, next) => {
+  const origin = req.headers.origin;
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  console.log(
+    `Received request with origin: ${origin}, IP: ${ip}, body: ${JSON.stringify(req.body, null, 2)}`
+  );
+  next();
+});
 
 /**
  * Expected request body
@@ -28,8 +37,6 @@ app.use(bodyParser.json());
  * Purpose: Feature flagging via API configuration
  */
 app.post("/config", async (req, res) => {
-  console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
-
   if (req.body.mutationRate) {
     GaWorker.MUTATION_RATE = Number(req.body.mutationRate);
   }
@@ -49,7 +56,7 @@ app.post("/config", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.get("/config", async (req, res) => {
+app.get("/config", async (_req, res) => {
   res.status(200).json({
     iterations: GaWorker.ITERATIONS,
     mutationRate: GaWorker.MUTATION_RATE,
@@ -57,50 +64,42 @@ app.get("/config", async (req, res) => {
 });
 
 /**
- * Expected request body
- * {bots : [{rating, melody}, {...}, ...]}
+ * Get metadata from latest user "session"
  */
-app.post("/createbots/rating", async (req, res) => {
-  console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
+app.get("/data/latest", async (_req, res) => {
+  return res.status(200).json(MetadataCache.getSession());
+});
 
-  const worker = new GaWorker();
-  let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
-    console.log(`First request initialized from ${ip}`);
-    res.status(200).json({ bots: worker.initialBots() });
-    return;
-  }
-
-  console.log(`Handling request from ${ip}`);
-
-  const bots = parseBotsFromReq(req);
-  const newBots = worker.generateNewBots(bots);
-
-  res.status(200).json({ bots: newBots });
+/**
+ * Get metadata from all user "sessions"
+ */
+app.get("/data", async (_req, res) => {
+  return res.status(200).json(MetadataCache.getSessions());
 });
 
 /**
  * Expected request body
- * {bots : [{rating, melody}, {...}, ...]}
+ * {bots : [{metric, melody}, {...}, ...]}
  */
-app.post("/createbots/usage", async (req, res) => {
-  console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
-
-  let worker = new GaWorker();
-  let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-
+app.post("/createbots/rating", async (req, res) => {
+  let bots;
+  let generation = 0;
+  const worker = new GaWorker();
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
+    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     console.log(`First request initialized from ${ip}`);
-    res.status(200).json({ bots: worker.initialBots() });
-    return;
+    MetadataCache.newSession();
+    bots = worker.initialBots();
+    generation = 0;
+  } else {
+    const reqBots = parseBotsFromReq(req);
+    bots = worker.generateNewBots(reqBots);
+    generation = req.body.generation + 1;
   }
 
-  console.log(`Handling request from ${ip}`);
+  MetadataCache.addGeneration(bots, generation);
 
-  const bots: Bot[] = parseBotsFromReq(req);
-  const newBots = worker.generateNewBots(bots);
-
-  res.status(200).json({ bots: newBots });
+  res.status(200).json({ bots, generation });
 });
 
 app.get("*", (req, res) => {
