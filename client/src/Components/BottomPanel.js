@@ -69,9 +69,9 @@ class BottomPanel extends Component {
         </div>
         <MDBRow id="composition-row">
           <MDBCol size="1" id="bottom-toolbar">
-            <MDBIcon icon="play-circle" size="3x" onClick={this.handlePlayComposition} />
-            <MDBIcon icon="trash-alt" size="3x" onClick={this.props.handleClearClick} />
-            <MDBIcon icon="file-download" size="3x" onClick={this.handleShowComposition} />
+            <MDBIcon icon="play-circle" size="3x" className="m-1" fixed onClick={this.handlePlayComposition} />
+            <MDBIcon icon="trash-alt" size="3x" className="m-1" fixed onClick={this.props.handleClearClick} />
+            <MDBIcon icon="file-download" size="3x" className="m-1" fixed onClick={this.handleShowComposition} />
           </MDBCol>
           {composition}
           {emptySpaces}
