@@ -39,13 +39,7 @@ export const selectRandomWeighted = (items, weights, n) => {
     choices.push(newItem);
   }
 
-  // For randomly weighted mutations
-  if (n==1){
-    return choices[0];
-  // For randomly weighted population generation
-  }else{
-    return choices;
-  }
+  return choices;
   
 };
 
@@ -111,20 +105,15 @@ export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody:
 export const randomInitialization = (set: Array<Note>, pop_size: number) => {
   let initialMelodies = new Array<string>();
   let index = 0;
-  let melody = "";
+  let melody = new Array<string>();
   let melodyLength = 4;
 
   for (let i = 0; i < pop_size; i++){
-    melody = "";
+    melody = [];
     for (let j = 0; j < melodyLength; j++){
-      index = Math.round(Math.random()*(set.length-1));
-      if (j < melodyLength - 1){
-        melody = melody + set[index].note + ",";
-      }else{
-        melody = melody + set[index].note;
-      }    
+      melody.push(selectRandom(set).note);
     }
-    initialMelodies.push(melody);
+    initialMelodies.push(melody.join(','));
   }
 
   return initialMelodies;

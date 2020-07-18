@@ -44,10 +44,9 @@ export class GaWorker {
       "C4,B4,A4,C4",
    */
 
-  initialBots(): Bot[] {
-    let random_initial = false;
+  initialBots(randomInitial=false): Bot[] {
 
-    if(random_initial){
+    if(randomInitial){
 
       let set = this.createStartSet();
       let initialMelodies = randomInitialization(set, this.POPULATION_SIZE);
@@ -107,7 +106,7 @@ export class GaWorker {
           return;
         }
 
-        //bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1);
+        //bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1)[0];
         bot.melody.notes[index] = selectRandom(notes);
       }
     }
