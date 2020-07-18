@@ -5,11 +5,11 @@ export class MetadataCache {
   static currentSession = {};
 
   static newSession() {
-    MetadataCache.SESSIONS.push({ ...this.currentSession });
     this.currentSession = {
       timestamp: Date.now(),
       data: [],
     };
+    MetadataCache.SESSIONS.push(this.currentSession);
   }
 
   static addGeneration(bots: Bot[], generation: number) {
