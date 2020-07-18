@@ -2,7 +2,7 @@ import { Bot } from "../models/Bot";
 import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
-import { selectRandom, selectRandomWeighted } from "../utils/Utils";
+import { selectRandom, selectRandomWeighted, assignNoteWeights, randomInitialization } from "../utils/Utils";
 import evaluate from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
@@ -44,16 +44,28 @@ export class GaWorker {
       "C4,B4,A4,C4",
    */
 
-  initialBots(): Bot[] {
-    return [
-      "C4,G4,G4,F4",
-      "A4,B4,G4,E4",
-      "G4,B4,D5,E5",
-      "E4,E4,E4,A4",
-      "B4,A4,G4,D4",
-      "D4,G4,C5,D5",
-      "E4,G4,E4,D4"
-    ].map((str) => new Bot(0, Melody.fromString(str)));
+  initialBots(randomInitial=false): Bot[] {
+
+    if(randomInitial){
+
+      let set = this.createStartSet();
+      let initialMelodies = randomInitialization(set, this.POPULATION_SIZE);
+      return initialMelodies.map((str) => new Bot(0, Melody.fromString(str)))
+
+    }else{
+
+      return [
+        "C4,G4,G4,F4",
+        "A4,B4,G4,E4",
+        "G4,B4,D5,E5",
+        "E4,E4,E4,A4",
+        "B4,A4,G4,D4",
+        "D4,G4,C5,D5",
+        "E4,G4,E4,D4"
+      ].map((str) => new Bot(0, Melody.fromString(str)));
+
+    }
+    
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
@@ -89,11 +101,12 @@ export class GaWorker {
     for (var index = 0; index < bot.melody.notes.length; index++) {
       if (Math.random() < GaWorker.MUTATION_RATE) {
         const notes = this.getPossibleNotesFromRules(index, bot);
-
+        const weights = assignNoteWeights(index, notes, bot.melody);
         if (!notes.length) {
           return;
         }
 
+        //bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1)[0];
         bot.melody.notes[index] = selectRandom(notes);
       }
     }
@@ -125,4 +138,5 @@ export class GaWorker {
 
     return startSet.map((s: string) => Note.fromString(s));
   }
+
 }

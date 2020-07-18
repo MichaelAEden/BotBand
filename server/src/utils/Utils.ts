@@ -40,4 +40,82 @@ export const selectRandomWeighted = (items, weights, n) => {
   }
 
   return choices;
+  
 };
+
+// Function to assign weights to possible notes for mutation
+export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody: Melody) => {
+  let noteWeights = new Array();
+  
+  const notes = melody.notes.map((note) => note.code);
+  const mut_notes_num = mut_notes.map((note) => note.code);
+  const minNote = Math.min(...notes);
+  const maxNote = Math.max(...notes);
+
+  for (let i = 0; i < mut_notes.length; i++){
+    let weight = 0;
+    
+    // Weighting based on octave range
+    // If notes are within 1.5 of an octave, full fitness score awarded
+    // Other wise, fitness score is assigned as 1/(octave range it covers)
+    const octave = 8;
+    const octaveRange = 1.5;
+    let octaveWeight = 0;
+    if (maxNote - mut_notes_num[i] < octave * octaveRange && mut_notes_num[i] - minNote) {
+      octaveWeight= 1;
+    }else{
+      let octDiff1 = Math.abs(minNote - mut_notes_num[i]);
+      let octDiff2 = Math.abs(maxNote - mut_notes_num[i]);
+      let octDiff = Math.max(octDiff1, octDiff2);
+
+      octaveWeight = 1 / octDiff;
+    }
+
+    // Weighting based on step interval
+    // Full fitness value awarded for stepwise motion
+    // Otherwise, fitness score is assigned as 1/(difference in notes)
+    let stepWeight = 0;
+    let noteDiff = 0;
+    if (index == 0){
+      noteDiff = Math.abs(notes[index+1] - mut_notes_num[i]);
+    } else if( index == melody.notes.length - 1){
+      noteDiff = Math.abs(notes[index-1] - mut_notes_num[i]);
+    } else {
+      let noteDiff1 = Math.abs(notes[index-1] - mut_notes_num[i]);
+      let noteDiff2 = Math.abs(notes[index+1] - mut_notes_num[i]);
+      noteDiff = Math.max(noteDiff1,noteDiff2);
+    }
+
+    if (noteDiff <= 1) {
+      stepWeight = 1;
+    } else{
+      stepWeight = 1 / Math.abs(noteDiff);
+    }
+
+    // Total weighting for fitness
+    weight = (stepWeight + octaveWeight)/2;
+
+    noteWeights.push(weight);
+  }
+
+  return noteWeights;
+};
+
+// Random initializes melodies for a starting population
+export const randomInitialization = (set: Array<Note>, pop_size: number) => {
+  let initialMelodies = new Array<string>();
+  let index = 0;
+  let melody = new Array<string>();
+  let melodyLength = 4;
+
+  for (let i = 0; i < pop_size; i++){
+    melody = [];
+    for (let j = 0; j < melodyLength; j++){
+      melody.push(selectRandom(set).note);
+    }
+    initialMelodies.push(melody.join(','));
+  }
+
+  return initialMelodies;
+
+}

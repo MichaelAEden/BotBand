@@ -43,7 +43,7 @@ export const evaluateStepwise = (melody: Melody): number => {
 export const evaluateWhoop = (melody: Melody): number => {
   // Bonus points: "millenial whoop" (alternating between fifth and third notes in a major scale)
   let whoopFitness = 0;
-  let millWhoop = ["G", "E", "G", "E", "G", "E", "G", "E"];
+  let millWhoop = ["G", "E", "G", "E"];
   for (let i = 0; i < melody.notes.length; i++) {
     if (millWhoop[i] == melody.notes[i].getKey()) {
       if (i > 0) {
