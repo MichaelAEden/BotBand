@@ -11,6 +11,8 @@ class App extends Component {
       bots: [],
       composition: [],
       dragIndex: 0,
+      rearrange: false,
+      startY: 0
     };
     this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
@@ -18,6 +20,7 @@ class App extends Component {
     this.generateBots = this.generateBots.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.onDropRobot = this.onDropRobot.bind(this);
   }
 
   async componentDidMount() {
@@ -34,8 +37,12 @@ class App extends Component {
     else this.setState({ bots: response.data.bots });
   }
 
-  onDragStart(i) {
-    this.setState({ dragIndex: i });
+  onDragStart(e, i, rearrange) {
+    this.setState({
+      dragIndex: i,
+      startY: e.clientY + window.scrollY,
+      rearrange
+    });
   }
 
   onDrop() {
@@ -45,8 +52,29 @@ class App extends Component {
     this.setState({ composition: newComposition });
   }
 
+  onDropRobot(e, i) {
+    e.preventDefault();
+    let robot = document.querySelector("#composition-row");
+    let target = robot.childNodes[i + 1].childNodes[0].children[2];
+    let hoverBoundingRect = target.getBoundingClientRect();
+
+    let endY = e.clientY;
+    let offsetY = endY - this.state.startY;
+    
+    const {dragIndex, startY, bots, composition, rearrange} = this.state;
+    if (offsetY  > (hoverBoundingRect.top - startY)) {
+      let newComposition = composition.slice();
+      let draggedMelody = rearrange ? composition[dragIndex] : bots[dragIndex];
+      newComposition.splice(i, 0, draggedMelody);
+      if (rearrange) {
+        const deleteIndex = dragIndex > i ? dragIndex + 1 : dragIndex;
+        newComposition.splice(deleteIndex, 1);
+      }
+      this.setState({ composition: newComposition});
+    }
+  }
+
   handleRobotPlayToggled(i, isPlaying) {
-    console.log(`Toggled play to ${isPlaying} for robot ${i}`);
     // Increment robot play counter if robot is being played.
     if (isPlaying) {
       const bot = { ...this.state.bots[i], playCount: (this.state.bots[i].playCount || 0) + 1 };
@@ -87,6 +115,7 @@ class App extends Component {
           handleClearClick={this.handleClearClick}
           onDragStart={this.onDragStart}
           onDrop={this.onDrop}
+          onDropRobot={this.onDropRobot}
         />
       </MDBContainer>
     );
