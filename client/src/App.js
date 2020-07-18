@@ -33,36 +33,40 @@ class App extends Component {
   async generateBots() {
     const response = await fetchJson("/createbots/rating", {
       method: "POST",
-      body: JSON.stringify(
-        { 
+      body: JSON.stringify({
         bots: this.state.bots,
+        generation: this.state.generation,
         startTime: this.state.startTime,
-        endTime: Date.now() 
-        }
-      ),
+        endTime: Date.now(),
+      }),
       headers: { "Content-Type": "application/json" },
     });
     if (response.error) console.log(`Error fetching bots: ${response.error}`);
-    else this.setState({ bots: response.data.bots, startTime: Date.now() });
+    else
+      this.setState({
+        ...this.state,
+        bots: response.data.bots,
+        generation: response.data.generation,
+        startTime: Date.now(),
+      });
   }
 
   onDragStart(e, i, rearrange) {
     this.setState({
       dragIndex: i,
       startY: e.clientY + window.scrollY,
-      rearrange
+      rearrange,
     });
   }
 
   onDrop() {
-    let {composition, bots, dragIndex} = this.state;
+    let { composition, bots, dragIndex } = this.state;
     let newComposition = composition.slice();
     let draggedMelody = null;
     if (this.state.rearrange) {
-      draggedMelody =  newComposition[dragIndex];
+      draggedMelody = newComposition[dragIndex];
       newComposition.splice(this.state.dragIndex, 1);
-    }
-    else {
+    } else {
       draggedMelody = bots[dragIndex];
     }
     newComposition.push(draggedMelody);
@@ -79,8 +83,8 @@ class App extends Component {
     let endY = e.clientY;
     let offsetY = endY - this.state.startY;
 
-    const {dragIndex, startY, bots, composition, rearrange} = this.state;
-    if (offsetY  > (hoverBoundingRect.top - startY)) {
+    const { dragIndex, startY, bots, composition, rearrange } = this.state;
+    if (offsetY > hoverBoundingRect.top - startY) {
       let newComposition = composition.slice();
       let draggedMelody = rearrange ? composition[dragIndex] : bots[dragIndex];
       newComposition.splice(i, 0, draggedMelody);
@@ -88,7 +92,7 @@ class App extends Component {
         const deleteIndex = dragIndex > i ? dragIndex + 1 : dragIndex;
         newComposition.splice(deleteIndex, 1);
       }
-      this.setState({ composition: newComposition});
+      this.setState({ composition: newComposition });
     }
   }
 
