@@ -64,7 +64,7 @@ export class GaWorker {
         "D4,G4,C5,D5",
         "E4,G4,E4,D4"
       ].map((str) => new Bot(0, Melody.fromString(str)));
-      
+
     }
     
   }
@@ -107,7 +107,8 @@ export class GaWorker {
           return;
         }
 
-        bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1);
+        //bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1);
+        bot.melody.notes[index] = selectRandom(notes);
       }
     }
   }

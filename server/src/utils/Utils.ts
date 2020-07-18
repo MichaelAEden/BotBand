@@ -62,8 +62,10 @@ export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody:
     let weight = 0;
     
     // Weighting based on octave range
+    // If notes are within 1.5 of an octave, full fitness score awarded
+    // Other wise, fitness score is assigned as 1/(octave range it covers)
     const octave = 8;
-    const octaveRange = 2;
+    const octaveRange = 1.5;
     let octaveWeight = 0;
     if (maxNote - mut_notes_num[i] < octave * octaveRange && mut_notes_num[i] - minNote) {
       octaveWeight= 1;
@@ -76,6 +78,8 @@ export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody:
     }
 
     // Weighting based on step interval
+    // Full fitness value awarded for stepwise motion
+    // Otherwise, fitness score is assigned as 1/(difference in notes)
     let stepWeight = 0;
     let noteDiff = 0;
     if (index == 0){
@@ -94,7 +98,7 @@ export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody:
       stepWeight = 1 / Math.abs(noteDiff);
     }
 
-    // Total weighting
+    // Total weighting for fitness
     weight = (stepWeight + octaveWeight)/2;
 
     noteWeights.push(weight);
@@ -103,6 +107,7 @@ export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody:
   return noteWeights;
 };
 
+// Random initializes melodies for a starting population
 export const randomInitialization = (set: Array<Note>, pop_size: number) => {
   let initialMelodies = new Array<string>();
   let index = 0;
