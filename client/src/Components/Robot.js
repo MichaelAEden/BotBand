@@ -76,18 +76,23 @@ class Robot extends Component {
             onClick={this.handleFavouriteClicked}
           />
         </div>
-        <Melody melody={this.props.melody}></Melody>
-        <img
-          src={this.getImage()}
-          className="robot-avatar"
-          alt="Robot"
+
+        <div
           draggable
           onMouseDown={(e) => {
             this.props.onDragStart(e, this.props.index, this.props.rearrange);
           }}
-          onDrop={(e) => this.props.onDropRobot(e, this.props.index)}
+          onDrop={(e) => {if (this.props.rearrange) this.props.onDropRobot(e, this.props.index)}}
           onDragOver={(e) => e.preventDefault()}
-        ></img>
+        >
+          <Melody melody={this.props.melody}></Melody>
+          <img
+            src={this.getImage()}
+            className="robot-avatar"
+            alt="Robot"
+          ></img>
+        </div>
+
       </div>
     );
   }

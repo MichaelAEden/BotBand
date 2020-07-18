@@ -46,21 +46,30 @@ class App extends Component {
   }
 
   onDrop() {
-    let newComposition = this.state.composition.slice();
-    const clickedMelody = this.state.bots[this.state.dragIndex];
-    newComposition.push(clickedMelody);
+    let {composition, bots, dragIndex} = this.state;
+    let newComposition = composition.slice();
+    let draggedMelody = null;
+    if (this.state.rearrange) {
+      draggedMelody =  newComposition[dragIndex];
+      newComposition.splice(this.state.dragIndex, 1);
+    }
+    else {
+      draggedMelody = bots[dragIndex];
+    }
+    newComposition.push(draggedMelody);
     this.setState({ composition: newComposition });
   }
 
   onDropRobot(e, i) {
     e.preventDefault();
     let robot = document.querySelector("#composition-row");
-    let target = robot.childNodes[i + 1].childNodes[0].children[2];
+    // let target = robot.childNodes[i + 1].childNodes[0].children[2];
+    let target = robot.childNodes[i + 1].childNodes[0];
     let hoverBoundingRect = target.getBoundingClientRect();
 
     let endY = e.clientY;
     let offsetY = endY - this.state.startY;
-    
+
     const {dragIndex, startY, bots, composition, rearrange} = this.state;
     if (offsetY  > (hoverBoundingRect.top - startY)) {
       let newComposition = composition.slice();
