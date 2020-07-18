@@ -1,19 +1,22 @@
 import { Bot } from "../models/Bot";
 import { Melody } from "../models/Melody";
+import { OCTAVE } from "../models/Note";
+import { GaWorker } from "./GaWorker";
+
+const MAX_MELODY_SCORE = 3;
 
 export const evaluateRange = (melody: Melody): number => {
   // Convention 1: All notes within an octave and a half
-  const notes = melody.notes.map((note) => note.toNumber());
+  const octaveRange = 1.5;
+  const notes = melody.notes.map((note) => note.code);
   const minNote = Math.min(...notes);
   const maxNote = Math.max(...notes);
-  const octave = 8;
-  const octaveRange = 2;
 
   let octaveFitness = 0;
-  if (maxNote - minNote < octave * octaveRange) {
+  if (maxNote - minNote < OCTAVE * octaveRange) {
     octaveFitness = 1;
   } else {
-    octaveFitness = (1.0 / (maxNote - minNote)) * octave;
+    octaveFitness = (1.0 / (maxNote - minNote)) * OCTAVE;
   }
   return octaveFitness;
 };
@@ -23,7 +26,7 @@ export const evaluateStepwise = (melody: Melody): number => {
   let stepFitness = 0;
 
   for (let i = 0; i < melody.notes.length - 1; i++) {
-    let noteDiff = melody.notes[i].compare(melody.notes[i + 1]);
+    let noteDiff = melody.notes[i].code - melody.notes[i + 1].code;
     // TODO: diminishing returns after 1?
     if (Math.abs(noteDiff) <= 1) {
       stepFitness += 1;
@@ -59,11 +62,17 @@ export const evaluateWhoop = (melody: Melody): number => {
   return whoopFitness;
 };
 
+export const getUserFitness = (bot: Bot) => {
+  return bot.metric != 0 ? bot.metric : GaWorker.NO_FAVOURITE_RATE;
+}
+
+// Fitness will be determined from the combined fitness of musical rules.
+export const getMusicalFitness = (bot: Bot) => {
+  return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody) + evaluateWhoop(bot.melody)) / MAX_MELODY_SCORE;
+}
+
 export default (bots: Bot[]): number[] => {
   return bots.map((bot) => {
-    // Fitness will be determined from the combined fitness of musical rules.
-    const musicalFitness =
-      (evaluateRange(bot.melody) + evaluateStepwise(bot.melody)) / 2 + evaluateWhoop(bot.melody);
-    return musicalFitness > 1 ? 1 : musicalFitness;
+    return getUserFitness(bot) + GaWorker.MUSICAL_FITNESS_WEIGHT * getMusicalFitness(bot);
   });
 };

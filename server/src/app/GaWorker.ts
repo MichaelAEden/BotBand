@@ -3,29 +3,33 @@ import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
 import { selectRandom, selectRandomWeighted } from "../utils/Utils";
-import evaluateConvention from "./FitnessConvention";
-import evaluateUser from "./FitnessUser";
+import evaluate from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
-import { OctiveRule } from "../rules/OctiveRule";
+import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
 
 export class GaWorker {
-
   // Default Values
   static ITERATIONS = 5; // Times GA will iterate
-  POPULATION_SIZE = 10; // Population size
+  // TODO decouple this
+  POPULATION_SIZE = 7; // Population size
   static MUTATION_RATE = 0.15; // Probability of mutation
+  static NO_FAVOURITE_RATE = 0.5; // weight of selection is weaker if bot not favourited
+  static MUSICAL_FITNESS_WEIGHT = 1; // relative weight of melody vs user fitness in convention algo
 
   rules: Rule[];
-  // feature flagging
-  fitnessFunction: string = "USER";
 
-  constructor(fitnessFunction: string) {
-    this.fitnessFunction = fitnessFunction;
-    this.rules = [new LeapRule(), new TritoneRule(), new OctiveRule(), new StepwiseRule(), new CounterTenorRule()];
+  constructor() {
+    this.rules = [
+      new LeapRule(),
+      new TritoneRule(),
+      new OctaveRule(),
+      new StepwiseRule(),
+      new CounterTenorRule(),
+    ];
 
     console.log(`
       Creating GaWorker with configs: 
@@ -33,6 +37,12 @@ export class GaWorker {
       mutation_rate - ${GaWorker.MUTATION_RATE}
     `);
   }
+
+  /*
+      "A4,G3,F3,E3",
+      "F3,C4,B4,A4",
+      "C4,B4,A4,C4",
+   */
 
   initialBots(): Bot[] {
     return [
@@ -42,22 +52,16 @@ export class GaWorker {
       "E4,E4,E4,A4",
       "B4,A4,G4,D4",
       "D4,G4,C5,D5",
-      "E4,G4,E4,D4",
-      "A4,G3,F3,E3",
-      "F3,C4,B4,A4",
-      "C4,B4,A4,C4",
-      ].map((str) => new Bot(0, Melody.fromString(str)));
+      "E4,G4,E4,D4"
+    ].map((str) => new Bot(0, Melody.fromString(str)));
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
 
-    // console.log(`Generating new bots, fitness method: ${this.fitnessFunction}`);
-
     // Number of generations to iterate before returning to client
     for (let i = 0; i < GaWorker.ITERATIONS; i++) {
       // Feature flagging
-      let evaluate = this.fitnessFunction === "USER" ? evaluateUser : evaluateConvention;
 
       // Produce fitness scores from bots
       let fitnesses = evaluate(generation);
@@ -66,12 +70,21 @@ export class GaWorker {
       generation = selectRandomWeighted(generation, fitnesses, this.POPULATION_SIZE);
 
       // Apply mutations in accordance with ruleset
-      generation = generation.map((bot) => this.mutateBot(bot));
+      generation.forEach((bot) => this.mutateBot(bot));
     }
+
+    // Reset metrics for new generation
+    generation.forEach((bot) => (bot.metric = 0));
+
+    // Ensure favourited robots are persisted
+    startingPopulation.forEach((bot, i) => {
+      if (bot.metric === 1) generation[i] = bot;
+    });
+
     return generation;
   }
 
-  private mutateBot(bot: Bot): Bot {
+  private mutateBot(bot: Bot): void {
     // Expected value of ~1 mutation per bot.
     for (var index = 0; index < bot.melody.notes.length; index++) {
       if (Math.random() < GaWorker.MUTATION_RATE) {
@@ -84,7 +97,6 @@ export class GaWorker {
         bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1);
       }
     }
-    return bot;
   }
 
   private getPossibleNotesFromRules(index: number, bot: Bot): Array<Note> {
@@ -111,7 +123,7 @@ export class GaWorker {
       startSet.push(s + "5");
     });
 
-    return startSet.map((s: string) => new Note(s));
+    return startSet.map((s: string) => Note.fromString(s));
   }
 
   // Function to assign weights to possible notes for mutation

@@ -2,8 +2,8 @@ import { evaluateRange, evaluateStepwise, evaluateWhoop } from "../src/app/Fitne
 import { Melody } from "../src/models/Melody";
 
 describe("Range evaluator", () => {
-  test("give fitness of 1 if all notes are within 3 octaves", () => {
-    const melody = Melody.fromString("A3,A3,G5,G5");
+  test("give fitness of 1 if all notes are within 1.5 octaves", () => {
+    const melody = Melody.fromString("A3,A3,B4,B4");
     const fitness = evaluateRange(melody);
     expect(fitness).toBe(1);
   });
@@ -17,7 +17,7 @@ describe("Range evaluator", () => {
 
 describe("Stepwise evaluator", () => {
   test("give fitness of 1 to stepwise melody", () => {
-    const melody = Melody.fromString("A3,B3,C3,D3,E3,F3");
+    const melody = Melody.fromString("A3,B3,C4,D4,E4,F4");
     const fitness = evaluateStepwise(melody);
     expect(fitness).toBe(1);
   });

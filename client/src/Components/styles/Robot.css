@@ -1,0 +1,23 @@
+.robot {
+  margin-top: 10px;
+  cursor: grab;
+}
+
+.robot .robot-avatar {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.robot .robot-toolbar {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.robot .robot-toolbar .toolbar-btn {
+  padding: 0.15rem;
+}
+
+.robot .robot-toolbar .toolbar-btn:hover {
+  cursor: pointer;
+}

@@ -1,36 +1,18 @@
 #top-panel {
-    border: 1px solid black;
-    background-image: url(../../cartoon-background.jpg);
-    background-position: center;
-    background-size: cover;
-}
-
-.robot {
-    width: 200px;
-    height: 200px;
-}
-
-#top-panel .robot-toolbar {
-    width: 50%;
-    margin: 0 auto;
-}
-
-#top-panel .toolbar-btn {
-    padding: 0.15rem;
-}
-
-#top-panel .toolbar-btn:hover {
-    cursor: pointer;
+  border: 1px solid black;
+  background-image: url(../../cartoon-background.jpg);
+  background-position: center;
+  background-size: cover;
 }
 
 #refresh {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #generate-btn {
-    font-size: 1rem;
-    width: 400px;
-    background-color: orange !important;
+  font-size: 1rem;
+  width: 400px;
+  background-color: orange !important;
 }

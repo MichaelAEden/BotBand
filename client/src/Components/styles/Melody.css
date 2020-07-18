@@ -1,0 +1,18 @@
+table.melody {
+  margin: 0;
+  height: 60px;
+  width: 50px;
+  position: absolute;
+  top: 116px;
+  left: 93px;
+  z-index: 1;
+  border: black solid 2px;
+}
+
+table.melody tr {
+  min-height: 5px;
+}
+
+table.melody tr td {
+  min-width: 10px;
+}
