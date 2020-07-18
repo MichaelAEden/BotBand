@@ -1,19 +1,15 @@
 import * as bodyParser from "body-parser";
 
-import { GaWorker } from "./GaWorker";
+import { GaWorker } from "../ga/GaWorker";
 import { Bot } from "../models/Bot";
 import { parseBotsFromReq } from "../utils/Utils";
 
-// Must use a require statement for testing for unknown reason
-const express = require("express");
+const express = require("express"); // Must use a require statement for testing for unknown reason
 const app = express();
 
-// Middleware
+// Middleware to set CORS headers
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "https://botband-983c7.web.app",
-  ];
+  const allowedOrigins = ["http://localhost:3000", "https://botband-983c7.web.app"];
   const origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.setHeader("Access-Control-Allow-Origin", origin);
@@ -23,12 +19,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Parse body to JSON
+// Middleware to parse body to JSON
 app.use(bodyParser.json());
-
-app.get("/", async (req, res) => {
-  res.status(200).send("Hello, world!");
-});
 
 /**
  * Expected request body
@@ -37,7 +29,7 @@ app.get("/", async (req, res) => {
  */
 app.post("/config", async (req, res) => {
   console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
-  
+
   if (req.body.mutationRate) {
     GaWorker.MUTATION_RATE = Number(req.body.mutationRate);
   }
@@ -45,7 +37,7 @@ app.post("/config", async (req, res) => {
   if (req.body.iterations) {
     GaWorker.ITERATIONS = Number(req.body.iterations);
   }
-  
+
   if (req.body.noFavourateRate) {
     GaWorker.NO_FAVOURITE_RATE = Number(req.body.noFavourateRate);
   }
@@ -59,8 +51,8 @@ app.post("/config", async (req, res) => {
 
 app.get("/config", async (req, res) => {
   res.status(200).json({
-    'iterations' : GaWorker.ITERATIONS,
-    'mutationRate' : GaWorker.MUTATION_RATE
+    iterations: GaWorker.ITERATIONS,
+    mutationRate: GaWorker.MUTATION_RATE,
   });
 });
 
@@ -69,9 +61,7 @@ app.get("/config", async (req, res) => {
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/rating", async (req, res) => {
-  console.log(
-    `Received request with body: ${JSON.stringify(req.body, null, 2)}`
-  );
+  console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
 
   const worker = new GaWorker();
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
@@ -94,9 +84,7 @@ app.post("/createbots/rating", async (req, res) => {
  * {bots : [{rating, melody}, {...}, ...]}
  */
 app.post("/createbots/usage", async (req, res) => {
-  console.log(
-    `Received request with body: ${JSON.stringify(req.body, null, 2)}`
-  );
+  console.log(`Received request with body: ${JSON.stringify(req.body, null, 2)}`);
 
   let worker = new GaWorker();
   let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
