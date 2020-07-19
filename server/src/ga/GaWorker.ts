@@ -108,7 +108,7 @@ export class GaWorker {
     generation.forEach((bot) => (bot.metric = 0));
 
     // Weighted average no replacement on bots
-    const selection = selectRandomWeightedNoReplacement(generation, fitnesses, this.config.populationSize);
+    const selection = selectRandomWeightedNoReplacement(generation, fitnesses, this.config.selectionSize);
 
     // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {
