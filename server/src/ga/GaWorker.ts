@@ -8,6 +8,7 @@ import {
   selectRandom,
   selectRandomMany,
   selectRandomWeighted,
+  selectRandomWeightedNoReplacement,
   randomInitialization,
 } from "../utils/Utils";
 import evaluate from "./Fitness";
@@ -39,12 +40,12 @@ export class GaWorker {
       noFavourateWeight: 0.5,
       musicalFitnessWeight: 1,
       randomInitial: false,
-      populationSize: 7,
+      populationSize: 10,
       selectionSize: 7,
     };
   }
 
-  constructor(config: GaWorkerConfig) {
+  constructor(config: GaWorkerConfig = GaWorker.defaultConfig()) {
     this.config = config;
     this.rules = [
       new LeapRule(),
@@ -106,12 +107,8 @@ export class GaWorker {
     // Reset metrics for new generation
     generation.forEach((bot) => (bot.metric = 0));
 
-    // Sort bots by fitness, descending, then select most fit bots
-    // TODO: introduce random weighted sorting
-    const selection = _.zip(generation, fitnesses)
-      .sort((a: any[], b: any[]) => b[1] - a[1])
-      .map((botWithFitness) => botWithFitness[0])
-      .slice(0, this.config.selectionSize);
+    // Weighted average no replacement on bots
+    const selection = selectRandomWeightedNoReplacement(generation, fitnesses, this.config.selectionSize);
 
     // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {

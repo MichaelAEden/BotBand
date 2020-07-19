@@ -1,7 +1,6 @@
-import { parseBotsFromReq, selectRandomWeighted } from "../src/utils/Utils";
+import { parseBotsFromReq, selectRandomWeighted, selectRandomWeightedNoReplacement } from "../src/utils/Utils";
 import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
-import { Note } from "../src/models/Note";
 
 test("parse bots from request", () => {
   const req = {
@@ -25,4 +24,15 @@ test("select items with equal probability", () => {
   expect(selection.filter((item) => item === "a").length).toBeGreaterThan(25);
   expect(selection.filter((item) => item === "b").length).toBeGreaterThan(25);
   expect(selection.filter((item) => item === "c").length).toBeGreaterThan(25);
+});
+
+test("select random weighted no replacement, does not replace", () => {
+
+  const selection = selectRandomWeightedNoReplacement(["a", "b", "c", "d"], [100, 0.5, 0.5, 0.5], 4);
+  expect(selection.length).toBe(4);
+  expect(selection.includes("a")).toBe(true);
+  expect(selection.includes("b")).toBe(true);
+  expect(selection.includes("c")).toBe(true);
+  expect(selection.includes("d")).toBe(true);
+
 });

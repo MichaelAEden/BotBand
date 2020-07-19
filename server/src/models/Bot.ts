@@ -4,8 +4,9 @@ export class Bot {
   // This will represent the usage count or the like / dislike depending on the GA interpretation.
   metric: number;
   melody: Melody;
+  playCount: number;
 
-  constructor(metric: number, melody: Melody) {
+  constructor(metric: number, melody: Melody, playCount: number = 0) {
     this.metric = metric;
     this.melody = melody;
   }

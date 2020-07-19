@@ -12,18 +12,20 @@ export class MetadataCache {
     MetadataCache.SESSIONS.push(this.currentSession);
   }
 
-  // TODO: add startTime & endTime timestamps, isFavourite for bots.
-  static addGeneration(bots: Bot[], generation: number) {
+  static addGeneration(bots: Bot[], generation: number, timestamps) {
     // Any other data processing should be done here.
-    this.currentSession["data"].push({ bots, generation });
+    this.currentSession["data"].push({ bots, generation, timestamps });
   }
 
-  // TODO: create clear session function and endpoint.
   static getSession() {
     return MetadataCache.currentSession;
   }
 
   static getSessions() {
     return MetadataCache.SESSIONS;
+  }
+
+  static clearSessions() {
+    MetadataCache.SESSIONS = [];
   }
 }
