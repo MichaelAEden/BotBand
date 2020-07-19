@@ -62,7 +62,7 @@ export class GaWorker {
       // Run GA once with randomly generated initial population
       const set = this.createStartSet();
       const initialMelodies = randomInitialization(set, this.config.selectionSize);
-      const bots = initialMelodies.map((melody) => new Bot(0, Melody.fromString(melody)));
+      const bots = initialMelodies.map((melody) => new Bot(0, melody));
       return this.generateNewBots(bots);
     } else {
       // Return pregenerated melodies

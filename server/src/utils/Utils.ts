@@ -106,16 +106,8 @@ export const assignNoteWeights = (index: number, mut_notes: Array<Note>, melody:
 };
 
 // Random initializes melodies for a starting population
-export const randomInitialization = (set: Array<Note>, populationSize: number) => {
-  let initialMelodies = new Array<string>();
-  let melody = new Array<string>();
+export const randomInitialization = (notes: Note[], populationSize: number): Melody[] => {
   // TODO: this 4 should be a constant somewhere.
   let melodyLength = 4;
-
-  for (let i = 0; i < populationSize; i++) {
-    melody = selectRandomMany(set, melodyLength);
-    initialMelodies.push(melody.join(","));
-  }
-
-  return initialMelodies;
+  return _.times(populationSize, () => new Melody(selectRandomMany(notes, melodyLength)));
 };
