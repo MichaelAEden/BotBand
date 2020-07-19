@@ -40,7 +40,7 @@ app.use((req, _res, next) => {
 app.post("/config", async (req, res) => {
   if (req.body.iterations) GA_CONFIG.iterations = Number(req.body.iterations);
   if (req.body.mutationRate) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
-  if (req.body.noFavourateRate) GA_CONFIG.noFavourateRate = Number(req.body.noFavourateRate);
+  if (req.body.noFavourateWeight) GA_CONFIG.noFavourateWeight = Number(req.body.noFavourateWeight);
   if (req.body.musicalFitnessWeight)
     GA_CONFIG.musicalFitnessWeight = Number(req.body.musicalFitnessWeight);
   if (req.body.randomInitial) GA_CONFIG.randomInitial = Boolean(req.body.randomInitial);

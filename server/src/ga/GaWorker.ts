@@ -21,7 +21,7 @@ import { StepwiseRule } from "../rules/StepwiseRule";
 interface GaWorkerConfig {
   iterations: number; // Times GA will iterate
   mutationRate: number; // Probability of mutation
-  noFavourateRate: number; // Weight of selection is weaker if bot not favourited
+  noFavourateWeight: number; // User fitness assigned to bots that are not favourited
   musicalFitnessWeight: number; // Relative weight of melody vs user fitness in convention algo
   randomInitial: boolean; // If true, initial GA population is randomly generated
   populationSize: number; // Population size
@@ -36,7 +36,7 @@ export class GaWorker {
     return {
       iterations: 5,
       mutationRate: 0.15,
-      noFavourateRate: 0.5,
+      noFavourateWeight: 0.5,
       musicalFitnessWeight: 1,
       randomInitial: false,
       populationSize: 7,
@@ -92,7 +92,7 @@ export class GaWorker {
       // Produce fitness scores from bots
       fitnesses = evaluate(
         generation,
-        this.config.noFavourateRate,
+        this.config.noFavourateWeight,
         this.config.musicalFitnessWeight
       );
 
