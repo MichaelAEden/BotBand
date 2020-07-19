@@ -2,4 +2,5 @@
   width: 60%;
   margin: 0 auto;
   background: rgba(196, 196, 196, 0.26);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
