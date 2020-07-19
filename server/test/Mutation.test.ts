@@ -83,7 +83,4 @@ test("End To End No Crash", () => {
   bots.forEach(bot => bot.metric = Math.floor(Math.random() + 1));
 
   worker.generateNewBots(bots);
-
-  // pass if no crash
-  expect(true).toBe(true);
 });

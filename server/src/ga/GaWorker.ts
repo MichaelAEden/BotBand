@@ -8,6 +8,7 @@ import {
   selectRandom,
   selectRandomMany,
   selectRandomWeighted,
+  selectRandomWeightedNoReplacement,
   randomInitialization,
 } from "../utils/Utils";
 import evaluate from "./FitnessConvention";
@@ -106,8 +107,8 @@ export class GaWorker {
     // Reset metrics for new generation
     generation.forEach((bot) => (bot.metric = 0));
 
-    // Sort bots by fitness, descending, then select most fit bots
-    const selection = selectRandomWeighted(generation, fitnesses, generation.length);
+    // Weighted average no replacement on bots
+    const selection = selectRandomWeightedNoReplacement(generation, fitnesses, this.config.populationSize);
 
     // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {
