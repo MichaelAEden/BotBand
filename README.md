@@ -31,6 +31,10 @@ If you make code changes, terminate the server and rerun the above commands.
 
 Run `npm run test` from root directory.
 
+## Run Backend Experiments
+
+Run `npm run experiment` from root directory.
+
 ## Run Frontend
 
 Run `npm start` from `client` directory.

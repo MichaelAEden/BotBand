@@ -10,7 +10,7 @@ import {
   selectRandomWeighted,
   randomInitialization,
 } from "../utils/Utils";
-import evaluate from "./FitnessConvention";
+import evaluate from "./Fitness";
 
 import { LeapRule } from "../rules/LeapRule";
 import { TritoneRule } from "../rules/TritoneRule";
@@ -18,7 +18,7 @@ import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
 
-interface GaWorkerConfig {
+export interface GaWorkerConfig {
   iterations: number; // Times GA will iterate
   mutationRate: number; // Probability of mutation
   noFavourateWeight: number; // User fitness assigned to bots that are not favourited

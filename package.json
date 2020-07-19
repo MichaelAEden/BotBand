@@ -29,6 +29,7 @@
   "scripts": {
     "start": "node build/index.js",
     "build": "npx tsc -p tsconfig.json",
-    "test": "jest"
+    "test": "jest",
+    "experiment": "jest --config experiment.jest.config.js"
   }
 }
