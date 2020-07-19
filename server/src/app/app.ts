@@ -71,7 +71,7 @@ app.get("/data", async (_req, res) => {
  * Expected request body
  * {bots : [{metric, melody}, {...}, ...]}
  */
-app.post("/createbots/rating", async (req, res) => {
+app.post("/bots", async (req, res) => {
   let bots;
   let generation = 0;
   const worker = new GaWorker();
