@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   async generateBots() {
-    const response = await fetchJson("/createbots/rating", {
+    const response = await fetchJson("/bots", {
       method: "POST",
       body: JSON.stringify({
         bots: this.state.bots,

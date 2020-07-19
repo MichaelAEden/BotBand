@@ -1,7 +1,6 @@
 import { Bot } from "../models/Bot";
 import { Melody } from "../models/Melody";
 import { OCTAVE } from "../models/Note";
-import { GaWorker } from "./GaWorker";
 
 const MAX_MELODY_SCORE = 3;
 
@@ -62,17 +61,20 @@ export const evaluateWhoop = (melody: Melody): number => {
   return whoopFitness;
 };
 
-export const getUserFitness = (bot: Bot) => {
-  return bot.metric != 0 ? bot.metric : GaWorker.NO_FAVOURITE_RATE;
-}
+export const getUserFitness = (bot: Bot, noFavouriteWeight: number) => {
+  return bot.metric != 0 ? bot.metric : noFavouriteWeight;
+};
 
 // Fitness will be determined from the combined fitness of musical rules.
 export const getMusicalFitness = (bot: Bot) => {
-  return (evaluateRange(bot.melody) + evaluateStepwise(bot.melody) + evaluateWhoop(bot.melody)) / MAX_MELODY_SCORE;
-}
+  return (
+    (evaluateRange(bot.melody) + evaluateStepwise(bot.melody) + evaluateWhoop(bot.melody)) /
+    MAX_MELODY_SCORE
+  );
+};
 
-export default (bots: Bot[]): number[] => {
+export default (bots: Bot[], noFavouriteWeight: number, musicalFitnessWeight: number): number[] => {
   return bots.map((bot) => {
-    return getUserFitness(bot) + GaWorker.MUSICAL_FITNESS_WEIGHT * getMusicalFitness(bot);
+    return getUserFitness(bot, noFavouriteWeight) + musicalFitnessWeight * getMusicalFitness(bot);
   });
 };

@@ -4,6 +4,8 @@ import { MetadataCache } from "./MetadataCache";
 import { GaWorker } from "../ga/GaWorker";
 import { parseBotsFromReq } from "../utils/Utils";
 
+const GA_CONFIG = GaWorker.defaultConfig();
+
 const express = require("express"); // Must use a require statement for testing for unknown reason
 const app = express();
 
@@ -32,35 +34,24 @@ app.use((req, _res, next) => {
 });
 
 /**
- * Expected request body
- * {fitness}
+ * See GaWorkerConfig interface in GaWorker.ts for all configurable fields
  * Purpose: Feature flagging via API configuration
  */
 app.post("/config", async (req, res) => {
-  if (req.body.mutationRate) {
-    GaWorker.MUTATION_RATE = Number(req.body.mutationRate);
-  }
+  if (req.body.iterations) GA_CONFIG.iterations = Number(req.body.iterations);
+  if (req.body.mutationRate) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
+  if (req.body.noFavourateWeight) GA_CONFIG.noFavourateWeight = Number(req.body.noFavourateWeight);
+  if (req.body.musicalFitnessWeight)
+    GA_CONFIG.musicalFitnessWeight = Number(req.body.musicalFitnessWeight);
+  if (req.body.randomInitial) GA_CONFIG.randomInitial = Boolean(req.body.randomInitial);
+  if (req.body.populationSize) GA_CONFIG.populationSize = Number(req.body.populationSize);
+  if (req.body.selectionSize) GA_CONFIG.selectionSize = Number(req.body.selectionSize);
 
-  if (req.body.iterations) {
-    GaWorker.ITERATIONS = Number(req.body.iterations);
-  }
-
-  if (req.body.noFavourateRate) {
-    GaWorker.NO_FAVOURITE_RATE = Number(req.body.noFavourateRate);
-  }
-
-  if (req.body.musicalFitnessWeight) {
-    GaWorker.MUSICAL_FITNESS_WEIGHT = Number(req.body.musicalFitnessWeight);
-  }
-
-  res.sendStatus(200);
+  res.status(200).json(GA_CONFIG);
 });
 
 app.get("/config", async (_req, res) => {
-  res.status(200).json({
-    iterations: GaWorker.ITERATIONS,
-    mutationRate: GaWorker.MUTATION_RATE,
-  });
+  res.status(200).json(GA_CONFIG);
 });
 
 /**
@@ -81,10 +72,10 @@ app.get("/data", async (_req, res) => {
  * Expected request body
  * {bots : [{metric, melody}, {...}, ...]}
  */
-app.post("/createbots/rating", async (req, res) => {
+app.post("/bots", async (req, res) => {
   let bots;
   let generation = 0;
-  const worker = new GaWorker();
+  const worker = new GaWorker(GA_CONFIG);
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     console.log(`First request initialized from ${ip}`);
@@ -96,9 +87,7 @@ app.post("/createbots/rating", async (req, res) => {
     bots = worker.generateNewBots(reqBots);
     generation = req.body.generation + 1;
   }
-
   MetadataCache.addGeneration(bots, generation);
-
   res.status(200).json({ bots, generation });
 });
 

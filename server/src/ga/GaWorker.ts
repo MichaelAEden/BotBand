@@ -1,8 +1,15 @@
+import * as _ from "lodash";
+
 import { Bot } from "../models/Bot";
 import { Rule } from "../rules/Rule";
 import { Melody } from "../models/Melody";
 import { Note } from "../models/Note";
-import { selectRandom, selectRandomWeighted, assignNoteWeights, randomInitialization } from "../utils/Utils";
+import {
+  selectRandom,
+  selectRandomMany,
+  selectRandomWeighted,
+  randomInitialization,
+} from "../utils/Utils";
 import evaluate from "./FitnessConvention";
 
 import { LeapRule } from "../rules/LeapRule";
@@ -11,18 +18,34 @@ import { OctaveRule } from "../rules/OctaveRule";
 import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
 
-export class GaWorker {
-  // Default Values
-  static ITERATIONS = 5; // Times GA will iterate
-  // TODO decouple this
-  POPULATION_SIZE = 7; // Population size
-  static MUTATION_RATE = 0.15; // Probability of mutation
-  static NO_FAVOURITE_RATE = 0.5; // weight of selection is weaker if bot not favourited
-  static MUSICAL_FITNESS_WEIGHT = 1; // relative weight of melody vs user fitness in convention algo
+interface GaWorkerConfig {
+  iterations: number; // Times GA will iterate
+  mutationRate: number; // Probability of mutation
+  noFavourateWeight: number; // User fitness assigned to bots that are not favourited
+  musicalFitnessWeight: number; // Relative weight of melody vs user fitness in convention algo
+  randomInitial: boolean; // If true, initial GA population is randomly generated
+  populationSize: number; // Population size
+  selectionSize: number; // Number of robots to be presented to the user
+}
 
+export class GaWorker {
+  config: GaWorkerConfig;
   rules: Rule[];
 
-  constructor() {
+  static defaultConfig(): GaWorkerConfig {
+    return {
+      iterations: 5,
+      mutationRate: 0.15,
+      noFavourateWeight: 0.5,
+      musicalFitnessWeight: 1,
+      randomInitial: false,
+      populationSize: 7,
+      selectionSize: 7,
+    };
+  }
+
+  constructor(config: GaWorkerConfig) {
+    this.config = config;
     this.rules = [
       new LeapRule(),
       new TritoneRule(),
@@ -31,55 +54,50 @@ export class GaWorker {
       new CounterTenorRule(),
     ];
 
-    console.log(`
-      Creating GaWorker with configs: 
-      iterations - ${GaWorker.ITERATIONS} , 
-      mutation_rate - ${GaWorker.MUTATION_RATE}
-    `);
+    console.log(`Creating GaWorker with config: ${JSON.stringify(config, null, 2)}`);
   }
 
-  /*
-      "A4,G3,F3,E3",
-      "F3,C4,B4,A4",
-      "C4,B4,A4,C4",
-   */
-
-  initialBots(randomInitial=false): Bot[] {
-
-    if(randomInitial){
-
-      let set = this.createStartSet();
-      let initialMelodies = randomInitialization(set, this.POPULATION_SIZE);
-      return initialMelodies.map((str) => new Bot(0, Melody.fromString(str)))
-
-    }else{
-
-      return [
+  initialBots(): Bot[] {
+    if (this.config.randomInitial) {
+      // Run GA once with randomly generated initial population
+      const set = this.createStartSet();
+      const initialMelodies = randomInitialization(set, this.config.selectionSize);
+      const bots = initialMelodies.map((melody) => new Bot(0, melody));
+      return this.generateNewBots(bots);
+    } else {
+      // Return pregenerated melodies
+      const melodies = [
+        "A4,G3,F3,E3",
+        "F3,C4,B4,A4",
+        "C4,B4,A4,C4",
         "C4,G4,G4,F4",
         "A4,B4,G4,E4",
         "G4,B4,D5,E5",
         "E4,E4,E4,A4",
         "B4,A4,G4,D4",
         "D4,G4,C5,D5",
-        "E4,G4,E4,D4"
-      ].map((str) => new Bot(0, Melody.fromString(str)));
-
+        "E4,G4,E4,D4",
+      ];
+      const selectedMelodies = selectRandomMany(melodies, this.config.selectionSize);
+      return selectedMelodies.map((melody) => new Bot(0, Melody.fromString(melody)));
     }
-    
   }
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
+    let fitnesses;
 
     // Number of generations to iterate before returning to client
-    for (let i = 0; i < GaWorker.ITERATIONS; i++) {
-      // Feature flagging
-
+    for (let i = 0; i < this.config.iterations; i++) {
       // Produce fitness scores from bots
-      let fitnesses = evaluate(generation);
+      fitnesses = evaluate(
+        generation,
+        this.config.noFavourateWeight,
+        this.config.musicalFitnessWeight
+      );
 
       // Normalize the scores to select a new generation
-      generation = selectRandomWeighted(generation, fitnesses, this.POPULATION_SIZE);
+      generation = selectRandomWeighted(generation, fitnesses, this.config.populationSize);
 
       // Apply mutations in accordance with ruleset
       generation.forEach((bot) => this.mutateBot(bot));
@@ -88,25 +106,32 @@ export class GaWorker {
     // Reset metrics for new generation
     generation.forEach((bot) => (bot.metric = 0));
 
+    // Sort bots by fitness, descending, then select most fit bots
+    // TODO: introduce random weighted sorting
+    const selection = _.zip(generation, fitnesses)
+      .sort((a: any[], b: any[]) => b[1] - a[1])
+      .map((botWithFitness) => botWithFitness[0])
+      .slice(0, this.config.selectionSize);
+
     // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {
-      if (bot.metric === 1) generation[i] = bot;
+      if (bot.metric === 1) selection[i] = bot;
     });
 
-    return generation;
+    return selection;
   }
 
   private mutateBot(bot: Bot): void {
     // Expected value of ~1 mutation per bot.
     for (var index = 0; index < bot.melody.notes.length; index++) {
-      if (Math.random() < GaWorker.MUTATION_RATE) {
+      if (Math.random() < this.config.mutationRate) {
         const notes = this.getPossibleNotesFromRules(index, bot);
-        const weights = assignNoteWeights(index, notes, bot.melody);
         if (!notes.length) {
           return;
         }
 
-        //bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1)[0];
+        // const weights = assignNoteWeights(index, notes, bot.melody);
+        // bot.melody.notes[index] = selectRandomWeighted(notes, weights, 1)[0];
         bot.melody.notes[index] = selectRandom(notes);
       }
     }
@@ -138,5 +163,4 @@ export class GaWorker {
 
     return startSet.map((s: string) => Note.fromString(s));
   }
-
 }
