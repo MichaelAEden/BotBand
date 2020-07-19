@@ -1,4 +1,4 @@
-import { GaWorker } from "../src/app/gaworker";
+import { GaWorker } from "../src/ga/gaworker";
 import { LeapRule } from "../src/rules/LeapRule";
 import { TritoneRule } from "../src/rules/TritoneRule";
 import { CounterTenorRule } from "../src/rules/CounterTenorRule";
@@ -68,39 +68,6 @@ test("Octave rule works", () => {
   expect(output.filter((o) => !expectedOutput.includes(o)).length === 0).toBe(true);
 });
 
-test("GA octaves", () => {
-  let worker = new GaWorker();
-
-  let highNotes = 0;
-  let totalNotes = 0;
-  let lowNotes = 0;
-  // Represents tenor range
-  let high = Note.fromString("C5");
-  let low = Note.fromString("C3");
-
-  for (var i = 0; i < 100; i++) {
-    let newBots = worker.generateNewBots(worker.initialBots());
-
-    newBots.forEach((bot) => {
-      bot.melody.notes.forEach((note) => {
-        totalNotes++;
-
-        if (high.compare(note) <= 0) {
-          highNotes++;
-        }
-
-        if (low.compare(note) >= 0) {
-          lowNotes++;
-        }
-      });
-    });
-  }
-
-  console.log(`results: high - ${highNotes} , low - ${lowNotes} , total - ${totalNotes}`);
-  console.log(`fraction high notes: ${highNotes / totalNotes}`);
-  console.log(`fraction low notes: ${lowNotes / totalNotes}`);
-});
-
 test("Vocal Range Rules", () => {
   let bot = new Bot(0, Melody.fromString("C4,G4,D4,A4"));
 
@@ -112,4 +79,17 @@ test("Vocal Range Rules", () => {
 
   expect(output.length).toBe(expectedOutput.length);
   expect(output.filter((o) => !expectedOutput.includes(o)).length === 0).toBe(true);
+});
+
+test("End To End No Crash", () => {
+  let worker = new GaWorker();
+
+  // create set of bots
+  let bots = worker.initialBots();
+  bots.forEach(bot => bot.metric = Math.floor(Math.random() + 1));
+
+  worker.generateNewBots(bots);
+
+  // pass if no crash
+  expect(true).toBe(true);
 });

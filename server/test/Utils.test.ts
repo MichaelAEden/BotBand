@@ -1,7 +1,6 @@
 import { parseBotsFromReq, selectRandomWeighted } from "../src/utils/Utils";
 import { Bot } from "../src/models/Bot";
 import { Melody } from "../src/models/Melody";
-import { Note } from "../src/models/Note";
 
 test("parse bots from request", () => {
   const req = {
