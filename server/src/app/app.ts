@@ -39,11 +39,12 @@ app.use((req, _res, next) => {
  */
 app.post("/config", async (req, res) => {
   if (req.body.iterations) GA_CONFIG.iterations = Number(req.body.iterations);
-  if (req.body.populationSize) GA_CONFIG.populationSize = Number(req.body.populationSize);
   if (req.body.mutationRate) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
   if (req.body.noFavourateRate) GA_CONFIG.noFavourateRate = Number(req.body.noFavourateRate);
   if (req.body.musicalFitnessWeight)
     GA_CONFIG.musicalFitnessWeight = Number(req.Number.musicalFitnessWeight);
+  if (req.body.randomInitial) GA_CONFIG.randomInitial = Boolean(req.body.randomInitial);
+  if (req.body.populationSize) GA_CONFIG.populationSize = Number(req.body.populationSize);
   if (req.body.selectionSize) GA_CONFIG.selectionSize = Number(req.body.selectionSize);
 
   res.status(200).json(GA_CONFIG);
@@ -74,7 +75,7 @@ app.get("/data", async (_req, res) => {
 app.post("/bots", async (req, res) => {
   let bots;
   let generation = 0;
-  const worker = new GaWorker();
+  const worker = new GaWorker(GA_CONFIG);
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     console.log(`First request initialized from ${ip}`);
@@ -86,9 +87,7 @@ app.post("/bots", async (req, res) => {
     bots = worker.generateNewBots(reqBots);
     generation = req.body.generation + 1;
   }
-
   MetadataCache.addGeneration(bots, generation);
-
   res.status(200).json({ bots, generation });
 });
 

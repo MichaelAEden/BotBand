@@ -19,12 +19,13 @@ import { CounterTenorRule } from "../rules/CounterTenorRule";
 import { StepwiseRule } from "../rules/StepwiseRule";
 
 interface GaWorkerConfig {
-  iterations: number;
-  mutationRate: number;
-  noFavourateRate: number;
-  musicalFitnessWeight: number;
-  populationSize: number;
-  selectionSize: number;
+  iterations: number; // Times GA will iterate
+  mutationRate: number; // Probability of mutation
+  noFavourateRate: number; // Weight of selection is weaker if bot not favourited
+  musicalFitnessWeight: number; // Relative weight of melody vs user fitness in convention algo
+  randomInitial: boolean; // If true, initial GA population is randomly generated
+  populationSize: number; // Population size
+  selectionSize: number; // Number of robots to be presented to the user
 }
 
 export class GaWorker {
@@ -33,12 +34,13 @@ export class GaWorker {
 
   static defaultConfig(): GaWorkerConfig {
     return {
-      iterations: 5, // Times GA will iterate
-      mutationRate: 0.15, // Probability of mutation
-      noFavourateRate: 0.5, // Weight of selection is weaker if bot not favourited
-      musicalFitnessWeight: 1, // Relative weight of melody vs user fitness in convention algo
-      populationSize: 7, // Population size
-      selectionSize: 7, // Number of robots to be presented to the user
+      iterations: 5,
+      mutationRate: 0.15,
+      noFavourateRate: 0.5,
+      musicalFitnessWeight: 1,
+      randomInitial: false,
+      populationSize: 7,
+      selectionSize: 7,
     };
   }
 
@@ -55,14 +57,15 @@ export class GaWorker {
     console.log(`Creating GaWorker with config: ${JSON.stringify(config, null, 2)}`);
   }
 
-  // TODO: make randomInitial configurable.
-  // TODO: on randomInitial flow, run GA.
-  initialBots(randomInitial = false): Bot[] {
-    if (randomInitial) {
+  initialBots(): Bot[] {
+    if (this.config.randomInitial) {
+      // Run GA once with randomly generated initial population
       const set = this.createStartSet();
       const initialMelodies = randomInitialization(set, this.config.selectionSize);
-      return initialMelodies.map((melody) => new Bot(0, Melody.fromString(melody)));
+      const bots = initialMelodies.map((melody) => new Bot(0, Melody.fromString(melody)));
+      return this.generateNewBots(bots);
     } else {
+      // Return pregenerated melodies
       const melodies = [
         "A4,G3,F3,E3",
         "F3,C4,B4,A4",
