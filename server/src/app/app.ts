@@ -69,6 +69,14 @@ app.get("/data", async (_req, res) => {
 });
 
 /**
+ * Delete all data from previous "sessions"
+ */
+app.delete("/data", async (_req, res) => {
+  MetadataCache.clearSessions();
+  return res.status(200).send();
+});
+
+/**
  * Expected request body
  * {bots : [{metric, melody}, {...}, ...]}
  */
@@ -87,7 +95,11 @@ app.post("/bots", async (req, res) => {
     bots = worker.generateNewBots(reqBots);
     generation = req.body.generation + 1;
   }
-  MetadataCache.addGeneration(bots, generation);
+
+  const timestamps = {startTime : req.body.startTime, endTime : req.body.endTime}
+
+  MetadataCache.addGeneration(bots, generation, timestamps);
+
   res.status(200).json({ bots, generation });
 });
 

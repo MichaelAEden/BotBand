@@ -106,8 +106,7 @@ class App extends Component {
 
   handleRobotFavouriteToggled(i, isFavourite) {
     console.log(`Toggled favourite to ${isFavourite} for robot ${i}`);
-    // TODO pass favourite data here
-    const bot = { ...this.state.bots[i], metric: 0 + isFavourite };
+    const bot = { ...this.state.bots[i], metric: 0 + isFavourite, 'isFavourite' : isFavourite};
     const bots = [...this.state.bots];
     bots[i] = bot;
     this.setState({ ...this.state, bots });
