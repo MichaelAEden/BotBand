@@ -13,7 +13,7 @@ export const parseBotsFromReq = (req) => {
 
 export const selectRandom = (items) => {
   if (!items.length) throw new Error("Array cannot be empty");
-  items[Math.floor(Math.random() * items.length)];
+  return items[Math.floor(Math.random() * items.length)];
 };
 
 export const selectRandomMany = (items, n) => {

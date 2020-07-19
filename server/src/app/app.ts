@@ -42,7 +42,7 @@ app.post("/config", async (req, res) => {
   if (req.body.mutationRate) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
   if (req.body.noFavourateRate) GA_CONFIG.noFavourateRate = Number(req.body.noFavourateRate);
   if (req.body.musicalFitnessWeight)
-    GA_CONFIG.musicalFitnessWeight = Number(req.Number.musicalFitnessWeight);
+    GA_CONFIG.musicalFitnessWeight = Number(req.body.musicalFitnessWeight);
   if (req.body.randomInitial) GA_CONFIG.randomInitial = Boolean(req.body.randomInitial);
   if (req.body.populationSize) GA_CONFIG.populationSize = Number(req.body.populationSize);
   if (req.body.selectionSize) GA_CONFIG.selectionSize = Number(req.body.selectionSize);

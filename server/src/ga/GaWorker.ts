@@ -90,7 +90,11 @@ export class GaWorker {
     // Number of generations to iterate before returning to client
     for (let i = 0; i < this.config.iterations; i++) {
       // Produce fitness scores from bots
-      fitnesses = evaluate(generation);
+      fitnesses = evaluate(
+        generation,
+        this.config.noFavourateRate,
+        this.config.musicalFitnessWeight
+      );
 
       // Normalize the scores to select a new generation
       generation = selectRandomWeighted(generation, fitnesses, this.config.populationSize);
