@@ -14,15 +14,15 @@
   margin: 20px;
 }
 
-.empty-space {
-  width: 200px;
-  height: 200px;
-}
-
 .bottom-toolbar-icon {
   padding: 10px;
 }
 
 .bottom-toolbar-icon:hover {
   cursor: pointer;
+}
+
+.empty-space {
+  width: 200px;
+  height: 200px;
 }

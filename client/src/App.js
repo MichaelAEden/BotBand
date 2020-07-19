@@ -144,7 +144,6 @@ class App extends Component {
           onDragStart={this.onDragStart}
           onDrop={this.onDrop}
           onDropRobot={this.onDropRobot}
-          onSelect={this.onSelect}
           onDeleted={this.handleRobotDeleted}
         />
       </MDBContainer>

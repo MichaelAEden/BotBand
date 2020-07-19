@@ -50,7 +50,6 @@ class BottomPanel extends Component {
           onDeleted={() => this.props.onDeleted(i)}
           index={i}
           rearrange
-          onSelect={this.props.onSelect}
         ></Robot>
       </MDBCol>
     ));
