@@ -14,16 +14,15 @@ class App extends Component {
       dragIndex: 0,
       rearrange: false,
       startY: 0,
-      selectIndex: null
     };
     this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
+    this.handleRobotDeleted = this.handleRobotDeleted.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onDropRobot = this.onDropRobot.bind(this);
-    this.onSelect = this.onSelect.bind(this);
   }
 
   async componentDidMount() {
@@ -114,21 +113,16 @@ class App extends Component {
     this.setState({ ...this.state, bots });
   }
 
-  handleClearClick(e) {
-    console.log("Clearing composition");
-    let {selectIndex, composition} = this.state;
-    let newComposition = [];
-    if (selectIndex != null) {
-      newComposition = composition.slice();
-      newComposition.splice(selectIndex, 1);
-    }
-    this.setState({ ...this.state, composition: newComposition, selectIndex: null });
+  handleRobotDeleted(i) {
+    console.log(`Deleted robot ${i}`);
+    const composition = [...this.state.composition];
+    composition.splice(i, 1);
+    this.setState({ ...this.state, composition });
   }
 
-  onSelect(i) {
-    let newIndex = i;
-    if (newIndex == this.state.selectIndex) newIndex = null;
-    this.setState({selectIndex: newIndex});
+  handleClearClick(e) {
+    console.log("Clearing composition");
+    this.setState({ ...this.state, composition: [] });
   }
 
   render() {
@@ -151,7 +145,7 @@ class App extends Component {
           onDrop={this.onDrop}
           onDropRobot={this.onDropRobot}
           onSelect={this.onSelect}
-          selectIndex={this.state.selectIndex}
+          onDeleted={this.handleRobotDeleted}
         />
       </MDBContainer>
     );

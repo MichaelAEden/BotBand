@@ -56,25 +56,34 @@ class Robot extends Component {
   render() {
     return (
       <div className="robot">
-        <div
-          className="robot-toolbar"
-          style={{ visibility: this.props.hideToolbar ? "hidden" : undefined }}
-        >
-          <MDBIcon
-            far
-            size="lg"
-            icon={this.props.isPlaying ? "stop-circle" : "play-circle"}
-            className="toolbar-btn"
-            onClick={this.handlePlayClicked}
-          />
-          <MDBIcon
-            far={!this.state.isFavourite}
-            fas={this.state.isFavourite}
-            size="lg"
-            icon="star"
-            className="toolbar-btn"
-            onClick={this.handleFavouriteClicked}
-          />
+        <div className="robot-toolbar">
+          {this.props.inComposition ? (
+            <MDBIcon
+              far
+              size="lg"
+              icon="trash-alt"
+              className="toolbar-btn"
+              onClick={this.props.onDeleted}
+            />
+          ) : (
+            <React.Fragment>
+              <MDBIcon
+                far
+                size="lg"
+                icon={this.props.isPlaying ? "stop-circle" : "play-circle"}
+                className="toolbar-btn"
+                onClick={this.handlePlayClicked}
+              />
+              <MDBIcon
+                far={!this.state.isFavourite}
+                fas={this.state.isFavourite}
+                size="lg"
+                icon="star"
+                className="toolbar-btn"
+                onClick={this.handleFavouriteClicked}
+              />
+            </React.Fragment>
+          )}
         </div>
 
         <div
@@ -82,19 +91,14 @@ class Robot extends Component {
           onMouseDown={(e) => {
             this.props.onDragStart(e, this.props.index, this.props.rearrange);
           }}
-          onDrop={(e) => {if (this.props.rearrange) this.props.onDropRobot(e, this.props.index)}}
+          onDrop={(e) => {
+            if (this.props.rearrange) this.props.onDropRobot(e, this.props.index);
+          }}
           onDragOver={(e) => e.preventDefault()}
-          onClick={() => this.props.onSelect(this.props.index)}
         >
           <Melody melody={this.props.melody}></Melody>
-          <img
-            src={this.getImage()}
-            className="robot-avatar"
-            alt="Robot"
-            style={ this.props.index == this.props.selectIndex ? {border: "1px solid red"} : {} }
-          ></img>
+          <img src={this.getImage()} className="robot-avatar" alt="Robot"></img>
         </div>
-
       </div>
     );
   }
