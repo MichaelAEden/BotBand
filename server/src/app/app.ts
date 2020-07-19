@@ -4,6 +4,8 @@ import { MetadataCache } from "./MetadataCache";
 import { GaWorker } from "../ga/GaWorker";
 import { parseBotsFromReq } from "../utils/Utils";
 
+const GA_CONFIG = GaWorker.defaultConfig();
+
 const express = require("express"); // Must use a require statement for testing for unknown reason
 const app = express();
 
@@ -32,35 +34,23 @@ app.use((req, _res, next) => {
 });
 
 /**
- * Expected request body
- * {fitness}
+ * See GaWorkerConfig interface in GaWorker.ts for all configurable fields
  * Purpose: Feature flagging via API configuration
  */
 app.post("/config", async (req, res) => {
-  if (req.body.mutationRate) {
-    GaWorker.MUTATION_RATE = Number(req.body.mutationRate);
-  }
+  if (req.body.iterations) GA_CONFIG.iterations = Number(req.body.iterations);
+  if (req.body.populationSize) GA_CONFIG.populationSize = Number(req.body.populationSize);
+  if (req.body.mutationRate) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
+  if (req.body.noFavourateRate) GA_CONFIG.noFavourateRate = Number(req.body.noFavourateRate);
+  if (req.body.musicalFitnessWeight)
+    GA_CONFIG.musicalFitnessWeight = Number(req.Number.musicalFitnessWeight);
+  if (req.body.selectionSize) GA_CONFIG.selectionSize = Number(req.body.selectionSize);
 
-  if (req.body.iterations) {
-    GaWorker.ITERATIONS = Number(req.body.iterations);
-  }
-
-  if (req.body.noFavourateRate) {
-    GaWorker.NO_FAVOURITE_RATE = Number(req.body.noFavourateRate);
-  }
-
-  if (req.body.musicalFitnessWeight) {
-    GaWorker.MUSICAL_FITNESS_WEIGHT = Number(req.body.musicalFitnessWeight);
-  }
-
-  res.sendStatus(200);
+  res.status(200).json(GA_CONFIG);
 });
 
 app.get("/config", async (_req, res) => {
-  res.status(200).json({
-    iterations: GaWorker.ITERATIONS,
-    mutationRate: GaWorker.MUTATION_RATE,
-  });
+  res.status(200).json(GA_CONFIG);
 });
 
 /**
