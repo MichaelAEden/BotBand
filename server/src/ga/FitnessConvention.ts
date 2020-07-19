@@ -61,8 +61,8 @@ export const evaluateWhoop = (melody: Melody): number => {
   return whoopFitness;
 };
 
-export const getUserFitness = (bot: Bot, noFavouriteRate: number) => {
-  return bot.metric != 0 ? bot.metric : noFavouriteRate;
+export const getUserFitness = (bot: Bot, noFavouriteWeight: number) => {
+  return bot.metric != 0 ? bot.metric : noFavouriteWeight;
 };
 
 // Fitness will be determined from the combined fitness of musical rules.
@@ -73,8 +73,8 @@ export const getMusicalFitness = (bot: Bot) => {
   );
 };
 
-export default (bots: Bot[], noFavouriteRate: number, musicalFitnessWeight: number): number[] => {
+export default (bots: Bot[], noFavouriteWeight: number, musicalFitnessWeight: number): number[] => {
   return bots.map((bot) => {
-    return getUserFitness(bot, noFavouriteRate) + musicalFitnessWeight * getMusicalFitness(bot);
+    return getUserFitness(bot, noFavouriteWeight) + musicalFitnessWeight * getMusicalFitness(bot);
   });
 };
