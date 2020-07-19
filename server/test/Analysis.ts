@@ -40,3 +40,4 @@ test("Test notes outside of vocal range", () => {
     console.log(`fraction high notes: ${highNotes / totalNotes}`);
     console.log(`fraction low notes: ${lowNotes / totalNotes}`);
   });
+  
