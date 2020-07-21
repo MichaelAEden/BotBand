@@ -21,7 +21,7 @@ export class MetadataCache {
       playCount: bot.playCount,
       musicalFitness: getMusicalFitness(bot),
     }));
-    this.currentSession["data"].push({ botsWithFitnesses, generation, timestamps });
+    this.currentSession["data"].push({ bots: botsWithFitnesses, generation, timestamps });
   }
 
   static getSession() {
