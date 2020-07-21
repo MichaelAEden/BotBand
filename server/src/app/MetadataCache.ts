@@ -1,4 +1,5 @@
 import { Bot } from "../models/Bot";
+import { getMusicalFitness } from "../ga/Fitness";
 
 export class MetadataCache {
   static SESSIONS = [];
@@ -13,8 +14,14 @@ export class MetadataCache {
   }
 
   static addGeneration(bots: Bot[], generation: number, timestamps) {
-    // Any other data processing should be done here.
-    this.currentSession["data"].push({ bots, generation, timestamps });
+    // TODO: add musicalFitness, userFitness fields to Bot class.
+    const botsWithFitnesses = bots.map((bot) => ({
+      metric: bot.metric,
+      melody: bot.melody,
+      playCount: bot.playCount,
+      musicalFitness: getMusicalFitness(bot),
+    }));
+    this.currentSession["data"].push({ bots: botsWithFitnesses, generation, timestamps });
   }
 
   static getSession() {
