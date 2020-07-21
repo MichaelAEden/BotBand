@@ -115,7 +115,10 @@ export class GaWorker {
     }
 
     // Reset metrics for new generation
-    generation.forEach((bot) => (bot.metric = 0));
+    generation.forEach((bot) => {
+      bot.metric = 0;
+      bot.playCount = 0;
+    });
 
     // Weighted average no replacement on bots
     const selection = selectRandomWeightedNoReplacement(
