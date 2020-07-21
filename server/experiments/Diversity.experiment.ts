@@ -1,23 +1,9 @@
 import { GaWorker } from "../src/ga/GaWorker";
 import { Bot } from "../src/models/Bot";
 
-const getNoteHash = (bot: Bot) => {
-    let score = 0;
-    let index = 1;
-
-    bot.melody.notes.forEach(note => {
-
-        score += note.code * index;
-        index *= 100;
-
-    });
-
-    return score;
-}
-
 test("Duplicate Count", () => {
     // TODO: pass different parameters to see how duplicate probability changes.
-    // Default config yields ~15%.
+    // Default config yields ~12%.
     let worker = new GaWorker();
 
     let numDuplicates = 0;
@@ -28,15 +14,15 @@ test("Duplicate Count", () => {
     
         let hashset = [];
 
-        newBots.forEach((bot) => {
+        newBots.forEach((bot: Bot) => {
           
-            let hash = getNoteHash(bot);
+            let hash = bot.getHash();
 
             if (hashset.includes(hash)) {
                 numDuplicates++;
             }
 
-            hashset.push(getNoteHash(bot));
+            hashset.push(bot.getHash());
             countBots++;
         });
     }

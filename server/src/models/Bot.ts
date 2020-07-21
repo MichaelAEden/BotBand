@@ -11,4 +11,18 @@ export class Bot {
     this.melody = melody;
     this.playCount = playCount;
   }
+
+  getHash() {
+    let score = 0;
+    let index = 1;
+
+    this.melody.notes.forEach(note => {
+
+        score += note.code * index;
+        index *= 100;
+
+    });
+
+    return score;
+  }
 }
