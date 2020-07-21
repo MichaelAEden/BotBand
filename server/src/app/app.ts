@@ -38,14 +38,19 @@ app.use((req, _res, next) => {
  * Purpose: Feature flagging via API configuration
  */
 app.post("/config", async (req, res) => {
-  if (req.body.iterations) GA_CONFIG.iterations = Number(req.body.iterations);
-  if (req.body.mutationRate) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
-  if (req.body.noFavourateWeight) GA_CONFIG.noFavourateWeight = Number(req.body.noFavourateWeight);
-  if (req.body.musicalFitnessWeight)
+  // TODO: validate provided values.
+  if (req.body.iterations !== undefined) GA_CONFIG.iterations = Number(req.body.iterations);
+  if (req.body.mutationRate !== undefined) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
+  if (req.body.noFavourateWeight !== undefined)
+    GA_CONFIG.noFavourateWeight = Number(req.body.noFavourateWeight);
+  if (req.body.musicalFitnessWeight !== undefined)
     GA_CONFIG.musicalFitnessWeight = Number(req.body.musicalFitnessWeight);
-  if (req.body.randomInitial) GA_CONFIG.randomInitial = Boolean(req.body.randomInitial);
-  if (req.body.populationSize) GA_CONFIG.populationSize = Number(req.body.populationSize);
-  if (req.body.selectionSize) GA_CONFIG.selectionSize = Number(req.body.selectionSize);
+  if (req.body.randomInitial !== undefined)
+    GA_CONFIG.randomInitial = Boolean(req.body.randomInitial);
+  if (req.body.populationSize !== undefined)
+    GA_CONFIG.populationSize = Number(req.body.populationSize);
+  if (req.body.selectionSize !== undefined)
+    GA_CONFIG.selectionSize = Number(req.body.selectionSize);
 
   res.status(200).json(GA_CONFIG);
 });
@@ -96,7 +101,7 @@ app.post("/bots", async (req, res) => {
     generation = req.body.generation + 1;
   }
 
-  const timestamps = {startTime : req.body.startTime, endTime : req.body.endTime}
+  const timestamps = { startTime: req.body.startTime, endTime: req.body.endTime };
 
   MetadataCache.addGeneration(bots, generation, timestamps);
 

@@ -46,6 +46,7 @@ export class GaWorker {
   }
 
   constructor(config: GaWorkerConfig = GaWorker.defaultConfig()) {
+    // TODO: validate config.
     this.config = config;
     this.rules = [
       new LeapRule(),
@@ -86,29 +87,39 @@ export class GaWorker {
 
   generateNewBots(startingPopulation: Bot[]): Bot[] {
     let generation = startingPopulation;
-    let fitnesses;
 
-    // Number of generations to iterate before returning to client
+    // Produce fitness scores from bots
+    let fitnesses = evaluate(
+      generation,
+      this.config.noFavourateWeight,
+      this.config.musicalFitnessWeight
+    );
+
     for (let i = 0; i < this.config.iterations; i++) {
+      // Normalize the scores to select a new generation
+      generation = selectRandomWeighted(generation, fitnesses, this.config.populationSize);
+
+      // Apply mutations in accordance with ruleset
+      generation.forEach((bot) => this.mutateBot(bot));
+
+      // TODO: after bot has mutated, it retains the same user score. Fix this?
       // Produce fitness scores from bots
       fitnesses = evaluate(
         generation,
         this.config.noFavourateWeight,
         this.config.musicalFitnessWeight
       );
-
-      // Normalize the scores to select a new generation
-      generation = selectRandomWeighted(generation, fitnesses, this.config.populationSize);
-
-      // Apply mutations in accordance with ruleset
-      generation.forEach((bot) => this.mutateBot(bot));
     }
 
     // Reset metrics for new generation
     generation.forEach((bot) => (bot.metric = 0));
 
     // Weighted average no replacement on bots
-    const selection = selectRandomWeightedNoReplacement(generation, fitnesses, this.config.selectionSize);
+    const selection = selectRandomWeightedNoReplacement(
+      generation,
+      fitnesses,
+      this.config.selectionSize
+    );
 
     // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {

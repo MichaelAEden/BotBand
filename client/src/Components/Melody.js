@@ -17,12 +17,6 @@ const NOTE_COLOURS = [
 
 class Melody extends Component {
   render() {
-    // Check for notes outside acceptable range.
-    const notesInvalid = this.props.melody.notes
-      .map((note) => note.code)
-      .filter((code) => code < NOTE_LOWEST || code > NOTE_HIGHEST);
-    if (notesInvalid.length > 0) throw new Error(`Notes out of range: ${notesInvalid.join(", ")}`);
-
     const melodyLength = this.props.melody.notes.length;
     const noteRange = NOTE_HIGHEST - NOTE_LOWEST;
 

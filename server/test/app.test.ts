@@ -1,14 +1,16 @@
 import app from "../src/app/app";
+import { GaWorker } from "../src/ga/GaWorker";
 const request = require("supertest");
 
-describe("Test: /createbots/rating", () => {
+describe("Test: /bots", () => {
   test("should return initial melodies if empty body", (done) => {
     request(app)
-      .post("/createbots/rating")
+      .post("/bots")
       .then((response) => {
         expect(response.statusCode).toBe(200);
-        const melody = response.body.bots[0].melody.notes.map((note) => note.note).join(",");
-        expect(melody).toBe("C4,G4,G4,F4");
+        const bots = response.body.bots;
+        expect(bots).toHaveLength(GaWorker.defaultConfig().selectionSize);
+        expect(bots[0].melody.notes).toHaveLength(4);
         done();
       });
   });
