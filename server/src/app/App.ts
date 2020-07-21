@@ -103,6 +103,7 @@ app.post("/bots", async (req, res) => {
 
   const timestamps = { startTime: req.body.startTime, endTime: req.body.endTime };
 
+  // TODO: this step should be BEFORE the bots are generated.
   MetadataCache.addGeneration(bots, generation, timestamps);
 
   res.status(200).json({ bots, generation });
