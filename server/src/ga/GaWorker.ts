@@ -80,7 +80,10 @@ export class GaWorker {
         "D4,G4,C5,D5",
         "E4,G4,E4,D4",
       ];
-      const selectedMelodies = selectRandomMany(melodies, this.config.selectionSize);
+      const selectedMelodies =
+        this.config.selectionSize <= melodies.length
+          ? _.take(melodies, this.config.selectionSize)
+          : selectRandomMany(melodies, this.config.selectionSize);
       return selectedMelodies.map((melody) => new Bot(0, Melody.fromString(melody)));
     }
   }
