@@ -46,6 +46,7 @@ export class GaWorker {
   }
 
   constructor(config: GaWorkerConfig = GaWorker.defaultConfig()) {
+    // TODO: validate config.
     this.config = config;
     this.rules = [
       new LeapRule(),

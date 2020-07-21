@@ -38,6 +38,7 @@ app.use((req, _res, next) => {
  * Purpose: Feature flagging via API configuration
  */
 app.post("/config", async (req, res) => {
+  // TODO: validate provided values.
   if (req.body.iterations !== undefined) GA_CONFIG.iterations = Number(req.body.iterations);
   if (req.body.mutationRate !== undefined) GA_CONFIG.mutationRate = Number(req.body.mutationRate);
   if (req.body.noFavourateWeight !== undefined)
