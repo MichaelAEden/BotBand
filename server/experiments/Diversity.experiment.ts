@@ -3,7 +3,7 @@ import { Bot } from "../src/models/Bot";
 
 test("Duplicate Count", () => {
     // TODO: pass different parameters to see how duplicate probability changes.
-    // Default config yields ~15%.
+    // Default config yields ~12%.
     let worker = new GaWorker();
 
     let numDuplicates = 0;
