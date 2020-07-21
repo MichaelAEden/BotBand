@@ -17,6 +17,7 @@ class App extends Component {
     };
     this.handleRobotPlayToggled = this.handleRobotPlayToggled.bind(this);
     this.handleRobotFavouriteToggled = this.handleRobotFavouriteToggled.bind(this);
+    this.handleRobotDeleted = this.handleRobotDeleted.bind(this);
     this.handleClearClick = this.handleClearClick.bind(this);
     this.generateBots = this.generateBots.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
@@ -112,6 +113,13 @@ class App extends Component {
     this.setState({ ...this.state, bots });
   }
 
+  handleRobotDeleted(i) {
+    console.log(`Deleted robot ${i}`);
+    const composition = [...this.state.composition];
+    composition.splice(i, 1);
+    this.setState({ ...this.state, composition });
+  }
+
   handleClearClick(e) {
     console.log("Clearing composition");
     this.setState({ ...this.state, composition: [] });
@@ -136,6 +144,7 @@ class App extends Component {
           onDragStart={this.onDragStart}
           onDrop={this.onDrop}
           onDropRobot={this.onDropRobot}
+          onDeleted={this.handleRobotDeleted}
         />
       </MDBContainer>
     );

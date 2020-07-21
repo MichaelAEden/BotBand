@@ -1,15 +1,25 @@
 #bottom-panel {
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  background-color: #fff;
 }
 
 #bottom-panel-label {
-  background-color: #D3FFEA;
+  background-color: #d3ffea;
   text-align: center;
 }
 
 #bottom-toolbar {
   display: flex;
   flex-direction: column;
+  margin: 20px;
+}
+
+.bottom-toolbar-icon {
+  padding: 10px;
+}
+
+.bottom-toolbar-icon:hover {
+  cursor: pointer;
 }
 
 .empty-space {

@@ -19,7 +19,7 @@ class BottomPanel extends Component {
       let melody = bot.melody.notes.map((note) => note.note);
       melodies = melodies.concat(melody);
     });
-    return melodies
+    return melodies;
   }
 
   handlePlayComposition(i) {
@@ -31,8 +31,7 @@ class BottomPanel extends Component {
     let melody = this.collectMelodies().toString();
     if (melody) {
       alert(melody);
-    }
-    else alert("Composition is empty.");
+    } else alert("Composition is empty.");
   }
 
   onDrag(e) {
@@ -44,10 +43,11 @@ class BottomPanel extends Component {
       <MDBCol key={i} size="2">
         <Robot
           melody={bot.melody}
-          hideToolbar
+          inComposition
           className="robot"
           onDragStart={this.props.onDragStart}
           onDropRobot={this.props.onDropRobot}
+          onDeleted={() => this.props.onDeleted(i)}
           index={i}
           rearrange
         ></Robot>
@@ -55,10 +55,9 @@ class BottomPanel extends Component {
     ));
     const numSpaces = 6 - (composition.length % 6);
     const emptySpaces = [];
-    for(let i = 0; i < numSpaces; i++) {
+    for (let i = 0; i < numSpaces; i++) {
       emptySpaces.push(
-        <MDBCol key={i} size="2" className="empty-space" onDrop={this.props.onDrop}>
-        </MDBCol>
+        <MDBCol key={i} size="2" className="empty-space" onDrop={this.props.onDrop}></MDBCol>
       );
     }
 
@@ -69,9 +68,27 @@ class BottomPanel extends Component {
         </div>
         <MDBRow id="composition-row">
           <MDBCol size="1" id="bottom-toolbar">
-            <MDBIcon icon="play-circle" size="3x" className="m-1" fixed onClick={this.handlePlayComposition} />
-            <MDBIcon icon="trash-alt" size="3x" className="m-1" fixed onClick={this.props.handleClearClick} />
-            <MDBIcon icon="file-download" size="3x" className="m-1" fixed onClick={this.handleShowComposition} />
+            <MDBIcon
+              icon="play-circle"
+              size="3x"
+              className="m-1 bottom-toolbar-icon"
+              fixed
+              onClick={this.handlePlayComposition}
+            />
+            <MDBIcon
+              icon="trash-alt"
+              size="3x"
+              className="m-1 bottom-toolbar-icon"
+              fixed
+              onClick={this.props.handleClearClick}
+            />
+            <MDBIcon
+              icon="file-download"
+              size="3x"
+              className="m-1 bottom-toolbar-icon"
+              fixed
+              onClick={this.handleShowComposition}
+            />
           </MDBCol>
           {composition}
           {emptySpaces}
