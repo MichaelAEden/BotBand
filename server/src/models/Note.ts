@@ -38,19 +38,19 @@ export class Note {
   }
 
   private static getNote(code: number): string {
-    const noteOffset = code % OCTAVE;
-    const note = String.fromCharCode("A".charCodeAt(0) + noteOffset - 1);
+    const noteOffset = (code - 1) % OCTAVE;
+    const note = String.fromCharCode("A".charCodeAt(0) + noteOffset);
     // Octaves start at C, not A; must handle this explicitly.
-    const octave = Math.floor(code / OCTAVE) + (noteOffset >= 3 ? 2 : 1);
+    const octave = Math.floor((code - 1) / OCTAVE) + (noteOffset >= 2 ? 2 : 1);
     return note + octave;
   }
 
   private static getCode(note: string): number {
     // Maps keys to numbers, starting with A1 -> 1.
-    const noteOffset = note.charCodeAt(0) - "A".charCodeAt(0) + 1;
+    const noteOffset = note.charCodeAt(0) - "A".charCodeAt(0);
     // Octaves start at C, not A; must handle this explicitly.
-    const octaveOffset = Number(note.charAt(1)) - (noteOffset >= 3 ? 2 : 1);
-    return octaveOffset * OCTAVE + noteOffset;
+    const octaveOffset = Number(note.charAt(1)) - (noteOffset >= 2 ? 2 : 1);
+    return octaveOffset * OCTAVE + noteOffset + 1;
   }
 
   getOctave(): number {
