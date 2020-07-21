@@ -27,5 +27,6 @@ export class MetadataCache {
 
   static clearSessions() {
     MetadataCache.SESSIONS = [];
+    MetadataCache.currentSession = {};
   }
 }
