@@ -1,4 +1,4 @@
-import app from "../src/app/app";
+import app from "../src/app/App";
 import { GaWorker } from "../src/ga/GaWorker";
 const request = require("supertest");
 
