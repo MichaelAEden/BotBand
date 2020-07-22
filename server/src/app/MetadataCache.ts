@@ -3,7 +3,7 @@ import { getMusicalFitness } from "../ga/Fitness";
 
 export class MetadataCache {
   static SESSIONS = {};
-  static SESSION_CURRENT = null;
+  static CURRENT_UUID = null;
 
   static addGeneration(uuid: string, bots: Bot[], generation: number, timestamps: object) {
     // TODO: track favourite counts.
@@ -14,15 +14,16 @@ export class MetadataCache {
       playCount: bot.playCount,
       musicalFitness: getMusicalFitness(bot),
     }));
-    // Create session for given UUID
-    if (MetadataCache[uuid] === undefined) MetadataCache[uuid] = [];
+    // Create session for given UUID if none exist
+    if (MetadataCache.SESSIONS[uuid] === undefined) MetadataCache.SESSIONS[uuid] = [];
 
-    MetadataCache.SESSION_CURRENT = MetadataCache[uuid];
-    MetadataCache.SESSION_CURRENT.push({ bots: botsWithFitnesses, generation, timestamps });
+    MetadataCache.SESSIONS[uuid].push({ bots: botsWithFitnesses, generation, timestamps });
+    MetadataCache.CURRENT_UUID = uuid;
   }
 
   static getSession() {
-    return MetadataCache.SESSION_CURRENT;
+    if (MetadataCache.CURRENT_UUID) return MetadataCache.SESSIONS[MetadataCache.CURRENT_UUID];
+    else return [];
   }
 
   static getSessions() {
@@ -31,6 +32,6 @@ export class MetadataCache {
 
   static clearSessions() {
     MetadataCache.SESSIONS = {};
-    MetadataCache.SESSION_CURRENT = null;
+    MetadataCache.CURRENT_UUID = null;
   }
 }

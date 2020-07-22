@@ -100,13 +100,16 @@ app.post("/bots", async (req, res) => {
     uuid = uuidv4();
   } else {
     const reqBots = parseBotsFromReq(req);
-    bots = worker.generateNewBots(reqBots);
+
+    // Note we add the bots parsed from the request rather than the newly generated ones
+    // This step must occur first because generateNewBots mutates the given bots
+    // TODO: make generateNewBots purely functional
     generation = req.body.generation + 1;
     uuid = req.body.uuid;
     const timestamps = { startTime: req.body.startTime, endTime: req.body.endTime };
-
-    // Note we add the bots parsed from the request rather than the newly generated ones
     MetadataCache.addGeneration(uuid, reqBots, generation, timestamps);
+
+    bots = worker.generateNewBots([...reqBots]);
   }
 
   res.status(200).json({ bots, generation, uuid });
