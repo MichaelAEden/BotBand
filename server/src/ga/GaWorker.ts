@@ -129,6 +129,8 @@ export class GaWorker {
 
     // Ensure favourited robots are persisted
     startingPopulation.forEach((bot, i) => {
+      // Reset only play counts for favourites
+      bot.playCount = 0;
       if (bot.metric === 1) selection[i] = bot;
     });
 

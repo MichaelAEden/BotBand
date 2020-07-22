@@ -10,6 +10,7 @@ class App extends Component {
     this.state = {
       bots: [],
       startTime: Date.now(),
+      uuid: null,
       composition: [],
       dragIndex: 0,
       rearrange: false,
@@ -35,6 +36,7 @@ class App extends Component {
       body: JSON.stringify({
         bots: this.state.bots,
         generation: this.state.generation,
+        uuid: this.state.uuid,
         startTime: this.state.startTime,
         endTime: Date.now(),
       }),
@@ -46,6 +48,7 @@ class App extends Component {
         ...this.state,
         bots: response.data.bots,
         generation: response.data.generation,
+        uuid: response.data.uuid,
         startTime: Date.now(),
       });
   }
