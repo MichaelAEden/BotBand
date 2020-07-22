@@ -7,7 +7,6 @@ export class MetadataCache {
 
   static addGeneration(uuid: string, bots: Bot[], generation: number, timestamps: object) {
     // TODO: track favourite counts.
-    // TODO: clean up timestamps.
     // TODO: add musicalFitness, userFitness fields to Bot class.
     const botsWithFitnesses = bots.map((bot) => ({
       metric: bot.metric,
