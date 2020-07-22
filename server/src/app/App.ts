@@ -109,7 +109,7 @@ app.post("/bots", async (req, res) => {
     const timestamps = { startTime: req.body.startTime, endTime: req.body.endTime };
     MetadataCache.addGeneration(uuid, reqBots, generation, timestamps);
 
-    bots = worker.generateNewBots([...reqBots]);
+    bots = worker.generateNewBots(reqBots);
   }
 
   res.status(200).json({ bots, generation, uuid });
