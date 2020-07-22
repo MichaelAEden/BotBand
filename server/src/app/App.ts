@@ -1,4 +1,5 @@
 import * as bodyParser from "body-parser";
+import { v4 as uuidv4 } from "uuid";
 
 import { MetadataCache } from "./MetadataCache";
 import { GaWorker } from "../ga/GaWorker";
@@ -87,26 +88,28 @@ app.delete("/data", async (_req, res) => {
  */
 app.post("/bots", async (req, res) => {
   let bots;
-  let generation = 0;
+  let generation;
+  let uuid;
   const worker = new GaWorker(GA_CONFIG);
   if (!req.body.bots || (req.body.bots && req.body.bots.length === 0)) {
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     console.log(`First request initialized from ${ip}`);
-    MetadataCache.newSession();
+
     bots = worker.initialBots();
     generation = 0;
+    uuid = uuidv4();
   } else {
     const reqBots = parseBotsFromReq(req);
     bots = worker.generateNewBots(reqBots);
     generation = req.body.generation + 1;
+    uuid = req.body.uuid;
+    const timestamps = { startTime: req.body.startTime, endTime: req.body.endTime };
+
+    // Note we add the bots parsed from the request rather than the newly generated ones
+    MetadataCache.addGeneration(uuid, reqBots, generation, timestamps);
   }
 
-  const timestamps = { startTime: req.body.startTime, endTime: req.body.endTime };
-
-  // TODO: this step should be BEFORE the bots are generated.
-  MetadataCache.addGeneration(bots, generation, timestamps);
-
-  res.status(200).json({ bots, generation });
+  res.status(200).json({ bots, generation, uuid });
 });
 
 app.get("*", (req, res) => {

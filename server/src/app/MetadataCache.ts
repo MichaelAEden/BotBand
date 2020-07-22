@@ -2,21 +2,12 @@ import { Bot } from "../models/Bot";
 import { getMusicalFitness } from "../ga/Fitness";
 
 export class MetadataCache {
-  static SESSIONS = [];
-  static currentSession = {};
+  static SESSIONS = {};
+  static SESSION_CURRENT = null;
 
-  static newSession() {
-    this.currentSession = {
-      timestamp: Date.now(),
-      data: [],
-    };
-    MetadataCache.SESSIONS.push(this.currentSession);
-  }
-
-  static addGeneration(bots: Bot[], generation: number, timestamps) {
+  static addGeneration(uuid: string, bots: Bot[], generation: number, timestamps: object) {
     // TODO: track favourite counts.
     // TODO: clean up timestamps.
-    // TODO: track each session with UUID.
     // TODO: add musicalFitness, userFitness fields to Bot class.
     const botsWithFitnesses = bots.map((bot) => ({
       metric: bot.metric,
@@ -24,11 +15,15 @@ export class MetadataCache {
       playCount: bot.playCount,
       musicalFitness: getMusicalFitness(bot),
     }));
-    this.currentSession["data"].push({ bots: botsWithFitnesses, generation, timestamps });
+    // Create session for given UUID
+    if (MetadataCache[uuid] === undefined) MetadataCache[uuid] = [];
+
+    MetadataCache.SESSION_CURRENT = MetadataCache[uuid];
+    MetadataCache.SESSION_CURRENT.push({ bots: botsWithFitnesses, generation, timestamps });
   }
 
   static getSession() {
-    return MetadataCache.currentSession;
+    return MetadataCache.SESSION_CURRENT;
   }
 
   static getSessions() {
@@ -36,7 +31,7 @@ export class MetadataCache {
   }
 
   static clearSessions() {
-    MetadataCache.SESSIONS = [];
-    MetadataCache.currentSession = {};
+    MetadataCache.SESSIONS = {};
+    MetadataCache.SESSION_CURRENT = null;
   }
 }
