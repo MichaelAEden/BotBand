@@ -56,7 +56,7 @@ export class GaWorker {
       new CounterTenorRule(),
     ];
 
-    console.log(`Creating GaWorker with config: ${JSON.stringify(config, null, 2)}`);
+    // console.log(`Creating GaWorker with config: ${JSON.stringify(config, null, 2)}`);
   }
 
   initialBots(): Bot[] {
@@ -79,6 +79,16 @@ export class GaWorker {
         "B4,A4,G4,D4",
         "D4,G4,C5,D5",
         "E4,G4,E4,D4",
+        "C4,G4,D4,A4",
+        "C4,C4,G4,E4",
+        "C4,C4,A4,E4",
+        "C4,E4,G4,A4",
+        "C4,A4,G4,G4",
+        "C4,C5,G4,D4",
+        "C4,B3,C4,A3",
+        "C4,B3,C4,E4",
+        "G4,A4,F4,G4",
+        "D4,E4,G4,A4"
       ];
       const selectedMelodies =
         this.config.selectionSize <= melodies.length
