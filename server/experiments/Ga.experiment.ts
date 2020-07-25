@@ -1,7 +1,7 @@
 import { GaWorker } from "../src/ga/GaWorker";
 import { getAnalysis, diffMeansInterval95, getAverageFitness } from "./StatisticalAnalysis";
 import { runGaTrials } from "./Utils";
-import { getDiversityMetric } from "./Diversity"
+import { getDiversityMetric } from "./Diversity";
 
 describe("GA Parameter Optimization Tests", () => {
   test("Pregenerated initial melodies yield greater fitness than random", () => {
@@ -47,8 +47,7 @@ describe("GA Parameter Optimization Tests", () => {
   test("Optimal parameters", () => {
     let trials = 1000;
 
-    for (var points = 0.1 ; points <= 0.30; points += 0.05) {
-
+    for (var points = 0.1; points <= 0.3; points += 0.05) {
       let config = {
         iterations: 5,
         mutationRate: points,
@@ -62,13 +61,16 @@ describe("GA Parameter Optimization Tests", () => {
 
       let diversityPercentage = getDiversityMetric(config, trials);
       let results1 = runGaTrials(config, getAverageFitness, trials);
-      let analysis1 = runAnalysis(results1);
+      let analysis1 = getAnalysis(results1);
 
-      console.log(`At Mutation Rate ${points}: Uniqueness fraction = ${1 - diversityPercentage} , Avg Fitness Score = ${analysis1.average}`);
+      console.log(
+        `At Mutation Rate ${points}: Uniqueness fraction = ${
+          1 - diversityPercentage
+        } , Avg Fitness Score = ${analysis1.average}`
+      );
     }
 
-    for (var size = 10 ; size <= 20; size += 2) {
-
+    for (var size = 10; size <= 20; size += 2) {
       let config = {
         iterations: 5,
         mutationRate: 0.15,
@@ -82,9 +84,13 @@ describe("GA Parameter Optimization Tests", () => {
 
       let diversityPercentage = getDiversityMetric(config, trials);
       let results1 = runGaTrials(config, getAverageFitness, trials);
-      let analysis1 = runAnalysis(results1);
+      let analysis1 = getAnalysis(results1);
 
-      console.log(`At Population Size ${size}: Uniqueness fraction = ${1 - diversityPercentage} , Avg Fitness Score = ${analysis1.average}`);
+      console.log(
+        `At Population Size ${size}: Uniqueness fraction = ${
+          1 - diversityPercentage
+        } , Avg Fitness Score = ${analysis1.average}`
+      );
     }
   });
 });
