@@ -57,8 +57,6 @@ describe("GA Parameter Optimization Tests", () => {
         populationSize: 10,
         selectionSize: 7,
       };
-      let worker = new GaWorker(config);
-
       let diversityPercentage = getDiversityMetric(config, trials);
       let results1 = runGaTrials(config, getAverageFitness, trials);
       let analysis1 = getAnalysis(results1);
@@ -66,7 +64,7 @@ describe("GA Parameter Optimization Tests", () => {
       console.log(
         `At Mutation Rate ${points}: Uniqueness fraction = ${
           1 - diversityPercentage
-        } , Avg Fitness Score = ${analysis1.average}`
+        } , Avg Fitness Score = ${analysis1.mean}`
       );
     }
 
@@ -80,8 +78,6 @@ describe("GA Parameter Optimization Tests", () => {
         populationSize: size,
         selectionSize: 7,
       };
-      let worker = new GaWorker(config);
-
       let diversityPercentage = getDiversityMetric(config, trials);
       let results1 = runGaTrials(config, getAverageFitness, trials);
       let analysis1 = getAnalysis(results1);
@@ -89,8 +85,16 @@ describe("GA Parameter Optimization Tests", () => {
       console.log(
         `At Population Size ${size}: Uniqueness fraction = ${
           1 - diversityPercentage
-        } , Avg Fitness Score = ${analysis1.average}`
+        } , Avg Fitness Score = ${analysis1.mean}`
       );
     }
   });
 });
+
+const writeToFile = (arr: number[], fileName: string) => {
+  require("fs").writeFile(fileName, arr.join("\n"), (err) => {
+    if (err) {
+      console.error(`Failed to write results to file: ${err}`);
+    }
+  });
+};
