@@ -5,7 +5,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "lodash": "^4.17.19",
     "mathjs": "^7.1.0",
     "uuid": "^8.2.0"
